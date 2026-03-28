@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code 社内導入提案｜役員向け説明資料</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e3a5f;
+      --primary-light: #2a5298;
+      --accent: #0077cc;
+      --accent-light: #e8f4fd;
+      --green: #0a7c42;
+      --green-light: #e6f6ee;
+      --red: #c0392b;
+      --red-light: #fdf0ee;
+      --orange: #d35400;
+      --orange-light: #fef5ec;
+      --yellow: #f39c12;
+      --yellow-light: #fef9ec;
+      --gray: #6b7280;
+      --gray-light: #f3f4f6;
+      --border: #dde1e7;
+      --text: #1a202c;
+      --text-sub: #4a5568;
+      --white: #ffffff;
+      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #f0f4f8;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    /* ===== COVER ===== */
+    .cover {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 60%, #3a6bc4 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 60px 48px 48px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -40px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .cover-label {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+    .cover h1 {
+      font-size: 34px;
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+    .cover-subtitle {
+      font-size: 16px;
+      opacity: 0.85;
+      margin-bottom: 32px;
+    }
+    .cover-meta {
+      display: flex;
+      gap: 24px;
+      font-size: 13px;
+      opacity: 0.75;
+    }
+    .cover-meta span::before {
+      content: '▸ ';
+    }
+
+    /* ===== SECTION ===== */
+    .section {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 40px 40px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--gray-light);
+    }
+    .section-num {
+      width: 32px; height: 32px;
+      background: var(--primary);
+      color: white;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* ===== WHAT IS ===== */
+    .what-is-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    .what-is-box {
+      background: var(--accent-light);
+      border: 1px solid #b3d9f5;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .what-is-box h4 {
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .what-is-box p {
+      font-size: 14px;
+      color: var(--text-sub);
+    }
+
+    .key-point {
+      background: var(--primary);
+      color: white;
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-size: 15px;
+      font-weight: 500;
+      text-align: center;
+      line-height: 1.6;
+    }
+    .key-point strong {
+      font-size: 18px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    /* ===== FLOW ===== */
+    .flow-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    .flow-step {
+      background: var(--gray-light);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+    .flow-step.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    .flow-arrow {
+      color: var(--gray);
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    /* ===== MERIT / DEMERIT ===== */
+    .md-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .merit-box, .demerit-box {
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .merit-box {
+      background: var(--green-light);
+      border: 1px solid #a8dfc0;
+    }
+    .demerit-box {
+      background: var(--red-light);
+      border: 1px solid #f0b8b2;
+    }
+    .merit-box h3, .demerit-box h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .merit-box h3 { color: var(--green); }
+    .demerit-box h3 { color: var(--red); }
+
+    .merit-item, .demerit-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+      align-items: flex-start;
+    }
+    .merit-icon {
+      width: 22px; height: 22px;
+      background: var(--green);
+      color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .demerit-icon {
+      width: 22px; height: 22px;
+      background: var(--red);
+      color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .merit-item p, .demerit-item p {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+    .merit-item strong, .demerit-item strong {
+      display: block;
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    /* ===== SECURITY ===== */
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .security-card {
+      background: var(--gray-light);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-align: center;
+    }
+    .security-card .icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .security-card h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .security-card p {
+      font-size: 12px;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    .option-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 13px;
+    }
+    .option-table th {
+      background: var(--primary);
+      color: white;
+      padding: 12px 14px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .option-table th:first-child { border-radius: 8px 0 0 0; }
+    .option-table th:last-child { border-radius: 0 8px 0 0; }
+    .option-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .option-table tr:last-child td { border-bottom: none; }
+    .option-table tr:nth-child(even) td { background: var(--gray-light); }
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .badge-green { background: var(--green-light); color: var(--green); }
+    .badge-yellow { background: var(--yellow-light); color: var(--orange); }
+    .badge-blue { background: var(--accent-light); color: var(--accent); }
+    .badge-recommend { background: var(--primary); color: white; }
+
+    /* ===== ROADMAP ===== */
+    .roadmap {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .roadmap-phase {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .roadmap-header {
+      padding: 14px 18px;
+      font-weight: 700;
+      font-size: 14px;
+      color: white;
+    }
+    .phase-1 .roadmap-header { background: #2a5298; }
+    .phase-2 .roadmap-header { background: #0a7c42; }
+    .phase-3 .roadmap-header { background: #d35400; }
+    .roadmap-body {
+      padding: 16px 18px;
+      background: white;
+    }
+    .roadmap-period {
+      font-size: 12px;
+      color: var(--gray);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    .roadmap-item {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+      padding-left: 14px;
+      position: relative;
+    }
+    .roadmap-item::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+    .roadmap-kpi {
+      margin-top: 14px;
+      padding: 10px 12px;
+      background: var(--gray-light);
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+    .roadmap-kpi strong { color: var(--text); display: block; margin-bottom: 4px; }
+
+    /* ===== COST ===== */
+    .cost-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .cost-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px;
+    }
+    .cost-card h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .cost-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      padding: 6px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .cost-row:last-child { border-bottom: none; }
+    .cost-label { color: var(--text-sub); }
+    .cost-value { font-weight: 700; color: var(--text); }
+    .cost-total {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: var(--primary);
+      color: white;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    /* ===== RISK ===== */
+    .risk-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .risk-table th {
+      background: var(--gray-light);
+      color: var(--text);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+    }
+    .risk-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .risk-level {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .risk-high { background: #fde8e8; color: #c0392b; }
+    .risk-mid { background: #fef3e2; color: #d35400; }
+    .risk-low { background: var(--green-light); color: var(--green); }
+
+    /* ===== SUMMARY ===== */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .summary-card {
+      background: var(--gray-light);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .summary-card .num {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1.1;
+    }
+    .summary-card .unit {
+      font-size: 14px;
+      color: var(--text-sub);
+      margin-bottom: 4px;
+    }
+    .summary-card .label {
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    .decision-box {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      border-radius: 14px;
+      padding: 28px 32px;
+    }
+    .decision-box h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .decision-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      align-items: flex-start;
+    }
+    .decision-bullet {
+      width: 20px; height: 20px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .decision-item p {
+      font-size: 14px;
+      opacity: 0.9;
+      line-height: 1.5;
+    }
+    .decision-item p strong {
+      opacity: 1;
+      display: block;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      text-align: center;
+      color: var(--gray);
+      font-size: 12px;
+      padding: 16px;
+      margin-top: 8px;
+    }
+
+    /* ===== PRINT ===== */
+    @media print {
+      body { background: white; }
+      .page { padding: 0; }
+      .section { box-shadow: none; border: 1px solid var(--border); page-break-inside: avoid; }
+      .cover { border-radius: 0; }
+    }
+
+    @media (max-width: 700px) {
+      .what-is-grid, .md-grid, .security-grid, .roadmap, .cost-grid, .summary-grid {
+        grid-template-columns: 1fr;
+      }
+      .cover { padding: 36px 24px 32px; }
+      .cover h1 { font-size: 24px; }
+      .section { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-label">役員向け・社外秘</div>
+    <h1>Claude Code<br>社内導入提案</h1>
+    <p class="cover-subtitle">AIコーディングアシスタントによるエンジニア生産性向上と<br>独立系SIerとしての競争力強化</p>
+    <div class="cover-meta">
+      <span>2026年3月28日</span>
+      <span>対象：開発部門・情報システム部門</span>
+      <span>機密区分：社内限り</span>
+    </div>
+  </div>
+
+  <!-- 01 WHAT IS CLAUDE CODE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <h2 class="section-title">Claude Code とは何か</h2>
+    </div>
+
+    <div class="what-is-grid">
+      <div class="what-is-box">
+        <h4>開発元・位置づけ</h4>
+        <p>米Anthropic社が提供するターミナルベースのAIコーディングアシスタント。ChatGPTと異なり<strong>開発者のローカル環境で直接動作</strong>し、コードの読み書き・テスト実行・バグ修正を自律的に行う。</p>
+      </div>
+      <div class="what-is-box">
+        <h4>対応範囲</h4>
+        <p>ファイルの読み書き・Git操作・テスト実行・コードレビュー・ドキュメント生成など開発工程全般をカバー。自然言語での指示で操作でき、<strong>エンジニアの補助ツール</strong>として機能する。</p>
+      </div>
+    </div>
+
+    <div class="flow-container">
+      <div class="flow-step active">エンジニアが<br>自然言語で指示</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Claude Codeが<br>コードを分析</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">修正案・実装を<br>自動生成</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">エンジニアが<br>確認・承認</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step active">実際のコードに<br>反映・完了</div>
+    </div>
+
+    <div class="key-point">
+      <strong>「AIがコードを書き、人間が判断する」新しい開発スタイル</strong>
+      ChatGPTのような「質問→回答」ではなく、AIが開発環境に直接接続してタスクを実行するエージェント型ツール
+    </div>
+  </div>
+
+  <!-- 02 MERIT / DEMERIT -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <h2 class="section-title">メリット・デメリット</h2>
+    </div>
+
+    <div class="md-grid">
+      <div class="merit-box">
+        <h3>✅ メリット（導入効果）</h3>
+
+        <div class="merit-item">
+          <div class="merit-icon">▲</div>
+          <div>
+            <strong>開発生産性の向上（最大30〜50%）</strong>
+            <p>定型的なコード生成・テスト作成・バグ調査の時間を大幅削減。エンジニアが設計・レビューなど高付加価値業務に集中できる。</p>
+          </div>
+        </div>
+
+        <div class="merit-item">
+          <div class="merit-icon">▲</div>
+          <div>
+            <strong>品質・一貫性の向上</strong>
+            <p>コーディング規約の自動適用、テストコード自動生成により人的ミスを削減。ドキュメント生成も自動化でき、保守性が向上。</p>
+          </div>
+        </div>
+
+        <div class="merit-item">
+          <div class="merit-icon">▲</div>
+          <div>
+            <strong>人材育成・スキル平準化</strong>
+            <p>ジュニアエンジニアがシニアレベルの知識を補完できる。技術の属人化リスクを低減し、チーム全体のスキル底上げに寄与。</p>
+          </div>
+        </div>
+
+        <div class="merit-item">
+          <div class="merit-icon">▲</div>
+          <div>
+            <strong>競争力・受注力の強化</strong>
+            <p>工数削減による価格競争力向上。AI活用による提案力・技術力のアピールで新規案件獲得につながる。</p>
+          </div>
+        </div>
+
+        <div class="merit-item">
+          <div class="merit-icon">▲</div>
+          <div>
+            <strong>残業削減・働き方改革</strong>
+            <p>繁忙期のコーディング・デバッグ作業をAIが肩代わりし、過重労働の抑制・エンジニア離職防止に効果的。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="demerit-box">
+        <h3>⚠️ デメリット・留意点</h3>
+
+        <div class="demerit-item">
+          <div class="demerit-icon">!</div>
+          <div>
+            <strong>顧客情報の外部送信リスク</strong>
+            <p>デフォルト設定では入力内容がAnthropicのサーバーに送信される。顧客情報・機密コードを誤って含めた場合のリスクがある。→ 対策あり（次頁参照）</p>
+          </div>
+        </div>
+
+        <div class="demerit-item">
+          <div class="demerit-icon">!</div>
+          <div>
+            <strong>AIの出力品質のバラつき</strong>
+            <p>生成されたコードが常に正しいとは限らない。エンジニアによるレビュー・検証が必須であり、過信による品質事故のリスクがある。</p>
+          </div>
+        </div>
+
+        <div class="demerit-item">
+          <div class="demerit-icon">!</div>
+          <div>
+            <strong>ランニングコストの発生</strong>
+            <p>APIの利用量に応じた従量課金が発生。利用が増えるほどコストが上昇するため、使用ルールの策定が必要。</p>
+          </div>
+        </div>
+
+        <div class="demerit-item">
+          <div class="demerit-icon">!</div>
+          <div>
+            <strong>社員のスキル依存度の変化</strong>
+            <p>AIへの過度な依存により、エンジニア自身のスキル形成が遅れる懸念がある。適切な利用ガイドラインの整備が必要。</p>
+          </div>
+        </div>
+
+        <div class="demerit-item">
+          <div class="demerit-icon">!</div>
+          <div>
+            <strong>導入・管理コストの発生</strong>
+            <p>PoC設計・ガイドライン策定・社員教育・利用監視の体制整備に初期工数が必要。IT部門への負担が一時的に増加。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 SECURITY -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <h2 class="section-title">セキュリティ対策（SIerとして最重要）</h2>
+    </div>
+
+    <div class="security-grid">
+      <div class="security-card">
+        <div class="icon">🔒</div>
+        <h4>学習利用なし</h4>
+        <p>Team / Enterprise / APIプラン契約下では、送信したコードや指示文がAIモデルの学習に<strong>一切使用されない</strong>ことが契約で保証されている</p>
+      </div>
+      <div class="security-card">
+        <div class="icon">🗄️</div>
+        <h4>ゼロデータ保持（ZDR）</h4>
+        <p>Enterpriseプランで申請可能。推論後にプロンプトとレスポンスをサーバーから即時削除。金融・医療・官公庁案件にも対応できる最高レベルの保護</p>
+      </div>
+      <div class="security-card">
+        <div class="icon">🛡️</div>
+        <h4>国際認証取得済み</h4>
+        <p>SOC 2 Type II・ISO 27001・ISO/IEC 42001（AI管理）・HIPAA BAA対応。第三者機関による審査済みのセキュリティ体制が確立されている</p>
+      </div>
+      <div class="security-card">
+        <div class="icon">☁️</div>
+        <h4>自社クラウド内完結</h4>
+        <p>AWS Bedrock / Google Vertex AI経由で利用すると、データがAnthropicのサーバーに送られず<strong>自社クラウド環境内で完結</strong>。既存のセキュリティポリシーをそのまま適用できる</p>
+      </div>
+      <div class="security-card">
+        <div class="icon">📋</div>
+        <h4>監査ログ完備</h4>
+        <p>AWS CloudTrailによる自動記録。誰がいつ何を入力したかを追跡可能。セキュリティインシデント発生時の調査・証跡として活用できる</p>
+      </div>
+      <div class="security-card">
+        <div class="icon">⚙️</div>
+        <h4>権限管理・ポリシー強制</h4>
+        <p>managed-settings.jsonにより、使用できる機能・アクセス可能なファイルを組織ポリシーとして強制適用。MDMと連携し全端末へ一括配布も可能</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:15px; color:var(--primary); margin-bottom:12px;">■ 導入方式の比較（SIerとして推奨はAWS Bedrock経由）</h3>
+    <table class="option-table">
+      <thead>
+        <tr>
+          <th>導入方式</th>
+          <th>データの流れ</th>
+          <th>監査ログ</th>
+          <th>コスト</th>
+          <th>セキュリティ</th>
+          <th>推奨度</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Anthropic API直接</strong></td>
+          <td>Anthropicサーバー経由</td>
+          <td>なし</td>
+          <td>低い</td>
+          <td><span class="badge badge-yellow">標準</span></td>
+          <td>PoC・検証用</td>
+        </tr>
+        <tr>
+          <td><strong>AWS Bedrock経由</strong></td>
+          <td>自社AWSの範囲内で完結</td>
+          <td>CloudTrail</td>
+          <td>やや高い</td>
+          <td><span class="badge badge-green">高い</span></td>
+          <td><span class="badge badge-recommend">★ 推奨</span></td>
+        </tr>
+        <tr>
+          <td><strong>Google Vertex AI経由</strong></td>
+          <td>自社GCPの範囲内で完結</td>
+          <td>Cloud Logging</td>
+          <td>やや高い</td>
+          <td><span class="badge badge-green">高い</span></td>
+          <td>GCP利用企業向け</td>
+        </tr>
+        <tr>
+          <td><strong>Enterprise + ZDR</strong></td>
+          <td>推論後即時削除</td>
+          <td>Compliance API</td>
+          <td>高い</td>
+          <td><span class="badge badge-blue">最高水準</span></td>
+          <td>官公庁・金融案件向け</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 04 ROADMAP -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <h2 class="section-title">導入ロードマップ（推奨）</h2>
+    </div>
+
+    <div class="roadmap">
+      <div class="roadmap-phase phase-1">
+        <div class="roadmap-header">Phase 1：PoC検証</div>
+        <div class="roadmap-body">
+          <div class="roadmap-period">期間：1〜2ヶ月</div>
+          <div class="roadmap-item">5〜10名の開発者で試験導入</div>
+          <div class="roadmap-item">社内プロジェクト（非顧客データ）で検証</div>
+          <div class="roadmap-item">利用ガイドライン・禁止事項を策定</div>
+          <div class="roadmap-item">AWS Bedrockを使ったセキュアな環境構築</div>
+          <div class="roadmap-item">生産性向上の定量計測開始</div>
+          <div class="roadmap-kpi">
+            <strong>KPI目標</strong>
+            コード作成時間 20%削減を検証
+          </div>
+        </div>
+      </div>
+
+      <div class="roadmap-phase phase-2">
+        <div class="roadmap-header">Phase 2：部門展開</div>
+        <div class="roadmap-body">
+          <div class="roadmap-period">期間：2〜4ヶ月</div>
+          <div class="roadmap-item">開発部門全体へ展開</div>
+          <div class="roadmap-item">顧客プロジェクトへの段階的適用開始</div>
+          <div class="roadmap-item">監査ログ運用ルールの確立</div>
+          <div class="roadmap-item">禁止操作ポリシーの全員徹底</div>
+          <div class="roadmap-item">社員向け研修・活用推進</div>
+          <div class="roadmap-kpi">
+            <strong>KPI目標</strong>
+            開発工数 30%削減・品質向上
+          </div>
+        </div>
+      </div>
+
+      <div class="roadmap-phase phase-3">
+        <div class="roadmap-header">Phase 3：全社最適化</div>
+        <div class="roadmap-body">
+          <div class="roadmap-period">期間：5ヶ月以降</div>
+          <div class="roadmap-item">全社展開・活用の標準化</div>
+          <div class="roadmap-item">提案資料へのAI活用訴求を追加</div>
+          <div class="roadmap-item">AI活用による価格戦略見直し</div>
+          <div class="roadmap-item">技術的優位性のブランド化</div>
+          <div class="roadmap-item">継続的なコスト最適化</div>
+          <div class="roadmap-kpi">
+            <strong>KPI目標</strong>
+            売上単価向上・新規案件獲得
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 COST -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <h2 class="section-title">概算コストと投資対効果（試算）</h2>
+    </div>
+
+    <div class="cost-grid">
+      <div class="cost-card">
+        <h4>月次ランニングコスト（試算：20名利用）</h4>
+        <div class="cost-row">
+          <span class="cost-label">Claude Code API利用料（Bedrock経由）</span>
+          <span class="cost-value">〜¥60,000</span>
+        </div>
+        <div class="cost-row">
+          <span class="cost-label">AWS Bedrock基盤コスト</span>
+          <span class="cost-value">〜¥10,000</span>
+        </div>
+        <div class="cost-row">
+          <span class="cost-label">監視・ログ管理</span>
+          <span class="cost-value">〜¥5,000</span>
+        </div>
+        <div class="cost-total">
+          <span>月次合計（20名）</span>
+          <span>約 ¥75,000</span>
+        </div>
+        <p style="font-size:11px; color:var(--gray); margin-top:10px;">※利用量により変動。1名あたり約¥3,750/月</p>
+      </div>
+
+      <div class="cost-card">
+        <h4>期待される生産性向上効果（試算）</h4>
+        <div class="cost-row">
+          <span class="cost-label">エンジニア平均月給</span>
+          <span class="cost-value">¥450,000</span>
+        </div>
+        <div class="cost-row">
+          <span class="cost-label">生産性向上率（保守的見積）</span>
+          <span class="cost-value">20%</span>
+        </div>
+        <div class="cost-row">
+          <span class="cost-label">20名換算の月次創出価値</span>
+          <span class="cost-value">¥1,800,000</span>
+        </div>
+        <div class="cost-total" style="background: var(--green);">
+          <span>月次ROI</span>
+          <span>約 24倍</span>
+        </div>
+        <p style="font-size:11px; color:var(--gray); margin-top:10px;">※実際の効果はプロジェクト特性により異なる</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 RISK -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">06</div>
+      <h2 class="section-title">リスクと対応策</h2>
+    </div>
+
+    <table class="risk-table">
+      <thead>
+        <tr>
+          <th>リスク</th>
+          <th>影響度</th>
+          <th>対応策</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>顧客情報・機密コードの外部送信</strong><br><span style="font-size:12px;color:var(--text-sub)">エンジニアが誤って顧客DBスキーマや個人情報を含むコードをAIに送信</span></td>
+          <td><span class="risk-level risk-high">高</span></td>
+          <td>AWS Bedrock経由でデータを自社AWS内に限定。managed-settings.jsonで.envファイル・認証情報へのアクセスを禁止。利用禁止コンテンツのガイドライン策定と研修</td>
+        </tr>
+        <tr>
+          <td><strong>AI生成コードの品質問題</strong><br><span style="font-size:12px;color:var(--text-sub)">AIが生成したコードに誤りがあり、そのまま本番に適用されてしまう</span></td>
+          <td><span class="risk-level risk-mid">中</span></td>
+          <td>AI生成コードは必ずエンジニアがレビュー・テストしてから採用するルールを義務化。自動テストの整備を並行推進。承認フローを既存の開発プロセスに組み込む</td>
+        </tr>
+        <tr>
+          <td><strong>シャドーAI（無許可利用）の発生</strong><br><span style="font-size:12px;color:var(--text-sub)">社員が個人契約のAIツールを無断使用し、顧客情報が流出するリスク</span></td>
+          <td><span class="risk-level risk-high">高</span></td>
+          <td>公式ツールとして社内整備することで「公認の抜け道」を提供し、シャドーAIの動機を排除。セキュリティポリシーで無断利用を禁止・周知徹底</td>
+        </tr>
+        <tr>
+          <td><strong>コスト超過</strong><br><span style="font-size:12px;color:var(--text-sub)">API利用量が想定を超え、月次コストが膨らむ</span></td>
+          <td><span class="risk-level risk-mid">中</span></td>
+          <td>AWS Cost Explorerでリアルタイム監視。部門ごとの利用上限を設定。月次レビューで使用状況を確認・調整</td>
+        </tr>
+        <tr>
+          <td><strong>エンジニアの技術力低下</strong><br><span style="font-size:12px;color:var(--text-sub)">AIへの過依存により自力でコードを書く能力が失われる</span></td>
+          <td><span class="risk-level risk-low">低</span></td>
+          <td>利用ガイドラインで「AIは補助ツール、最終判断は人間」を明記。定期的なコードレビュー文化を維持。新人研修では基礎スキルを従来通り育成</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 07 CONCLUSION -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">07</div>
+      <h2 class="section-title">まとめ・経営への提言</h2>
+    </div>
+
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="num">〜50%</div>
+        <div class="unit">開発工数削減ポテンシャル</div>
+        <div class="label">業界各社の導入事例より</div>
+      </div>
+      <div class="summary-card">
+        <div class="num">約24倍</div>
+        <div class="unit">月次ROI（試算）</div>
+        <div class="label">20名・生産性20%向上ベース</div>
+      </div>
+      <div class="summary-card">
+        <div class="num">1〜2ヶ月</div>
+        <div class="unit">PoC開始〜効果検証</div>
+        <div class="label">段階的導入で リスク最小化</div>
+      </div>
+    </div>
+
+    <div class="decision-box">
+      <h3>🎯 経営判断のポイント</h3>
+
+      <div class="decision-item">
+        <div class="decision-bullet">1</div>
+        <p><strong>今すぐ導入すべき理由</strong>競合SIerのAI活用は急速に進んでいる。導入の遅れは価格競争力・提案力の差として顕在化し、受注機会の損失につながる。</p>
+      </div>
+
+      <div class="decision-item">
+        <div class="decision-bullet">2</div>
+        <p><strong>セキュリティは技術的に担保できる</strong>AWS Bedrock経由の導入により、顧客情報を自社AWS外に出さずに活用できる。独立系SIerとしての信頼性を損なわない体制が整っている。</p>
+      </div>
+
+      <div class="decision-item">
+        <div class="decision-bullet">3</div>
+        <p><strong>シャドーAIを放置することの方がリスク</strong>既に多くの社員が個人でAIツールを使っている可能性が高い。公式導入してガバナンスを効かせる方が、情報漏洩リスクを確実に低減できる。</p>
+      </div>
+
+      <div class="decision-item">
+        <div class="decision-bullet">4</div>
+        <p><strong>推奨アクション</strong>まず5〜10名でPoC承認を。AWS Bedrock経由のセキュアな環境で2ヶ月間検証し、定量的な効果確認後に全社展開を判断する。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    本資料は社内限りの機密情報です。外部への持ち出しを禁じます。<br>
+    作成日：2026年3月28日　|　次回レビュー：2026年6月
+  </div>
+
+</div>
+</body>
+</html>
