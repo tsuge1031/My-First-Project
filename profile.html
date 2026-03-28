@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>自己紹介 — 告野 孝彰</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root {
+      --bg:      #f5f4f0;
+      --card:    #ffffff;
+      --ink:     #1a1a1a;
+      --sub:     #6b6b6b;
+      --border:  #e2e0db;
+      --accent:  #2c2c2c;
+      --line:    #c8c5be;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Helvetica Neue', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      padding: 64px 24px 100px;
+      line-height: 1;
+    }
+
+    /* ========== ヘッダー ========== */
+    .hero {
+      max-width: 760px;
+      margin: 0 auto 72px;
+      opacity: 0;
+      animation: fadeIn .8s .1s forwards;
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--sub);
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 300;
+      letter-spacing: -1px;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+    .hero h1 strong { font-weight: 700; }
+    .hero-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--ink);
+      margin: 28px 0;
+    }
+    .hero-meta {
+      font-size: 14px;
+      color: var(--sub);
+      letter-spacing: .3px;
+      line-height: 1.8;
+    }
+
+    /* ========== レイアウト ========== */
+    .wrapper {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    /* ========== セクション共通 ========== */
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 40px 44px;
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    .section:first-child { border-radius: 4px 4px 0 0; }
+    .section:last-child  { border-radius: 0 0 4px 4px; }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--sub);
+      margin-bottom: 28px;
+    }
+
+    /* ========== 基本情報 ========== */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    @media (max-width: 600px) {
+      .profile-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .profile-item {
+      padding: 20px 0;
+      border-right: 1px solid var(--border);
+      padding-right: 24px;
+      margin-right: 24px;
+    }
+    .profile-item:last-child {
+      border-right: none;
+      padding-right: 0;
+      margin-right: 0;
+    }
+    .p-label {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--sub);
+      margin-bottom: 10px;
+    }
+    .p-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    .p-value small {
+      display: block;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--sub);
+      margin-top: 3px;
+    }
+
+    /* ========== 仕事 ========== */
+    .job-list { display: flex; flex-direction: column; gap: 28px; }
+    .job-item { display: flex; gap: 32px; align-items: flex-start; }
+    .job-period {
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--sub);
+      white-space: nowrap;
+      padding-top: 3px;
+      min-width: 80px;
+    }
+    .job-body {}
+    .job-role {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .job-desc {
+      font-size: 14px;
+      color: var(--sub);
+      line-height: 1.75;
+    }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .tag {
+      font-size: 11px;
+      letter-spacing: .5px;
+      color: var(--sub);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 2px;
+    }
+    .job-separator {
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ========== 趣味 ========== */
+    .hobby-row { display: flex; gap: 48px; }
+    .hobby-item {}
+    .hobby-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .hobby-desc {
+      font-size: 13px;
+      color: var(--sub);
+      line-height: 1.6;
+    }
+
+    /* ========== ADS受講きっかけ ========== */
+    .reason-steps { display: flex; flex-direction: column; gap: 0; }
+    .reason-step {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .reason-step:last-of-type { border-bottom: none; }
+    .step-n {
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--line);
+      padding-top: 2px;
+      min-width: 20px;
+    }
+    .step-body {
+      font-size: 15px;
+      color: var(--ink);
+      line-height: 1.7;
+    }
+    .step-body strong { font-weight: 700; }
+    .goal-statement {
+      margin-top: 28px;
+      padding: 24px 28px;
+      border: 1px solid var(--ink);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1.7;
+      letter-spacing: .2px;
+    }
+
+    /* ========== おすすめ体験 ========== */
+    .bungee-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    @media (max-width: 580px) { .bungee-layout { grid-template-columns: 1fr; } }
+    .bungee-story {
+      font-size: 14px;
+      color: var(--sub);
+      line-height: 1.9;
+    }
+    .bungee-story strong { color: var(--ink); font-weight: 600; }
+    .bungee-compare { display: flex; flex-direction: column; gap: 0; }
+    .compare-item {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .compare-item:first-child { padding-top: 0; }
+    .compare-item:last-child  { border-bottom: none; }
+    .compare-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--line);
+      margin-bottom: 8px;
+    }
+    .compare-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    .compare-arrow {
+      text-align: center;
+      font-size: 18px;
+      color: var(--line);
+      padding: 12px 0;
+    }
+    .quote {
+      margin-top: 32px;
+      grid-column: 1 / -1;
+      font-size: 14px;
+      font-style: italic;
+      color: var(--sub);
+      line-height: 1.9;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ========== アニメーション ========== */
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .section.visible {
+      animation: fadeUp .55s forwards;
+    }
+
+    @media (max-width: 600px) {
+      .section { padding: 32px 24px; }
+      .job-item { flex-direction: column; gap: 6px; }
+      .hobby-row { flex-direction: column; gap: 28px; }
+    }
+
+    /* ========== PDF ダウンロードボタン ========== */
+    .pdf-btn {
+      position: fixed;
+      bottom: 36px;
+      right: 36px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      padding: 14px 22px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,.18);
+      transition: background .2s, transform .15s, box-shadow .2s;
+      z-index: 100;
+    }
+    .pdf-btn:hover {
+      background: #333;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0,0,0,.22);
+    }
+    .pdf-btn:active { transform: translateY(0); }
+    .pdf-btn svg { flex-shrink: 0; }
+    .pdf-btn.loading { pointer-events: none; opacity: .6; }
+    .pdf-btn.loading .btn-label::after {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      animation: dots 1.2s steps(4, end) infinite;
+    }
+    @keyframes dots {
+      0%   { content: ''; }
+      25%  { content: '.'; }
+      50%  { content: '..'; }
+      75%  { content: '...'; }
+      100% { content: ''; }
+    }
+    @media print { .pdf-btn { display: none; } }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="hero">
+    <p class="hero-eyebrow">Self Introduction</p>
+    <h1><strong>告野 孝彰</strong><br>つげの たかあき</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-meta">
+      SE / 課長 &nbsp;·&nbsp; SIer &nbsp;·&nbsp; ADS 受講生<br>
+      42歳 &nbsp;·&nbsp; 既婚 &nbsp;·&nbsp; 息子ひとり（4月から小学生）
+    </p>
+  </header>
+
+  <main class="wrapper">
+
+    <!-- 基本情報 -->
+    <section class="section">
+      <p class="section-label">Profile</p>
+      <div class="profile-grid">
+        <div class="profile-item">
+          <div class="p-label">Name</div>
+          <div class="p-value">告野 孝彰<small>つげの たかあき</small></div>
+        </div>
+        <div class="profile-item">
+          <div class="p-label">Nickname</div>
+          <div class="p-value">つげ</div>
+        </div>
+        <div class="profile-item">
+          <div class="p-label">Age</div>
+          <div class="p-value">42<small>歳</small></div>
+        </div>
+        <div class="profile-item">
+          <div class="p-label">Family</div>
+          <div class="p-value">既婚<small>息子 6 歳 / 4月から小学生</small></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 仕事 -->
+    <section class="section">
+      <p class="section-label">Career</p>
+      <div class="job-list">
+        <div class="job-item">
+          <div class="job-period">キャリア全般</div>
+          <div class="job-body">
+            <div class="job-role">システムエンジニア（SE）</div>
+            <div class="job-desc">SIer にて業務アプリケーションの開発・構築・運用に長年携わる。</div>
+            <div class="tag-list">
+              <span class="tag">開発</span>
+              <span class="tag">構築</span>
+              <span class="tag">運用</span>
+            </div>
+          </div>
+        </div>
+        <div class="job-separator"></div>
+        <div class="job-item">
+          <div class="job-period">ここ数年</div>
+          <div class="job-body">
+            <div class="job-role">課長職</div>
+            <div class="job-desc">現場開発よりも組織マネジメントの比率が高くなり、技術から離れた業務へのギャップに危機感を覚える。</div>
+            <div class="tag-list">
+              <span class="tag">組織マネジメント</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 趣味 -->
+    <section class="section">
+      <p class="section-label">Interests</p>
+      <div class="hobby-row">
+        <div class="hobby-item">
+          <div class="hobby-name">ゴルフ</div>
+          <div class="hobby-desc">コースを歩きながら戦略を練る、大人のスポーツ。</div>
+        </div>
+        <div class="hobby-item">
+          <div class="hobby-name">サウナ</div>
+          <div class="hobby-desc">「整う」体験で心身をリセットする。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADS受講のきっかけ -->
+    <section class="section">
+      <p class="section-label">Why ADS</p>
+      <div class="reason-steps">
+        <div class="reason-step">
+          <span class="step-n">01</span>
+          <div class="step-body">マコなり社長の <strong>YouTube</strong> でこの講座を知った</div>
+        </div>
+        <div class="reason-step">
+          <span class="step-n">02</span>
+          <div class="step-body">管理職になり <strong>技術から遠ざかり</strong>、政治的な業務が増えてきた</div>
+        </div>
+        <div class="reason-step">
+          <span class="step-n">03</span>
+          <div class="step-body">このまま変わらないことへの <strong>危機感</strong> が限界に達した</div>
+        </div>
+      </div>
+      <div class="goal-statement">
+        自分自身が AI トレンドの波に乗り、組織を引っ張っていきたい。
+      </div>
+    </section>
+
+    <!-- おすすめ体験 -->
+    <section class="section">
+      <p class="section-label">Recommended Experience</p>
+      <div class="bungee-layout">
+        <div class="bungee-story">
+          <strong>バンジージャンプ — 群馬県・みなかみ</strong><br><br>
+          元々 <strong>高所恐怖症気味</strong> で絶叫系は大嫌い。
+          ディズニーランドのビッグサンダーマウンテンでさえ限界ギリギリの状態でした。<br><br>
+          友人に誘われ「断るのはなんかダサい」と意を決してチャレンジ。
+          落下中は <strong>アドレナリン大放出</strong> で、最高に楽しかった。<br><br>
+          以降、絶叫系が全く怖くなくなりました。
+        </div>
+        <div class="bungee-compare">
+          <div class="compare-item">
+            <div class="compare-label">Before</div>
+            <div class="compare-text">高所恐怖症<br>絶叫系が大嫌い</div>
+          </div>
+          <div class="compare-arrow">↓</div>
+          <div class="compare-item">
+            <div class="compare-label">Challenge</div>
+            <div class="compare-text">バンジージャンプ<br>みなかみ（群馬）</div>
+          </div>
+          <div class="compare-arrow">↓</div>
+          <div class="compare-item">
+            <div class="compare-label">After</div>
+            <div class="compare-text">絶叫系が<br>全く怖くなくなった</div>
+          </div>
+        </div>
+        <p class="quote">
+          「毛嫌いしていることにあえてチャレンジしてみたら、思いもよらず視界が開けた——そんな特別な体験でした。」
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- PDF ダウンロードボタン -->
+  <button class="pdf-btn" id="pdfBtn" onclick="downloadPDF()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/>
+      <line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    <span class="btn-label">PDF</span>
+  </button>
+
+  <script>
+    // スクロールフェードイン
+    const sections = document.querySelectorAll('.section');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const idx = Array.from(sections).indexOf(entry.target);
+          entry.target.style.animationDelay = (idx * 60) + 'ms';
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    sections.forEach(s => io.observe(s));
+
+    // PDF ダウンロード
+    function downloadPDF() {
+      const btn = document.getElementById('pdfBtn');
+      btn.classList.add('loading');
+      btn.querySelector('.btn-label').textContent = '生成中';
+
+      // アニメーション中の要素をすべて表示状態に強制する
+      const animated = document.querySelectorAll('.hero, .section');
+      animated.forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        el.style.animation = 'none';
+      });
+
+      const target = document.body;
+      const opt = {
+        margin:      [10, 10, 10, 10],
+        filename:    '自己紹介_告野孝彰.pdf',
+        image:       { type: 'jpeg', quality: 0.97 },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+        jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak:   { mode: ['avoid-all', 'css'] }
+      };
+
+      btn.style.display = 'none';
+      html2pdf().set(opt).from(target).save().then(() => {
+        btn.style.display = '';
+        btn.classList.remove('loading');
+        btn.querySelector('.btn-label').textContent = 'PDF';
+      });
+    }
+  </script>
+
+</body>
+</html>

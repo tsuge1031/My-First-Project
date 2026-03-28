@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cursorセットアップ完了！</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    /* 背景の浮遊する丸 */
+    .bubble {
+      position: fixed;
+      border-radius: 50%;
+      opacity: 0.15;
+      animation: float linear infinite;
+    }
+    .bubble:nth-child(1)  { width: 120px; height: 120px; background: #e040fb; left:  5%; animation-duration: 14s; animation-delay: 0s; }
+    .bubble:nth-child(2)  { width:  80px; height:  80px; background: #00e5ff; left: 20%; animation-duration: 18s; animation-delay: -4s; }
+    .bubble:nth-child(3)  { width: 160px; height: 160px; background: #76ff03; left: 50%; animation-duration: 12s; animation-delay: -7s; }
+    .bubble:nth-child(4)  { width:  60px; height:  60px; background: #ff6d00; left: 75%; animation-duration: 20s; animation-delay: -2s; }
+    .bubble:nth-child(5)  { width: 100px; height: 100px; background: #ff1744; left: 90%; animation-duration: 16s; animation-delay: -9s; }
+
+    @keyframes float {
+      0%   { transform: translateY(110vh) scale(1);   }
+      100% { transform: translateY(-20vh) scale(1.2); }
+    }
+
+    /* カード */
+    .card {
+      position: relative;
+      text-align: center;
+      padding: 64px 72px;
+      border-radius: 32px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
+      max-width: 680px;
+      width: 90%;
+      animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* アイコン */
+    .icon {
+      font-size: 72px;
+      margin-bottom: 24px;
+      display: block;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    /* メインタイトル */
+    h1 {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #f9a825, #e040fb, #00e5ff, #76ff03);
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shine 4s linear infinite;
+      margin-bottom: 24px;
+    }
+
+    @keyframes shine {
+      0%   { background-position: 0% center; }
+      100% { background-position: 300% center; }
+    }
+
+    /* 区切り線 */
+    .divider {
+      width: 80px;
+      height: 4px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #e040fb, #00e5ff);
+      margin: 0 auto 28px;
+    }
+
+    /* サブメッセージ */
+    p {
+      font-size: clamp(16px, 2.2vw, 22px);
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+
+    /* バッジ群 */
+    .badges {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      border: none;
+      cursor: default;
+    }
+
+    .badge-1 { background: linear-gradient(135deg, #e040fb, #7c4dff); color: #fff; }
+    .badge-2 { background: linear-gradient(135deg, #00e5ff, #00b0ff); color: #00001a; }
+    .badge-3 { background: linear-gradient(135deg, #76ff03, #00e676); color: #003300; }
+  </style>
+</head>
+<body>
+
+  <!-- 背景バブル -->
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+
+  <!-- メインカード -->
+  <div class="card">
+    <span class="icon">🚀</span>
+    <h1>Cursorセットアップ完了！</h1>
+    <div class="divider"></div>
+    <p>AIと一緒にものづくりを始める準備ができました</p>
+    <div class="badges">
+      <span class="badge badge-1">✨ AI コーディング</span>
+      <span class="badge badge-2">⚡ 高速開発</span>
+      <span class="badge badge-3">🎯 無限の可能性</span>
+    </div>
+  </div>
+
+</body>
+</html>

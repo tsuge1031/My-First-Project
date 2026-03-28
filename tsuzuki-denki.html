@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>都築電気株式会社 — 企業概要</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root {
+      --bg:       #f5f4f0;
+      --card:     #ffffff;
+      --ink:      #1a1a1a;
+      --sub:      #6b6b6b;
+      --border:   #e2e0db;
+      --line:     #c8c5be;
+      --accent:   #0f3557;   /* 都築ネイビー */
+      --accent2:  #1a6699;   /* アクセントブルー */
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Helvetica Neue', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      padding: 64px 24px 100px;
+    }
+
+    /* ===== ヘッダー ===== */
+    .hero {
+      max-width: 860px;
+      margin: 0 auto 64px;
+      opacity: 0;
+      animation: fadeIn .8s .1s forwards;
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--sub);
+      margin-bottom: 18px;
+    }
+    .hero-title {
+      font-size: clamp(32px, 5.5vw, 58px);
+      font-weight: 300;
+      letter-spacing: -1px;
+      color: var(--accent);
+      line-height: 1.15;
+    }
+    .hero-title strong { font-weight: 800; }
+    .hero-divider { width: 40px; height: 1px; background: var(--accent); margin: 24px 0; }
+    .hero-desc {
+      font-size: 15px;
+      color: var(--sub);
+      line-height: 1.8;
+      max-width: 560px;
+    }
+
+    /* ===== ラッパー ===== */
+    .wrapper {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    /* ===== セクション共通 ===== */
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 40px 44px;
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    .section:first-child { border-radius: 4px 4px 0 0; }
+    .section:last-child  { border-radius: 0 0 4px 4px; }
+    .section.visible { animation: fadeUp .55s forwards; }
+
+    .sec-label {
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--sub);
+      margin-bottom: 28px;
+    }
+
+    /* ===== KPI ===== */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    @media (max-width: 640px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    .kpi-item {
+      padding: 0 24px 0 0;
+      margin: 0 24px 0 0;
+      border-right: 1px solid var(--border);
+    }
+    .kpi-item:last-child { border-right: none; padding-right: 0; margin-right: 0; }
+    .kpi-label {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--sub);
+      margin-bottom: 10px;
+    }
+    .kpi-value {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1.1;
+    }
+    .kpi-unit {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--sub);
+      margin-top: 4px;
+    }
+
+    /* ===== 基本情報テーブル ===== */
+    .info-table { width: 100%; border-collapse: collapse; }
+    .info-table tr { border-bottom: 1px solid var(--border); }
+    .info-table tr:last-child { border-bottom: none; }
+    .info-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--sub);
+      padding: 14px 0;
+      width: 160px;
+      vertical-align: top;
+    }
+    .info-table td {
+      font-size: 14px;
+      color: var(--ink);
+      padding: 14px 0;
+      line-height: 1.6;
+    }
+
+    /* ===== 事業セグメント ===== */
+    .segment-list { display: flex; flex-direction: column; gap: 16px; }
+    .segment-item {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      padding: 20px 24px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+    }
+    .segment-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      min-width: 20px;
+      padding-top: 2px;
+    }
+    .segment-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .segment-desc { font-size: 13px; color: var(--sub); line-height: 1.7; }
+    .segment-tag {
+      display: inline-block;
+      font-size: 11px;
+      border: 1px solid var(--border);
+      color: var(--sub);
+      padding: 3px 9px;
+      border-radius: 2px;
+      margin: 6px 4px 0 0;
+    }
+
+    /* ===== パーパス ===== */
+    .purpose-box {
+      border: 1px solid var(--accent);
+      padding: 28px 32px;
+      margin-bottom: 28px;
+      border-radius: 3px;
+    }
+    .purpose-eyebrow {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 12px;
+    }
+    .purpose-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.5;
+    }
+    .purpose-items {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+    @media (max-width: 580px) { .purpose-items { grid-template-columns: 1fr; } }
+    .purpose-item {
+      padding: 18px 20px;
+      background: var(--bg);
+      border-radius: 3px;
+    }
+    .purpose-item-name {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .purpose-item-desc { font-size: 12px; color: var(--sub); line-height: 1.6; }
+
+    .values-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--sub);
+      margin-bottom: 14px;
+    }
+    .values-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .value-tag {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 7px 16px;
+      border-radius: 2px;
+      letter-spacing: .3px;
+    }
+
+    /* ===== 沿革タイムライン ===== */
+    .timeline { position: relative; padding-left: 28px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px; top: 6px; bottom: 6px;
+      width: 1px;
+      background: var(--border);
+    }
+    .tl-era {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--sub);
+      margin: 28px 0 16px;
+    }
+    .tl-era:first-child { margin-top: 0; }
+    .tl-item {
+      position: relative;
+      display: flex;
+      gap: 20px;
+      margin-bottom: 16px;
+      align-items: flex-start;
+    }
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -24px;
+      top: 6px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--line);
+    }
+    .tl-item.highlight::before {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .tl-year {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent2);
+      min-width: 40px;
+      padding-top: 1px;
+    }
+    .tl-text {
+      font-size: 14px;
+      color: var(--ink);
+      line-height: 1.65;
+    }
+    .tl-text strong { font-weight: 700; color: var(--accent); }
+
+    /* ===== 認証 ===== */
+    .cert-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 600px) { .cert-grid { grid-template-columns: 1fr; } }
+    .cert-item {
+      padding: 18px 20px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+    }
+    .cert-name {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 6px;
+      letter-spacing: .3px;
+    }
+    .cert-desc { font-size: 12px; color: var(--sub); line-height: 1.6; }
+
+    /* ===== グループ会社 ===== */
+    .group-list { display: flex; flex-direction: column; gap: 0; }
+    .group-item {
+      display: flex;
+      gap: 20px;
+      align-items: baseline;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .group-item:last-child { border-bottom: none; }
+    .group-name { font-size: 14px; font-weight: 700; color: var(--ink); min-width: 260px; }
+    .group-note { font-size: 13px; color: var(--sub); }
+
+    /* ===== フッター ===== */
+    .footer {
+      max-width: 860px;
+      margin: 32px auto 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--line);
+      opacity: 0;
+      animation: fadeIn .6s 1s forwards;
+    }
+    .footer a { color: var(--sub); text-decoration: none; border-bottom: 1px solid var(--border); }
+    .footer a:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* ===== PDF ボタン ===== */
+    .pdf-btn {
+      position: fixed;
+      bottom: 36px;
+      right: 36px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      padding: 14px 22px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(15,53,87,.25);
+      transition: background .2s, transform .15s, box-shadow .2s;
+      z-index: 100;
+    }
+    .pdf-btn:hover { background: #1a4f7a; transform: translateY(-2px); }
+    .pdf-btn:active { transform: translateY(0); }
+    .pdf-btn.loading { pointer-events: none; opacity: .65; }
+    @media print { .pdf-btn { display: none; } }
+
+    /* ===== アニメーション ===== */
+    @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 600px) {
+      .section { padding: 28px 20px; }
+      .info-table th { width: 110px; font-size: 10px; }
+      .group-name { min-width: 0; }
+      .group-item { flex-direction: column; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="hero">
+    <p class="hero-eyebrow">Company Overview</p>
+    <h1 class="hero-title"><strong>都築電気</strong>株式会社<br>TSUZUKI DENKI CO., LTD.</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">
+      1932年創業。ネットワーク・情報システムの設計・開発・施工・保守を主力とする<br>
+      東証プライム上場のシステムインテグレータ。
+    </p>
+  </header>
+
+  <main class="wrapper">
+
+    <!-- KPI -->
+    <section class="section">
+      <p class="sec-label">Key Figures</p>
+      <div class="kpi-grid">
+        <div class="kpi-item">
+          <div class="kpi-label">創業</div>
+          <div class="kpi-value">1932</div>
+          <div class="kpi-unit">年（創業93年）</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-label">連結売上高</div>
+          <div class="kpi-value">982<span style="font-size:16px;font-weight:400;">億円</span></div>
+          <div class="kpi-unit">2025年3月期</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-label">従業員数（連結）</div>
+          <div class="kpi-value">2,061<span style="font-size:16px;font-weight:400;">名</span></div>
+          <div class="kpi-unit">2025年3月時点</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-label">上場市場</div>
+          <div class="kpi-value" style="font-size:18px;padding-top:4px;">東証<br>プライム</div>
+          <div class="kpi-unit">証券コード 8157</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 基本情報 -->
+    <section class="section">
+      <p class="sec-label">Company Profile</p>
+      <table class="info-table">
+        <tr>
+          <th>商号</th>
+          <td>都築電気株式会社（TSUZUKI DENKI CO.,LTD.）</td>
+        </tr>
+        <tr>
+          <th>本社</th>
+          <td>〒105-8665 東京都港区新橋6丁目19番15号（東京美術倶楽部ビル）</td>
+        </tr>
+        <tr>
+          <th>創業 / 設立</th>
+          <td>1932年5月1日 創業 ／ 1941年3月26日 設立</td>
+        </tr>
+        <tr>
+          <th>資本金</th>
+          <td>98億1,293万円</td>
+        </tr>
+        <tr>
+          <th>主要取引銀行</th>
+          <td>三菱UFJ銀行・三井住友銀行・みずほ銀行・三菱UFJ信託銀行</td>
+        </tr>
+        <tr>
+          <th>事業概要</th>
+          <td>ネットワークシステムおよび情報システムの設計・開発・施工・保守</td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- 事業セグメント -->
+    <section class="section">
+      <p class="sec-label">Business Segments</p>
+      <div class="segment-list">
+        <div class="segment-item">
+          <div class="segment-num">01</div>
+          <div>
+            <div class="segment-name">ネットワークソリューションサービス</div>
+            <div class="segment-desc">通信インフラ・業務システムの設計・構築・運用保守、クラウドサービス、DX支援を提供。主力事業。</div>
+            <span class="segment-tag">設計・構築</span>
+            <span class="segment-tag">運用保守</span>
+            <span class="segment-tag">クラウド</span>
+            <span class="segment-tag">DX支援</span>
+          </div>
+        </div>
+        <div class="segment-item">
+          <div class="segment-num">02</div>
+          <div>
+            <div class="segment-name">電子デバイス</div>
+            <div class="segment-desc">電子部品・デバイスの販売。2024年に当該事業の子会社株式をレスターホールディングスへ譲渡。</div>
+            <span class="segment-tag">電子部品</span>
+            <span class="segment-tag">デバイス販売</span>
+            <span class="segment-tag">※2024年譲渡</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 経営理念 -->
+    <section class="section">
+      <p class="sec-label">Purpose &amp; Values</p>
+      <div class="purpose-box">
+        <div class="purpose-eyebrow">Purpose — 私たちの価値とあり方</div>
+        <div class="purpose-text">「人と知と技術」で、<br>可能性に満ちた"余白"をともに。</div>
+      </div>
+      <div class="purpose-items">
+        <div class="purpose-item">
+          <div class="purpose-item-name">人と知と技術</div>
+          <div class="purpose-item-desc">価値の源泉であり、都築電気の独自のアイデンティティ</div>
+        </div>
+        <div class="purpose-item">
+          <div class="purpose-item-name">可能性に満ちた"余白"</div>
+          <div class="purpose-item-desc">お客さまや社会に対して生み出し続ける価値を表現</div>
+        </div>
+        <div class="purpose-item">
+          <div class="purpose-item-name">ともに</div>
+          <div class="purpose-item-desc">ステークホルダーと伴走・協働する企業姿勢</div>
+        </div>
+      </div>
+      <div style="margin-top:28px;">
+        <div class="values-label">Values — 7つの行動指針</div>
+        <div class="values-list">
+          <span class="value-tag">向き合う</span>
+          <span class="value-tag">築く</span>
+          <span class="value-tag">つなぐ</span>
+          <span class="value-tag">挑む</span>
+          <span class="value-tag">楽しむ</span>
+          <span class="value-tag">支援する</span>
+          <span class="value-tag">やり抜く</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 沿革 -->
+    <section class="section">
+      <p class="sec-label">History</p>
+      <div class="timeline">
+
+        <div class="tl-era">Creation — 1930s to 1960s</div>
+        <div class="tl-item">
+          <div class="tl-year">1932</div>
+          <div class="tl-text">名古屋で<strong>都築商店</strong>として創業（電話・電気通信設備工事）</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1941</div>
+          <div class="tl-text">株式会社に改組、<strong>都築電話工業株式会社</strong>となる</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1958</div>
+          <div class="tl-text"><strong>電算機・関連機器の販売</strong>を開始（IT 事業の原点）</div>
+        </div>
+
+        <div class="tl-era">Growth — 1970s to 1990s</div>
+        <div class="tl-item">
+          <div class="tl-year">1981</div>
+          <div class="tl-text"><strong>OA 事業部</strong>を設置</div>
+        </div>
+        <div class="tl-item highlight">
+          <div class="tl-year">1986</div>
+          <div class="tl-text">東京証券取引所 市場第二部に<strong>上場</strong></div>
+        </div>
+        <div class="tl-item highlight">
+          <div class="tl-year">1988</div>
+          <div class="tl-text">通産大臣認定の<strong>システムインテグレータ企業</strong>となる</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1991</div>
+          <div class="tl-text"><strong>都築電気株式会社</strong>に社名変更</div>
+        </div>
+
+        <div class="tl-era">Modern — 2000s to Present</div>
+        <div class="tl-item">
+          <div class="tl-year">2018</div>
+          <div class="tl-text">東証業種区分を「卸売業」→「<strong>情報・通信業</strong>」に変更</div>
+        </div>
+        <div class="tl-item highlight">
+          <div class="tl-year">2022</div>
+          <div class="tl-text"><strong>東証プライム銘柄</strong>に移行 ／ <strong>DX 認定事業者</strong>に認定 ／ パーパス制定・経営理念を刷新</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">2024</div>
+          <div class="tl-text">電子デバイス系子会社の株式をレスターホールディングスに譲渡</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 認証 -->
+    <section class="section">
+      <p class="sec-label">Certifications</p>
+      <div class="cert-grid">
+        <div class="cert-item">
+          <div class="cert-name">ISO 9001 : 2015</div>
+          <div class="cert-desc">通信ネットワークシステムの設計・施工・保守（東京・名古屋・大阪）</div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-name">ISO 14001 : 2015</div>
+          <div class="cert-desc">ネットワーク・情報システムの設計・開発・施工・保守</div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-name">ISO/IEC 27001 : 2022</div>
+          <div class="cert-desc">クラウドサービス・電子契約・データ分析サービスの開発・運用</div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-name">DX 認定事業者</div>
+          <div class="cert-desc">経済産業省認定（2022年〜）</div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-name">健康経営優良法人</div>
+          <div class="cert-desc">厚生労働省認定（2018年〜継続）</div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-name">特定建設業</div>
+          <div class="cert-desc">国土交通大臣許可 電気通信工事業・電気工事業（特−7）第4226号</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- グループ会社 -->
+    <section class="section">
+      <p class="sec-label">Group Companies</p>
+      <div class="group-list">
+        <div class="group-item">
+          <div class="group-name">都築クロスサポート株式会社</div>
+          <div class="group-note">旧：都築サービス株式会社</div>
+        </div>
+        <div class="group-item">
+          <div class="group-name">都築テクノサービス株式会社</div>
+          <div class="group-note">旧：株式会社都築シーイーセンター</div>
+        </div>
+        <div class="group-item">
+          <div class="group-name">株式会社コムデザイン</div>
+          <div class="group-note">2020年子会社化 ／ クラウド CTX 事業</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- フッター -->
+  <footer class="footer">
+    <span>出典：<a href="https://www.tsuzuki.co.jp/" target="_blank">都築電気株式会社 公式サイト</a></span>
+    <span>2025年3月期 データ基準</span>
+  </footer>
+
+  <!-- PDF ボタン -->
+  <button class="pdf-btn" id="pdfBtn" onclick="downloadPDF()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/>
+      <line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    <span class="btn-label">PDF</span>
+  </button>
+
+  <script>
+    // スクロールフェードイン
+    const sections = document.querySelectorAll('.section');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const idx = Array.from(sections).indexOf(entry.target);
+          entry.target.style.animationDelay = (idx * 60) + 'ms';
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.06 });
+    sections.forEach(s => io.observe(s));
+
+    // PDF ダウンロード
+    function downloadPDF() {
+      const btn = document.getElementById('pdfBtn');
+      btn.classList.add('loading');
+      btn.querySelector('.btn-label').textContent = '生成中';
+
+      document.querySelectorAll('.hero, .section, .footer').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        el.style.animation = 'none';
+      });
+
+      btn.style.display = 'none';
+      html2pdf().set({
+        margin:      [10, 10, 10, 10],
+        filename:    '都築電気_企業概要.pdf',
+        image:       { type: 'jpeg', quality: 0.97 },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+        jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak:   { mode: ['avoid-all', 'css'] }
+      }).from(document.body).save().then(() => {
+        btn.style.display = '';
+        btn.classList.remove('loading');
+        btn.querySelector('.btn-label').textContent = 'PDF';
+      });
+    }
+  </script>
+
+</body>
+</html>

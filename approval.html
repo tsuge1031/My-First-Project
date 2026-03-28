@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ワンクリック承認センター</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    /* ========== Header ========== */
+    header {
+      background: linear-gradient(135deg, #1e3a5f 0%, #2d6a9f 100%);
+      color: #fff;
+      padding: 0 32px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,.25);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header .brand { font-size: 18px; font-weight: 700; letter-spacing: .04em; }
+    header .meta  { font-size: 13px; opacity: .85; }
+
+    /* ========== Main layout ========== */
+    main { max-width: 1300px; margin: 0 auto; padding: 28px 24px 60px; }
+
+    /* ========== Page title bar ========== */
+    .page-title-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .page-title-bar h1 { font-size: 22px; font-weight: 700; color: #1e3a5f; }
+    .page-title-bar .period {
+      background: #fff;
+      border: 1px solid #d0d7e3;
+      border-radius: 8px;
+      padding: 7px 16px;
+      font-size: 14px;
+      color: #555;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .page-title-bar .period select {
+      border: none;
+      outline: none;
+      font-size: 14px;
+      background: transparent;
+      cursor: pointer;
+      color: #1e3a5f;
+      font-weight: 600;
+    }
+
+    /* ========== Toolbar ========== */
+    .toolbar {
+      background: #fff;
+      border: 1px solid #d0d7e3;
+      border-radius: 12px;
+      padding: 14px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .toolbar label { font-size: 13px; color: #666; white-space: nowrap; }
+    .toolbar .checkbox-all {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+    }
+    .toolbar .checkbox-all input[type=checkbox] {
+      width: 18px; height: 18px; cursor: pointer; accent-color: #2d6a9f;
+    }
+    .divider-v { width: 1px; height: 28px; background: #d0d7e3; }
+
+    .filter-tabs { display: flex; gap: 4px; }
+    .filter-tabs button {
+      border: 1px solid #d0d7e3;
+      background: #f8f9fb;
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      color: #555;
+      transition: all .15s;
+    }
+    .filter-tabs button.active, .filter-tabs button:hover {
+      background: #2d6a9f;
+      border-color: #2d6a9f;
+      color: #fff;
+    }
+
+    .ml-auto { margin-left: auto; }
+
+    /* ========== Bulk action buttons ========== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+      white-space: nowrap;
+    }
+    .btn-approve {
+      background: linear-gradient(135deg, #27ae60, #2ecc71);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(39,174,96,.35);
+    }
+    .btn-approve:hover { filter: brightness(1.08); transform: translateY(-1px); }
+    .btn-reject {
+      background: #fff;
+      color: #e74c3c;
+      border: 2px solid #e74c3c;
+    }
+    .btn-reject:hover { background: #fdf0ee; transform: translateY(-1px); }
+    .btn:disabled { opacity: .45; cursor: not-allowed; transform: none !important; }
+
+    .selected-count {
+      font-size: 13px;
+      color: #2d6a9f;
+      font-weight: 600;
+      padding: 5px 10px;
+      background: #e8f1f9;
+      border-radius: 20px;
+    }
+
+    /* ========== Section cards ========== */
+    .section-card {
+      background: #fff;
+      border: 1px solid #d0d7e3;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 20px;
+      border-bottom: 1px solid #e8edf3;
+      background: #f8f9fb;
+    }
+    .section-head h2 { font-size: 15px; font-weight: 700; color: #1e3a5f; }
+    .badge-count {
+      background: #2d6a9f;
+      color: #fff;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 9px;
+    }
+    .section-head .legend { margin-left: auto; display: flex; gap: 12px; align-items: center; font-size: 12px; color: #888; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+    /* ========== Tables ========== */
+    .tbl-wrap { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    thead th {
+      background: #f0f4f9;
+      color: #4a6080;
+      font-weight: 600;
+      padding: 10px 14px;
+      text-align: center;
+      border-bottom: 1px solid #d8e2ed;
+      white-space: nowrap;
+      font-size: 12.5px;
+    }
+    thead th:first-child, thead th:nth-child(2) { text-align: left; }
+    tbody tr {
+      border-bottom: 1px solid #edf0f5;
+      transition: background .1s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #f5f8fc; }
+    tbody td {
+      padding: 11px 14px;
+      vertical-align: middle;
+      text-align: center;
+    }
+    tbody td:first-child, tbody td:nth-child(2) { text-align: left; }
+
+    /* checkbox column */
+    .col-check { width: 44px; }
+    .row-checkbox { width: 17px; height: 17px; accent-color: #2d6a9f; cursor: pointer; }
+
+    /* member cell */
+    .member-cell { display: flex; align-items: center; gap: 10px; }
+    .avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: #fff;
+      flex-shrink: 0;
+    }
+    .member-name { font-weight: 600; font-size: 13.5px; }
+    .member-role { font-size: 11px; color: #888; }
+
+    /* diff cell */
+    .diff-pos { color: #27ae60; font-weight: 600; }
+    .diff-neg { color: #e74c3c; font-weight: 600; }
+    .diff-zero { color: #888; }
+
+    /* status badge */
+    .status {
+      display: inline-flex; align-items: center; gap: 4px;
+      border-radius: 20px;
+      padding: 3px 11px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .status-pending  { background: #fff8e1; color: #f39c12; border: 1px solid #f6d980; }
+    .status-approved { background: #e9f7ef; color: #27ae60; border: 1px solid #a9dfbf; }
+    .status-rejected { background: #fdf0ee; color: #e74c3c; border: 1px solid #f5b7b1; }
+
+    /* progress bar (勤怠率) */
+    .progress-wrap { display: flex; align-items: center; gap: 8px; justify-content: center; }
+    .progress-bar { width: 70px; height: 7px; background: #e8edf3; border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 4px; }
+    .pf-ok   { background: #27ae60; }
+    .pf-warn { background: #f39c12; }
+    .pf-bad  { background: #e74c3c; }
+
+    /* commute amount */
+    .amount { font-weight: 600; font-family: 'Courier New', monospace; font-size: 13.5px; }
+    .amount-over { color: #e74c3c; }
+
+    /* detail toggle */
+    .btn-detail {
+      border: 1px solid #2d6a9f;
+      background: #fff;
+      color: #2d6a9f;
+      border-radius: 6px;
+      padding: 4px 11px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all .12s;
+    }
+    .btn-detail:hover { background: #2d6a9f; color: #fff; }
+
+    /* ========== Summary footer ========== */
+    .summary-bar {
+      background: #fff;
+      border: 1px solid #d0d7e3;
+      border-radius: 12px;
+      padding: 16px 24px;
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .summary-item { text-align: center; }
+    .summary-item .s-label { font-size: 11px; color: #888; margin-bottom: 3px; }
+    .summary-item .s-value { font-size: 22px; font-weight: 700; color: #1e3a5f; }
+    .summary-item .s-value.green { color: #27ae60; }
+    .summary-item .s-value.orange { color: #f39c12; }
+    .summary-item .s-value.red { color: #e74c3c; }
+    .summary-divider { width: 1px; height: 48px; background: #d0d7e3; }
+
+    /* ========== Modal ========== */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 16px;
+      width: 440px;
+      max-width: 94vw;
+      padding: 32px 36px;
+      text-align: center;
+      box-shadow: 0 16px 48px rgba(0,0,0,.22);
+      animation: modalIn .18s ease;
+    }
+    @keyframes modalIn { from { transform: scale(.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-icon { font-size: 44px; margin-bottom: 12px; }
+    .modal h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; color: #1e3a5f; }
+    .modal p  { font-size: 14px; color: #666; margin-bottom: 24px; line-height: 1.65; }
+    .modal-actions { display: flex; gap: 12px; justify-content: center; }
+    .btn-modal-cancel {
+      border: 1px solid #d0d7e3; background: #fff; color: #555;
+      border-radius: 8px; padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    .btn-modal-ok {
+      border: none; background: linear-gradient(135deg, #27ae60, #2ecc71);
+      color: #fff; border-radius: 8px; padding: 10px 28px; font-size: 14px; font-weight: 600; cursor: pointer;
+      box-shadow: 0 2px 6px rgba(39,174,96,.35);
+    }
+    .btn-modal-ok:hover { filter: brightness(1.07); }
+
+    /* ========== Toast ========== */
+    .toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: #1e3a5f; color: #fff;
+      border-radius: 10px; padding: 14px 28px;
+      font-size: 14px; font-weight: 600;
+      box-shadow: 0 6px 20px rgba(0,0,0,.22);
+      z-index: 300;
+      transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .35s;
+      opacity: 0;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* ========== Responsive ========== */
+    @media (max-width: 700px) {
+      header { padding: 0 16px; }
+      main { padding: 16px 10px 40px; }
+      .summary-bar { gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== Header ===== -->
+<header>
+  <span class="brand">&#9989; ワンクリック承認センター</span>
+  <span class="meta">承認者：田中 部長　|　2026年3月度</span>
+</header>
+
+<!-- ===== Main ===== -->
+<main>
+
+  <!-- Page title -->
+  <div class="page-title-bar">
+    <h1>&#9989; ワンクリック承認センター</h1>
+    <div class="period">
+      対象月：
+      <select id="periodSelect" onchange="updatePeriod()">
+        <option>2026年 1月</option>
+        <option>2026年 2月</option>
+        <option selected>2026年 3月</option>
+        <option>2026年 4月</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Summary bar -->
+  <div class="summary-bar">
+    <div class="summary-item">
+      <div class="s-label">チーム人数</div>
+      <div class="s-value">6<span style="font-size:14px;font-weight:400;color:#888"> 名</span></div>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="summary-item">
+      <div class="s-label">承認待ち</div>
+      <div class="s-value orange" id="pendingCount">6</div>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="summary-item">
+      <div class="s-label">承認済み</div>
+      <div class="s-value green" id="approvedCount">0</div>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="summary-item">
+      <div class="s-label">差戻し</div>
+      <div class="s-value red" id="rejectedCount">0</div>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="summary-item">
+      <div class="s-label">通勤費合計（申請）</div>
+      <div class="s-value" style="font-size:18px;">¥<span id="totalCommuteAmt">176,400</span></div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <label class="checkbox-all">
+      <input type="checkbox" id="checkAll" onchange="toggleAll(this)" />
+      全選択
+    </label>
+    <div class="divider-v"></div>
+    <span class="selected-count" id="selectedCount">0 件選択中</span>
+    <div class="filter-tabs">
+      <button class="active" onclick="filterRows('all',this)">すべて</button>
+      <button onclick="filterRows('pending',this)">承認待ち</button>
+      <button onclick="filterRows('approved',this)">承認済み</button>
+      <button onclick="filterRows('rejected',this)">差戻し</button>
+    </div>
+    <div class="ml-auto" style="display:flex;gap:10px;align-items:center;">
+      <button class="btn btn-reject" id="btnReject" disabled onclick="openModal('reject')">
+        &#10005; 一括差戻し
+      </button>
+      <button class="btn btn-approve" id="btnApprove" disabled onclick="openModal('approve')">
+        &#10003; 一括承認
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== 勤怠予実 ===== -->
+  <div class="section-card">
+    <div class="section-head">
+      <h2>&#128336; 勤怠予実</h2>
+      <span class="badge-count" id="atndBadge">6</span>
+      <div class="legend" style="font-size:12px;color:#888;">
+        <span><span class="legend-dot" style="background:#27ae60;"></span> 計画内</span>
+        <span><span class="legend-dot" style="background:#f39c12;"></span> 軽微な差異</span>
+        <span><span class="legend-dot" style="background:#e74c3c;"></span> 超過・未達</span>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table id="attendanceTable">
+        <thead>
+          <tr>
+            <th class="col-check"></th>
+            <th>メンバー</th>
+            <th>所定日数</th>
+            <th>出勤予定</th>
+            <th>実績出勤</th>
+            <th>差異（日）</th>
+            <th>所定時間</th>
+            <th>実績時間</th>
+            <th>差異（時間）</th>
+            <th>残業時間</th>
+            <th>有給取得</th>
+            <th>勤務率</th>
+            <th>ステータス</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="attendanceTbody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== 通勤費実績 ===== -->
+  <div class="section-card">
+    <div class="section-head">
+      <h2>&#128652; 通勤費実績</h2>
+      <span class="badge-count" id="commuteBadge">6</span>
+      <div class="legend">
+        <span style="font-size:12px;color:#888;">※ 上限超過は赤字表示</span>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table id="commuteTable">
+        <thead>
+          <tr>
+            <th class="col-check"></th>
+            <th>メンバー</th>
+            <th>交通手段</th>
+            <th>申請区間</th>
+            <th>支給上限</th>
+            <th>申請金額</th>
+            <th>実績金額</th>
+            <th>差異</th>
+            <th>領収書</th>
+            <th>ステータス</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="commuteTbody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<!-- ===== Modal ===== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-icon" id="modalIcon">✅</div>
+    <h3 id="modalTitle">一括承認の確認</h3>
+    <p id="modalBody">選択した <strong id="modalCount">0</strong> 件を承認します。<br>この操作は取り消せません。よろしいですか？</p>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeModal()">キャンセル</button>
+      <button class="btn-modal-ok" id="modalOkBtn" onclick="execAction()">承認する</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Toast ===== -->
+<div class="toast" id="toast">&#10003; 処理が完了しました</div>
+
+<script>
+/* ===== Data ===== */
+const members = [
+  { id:1, name:'佐藤 陽介', role:'シニアエンジニア', color:'#3498db', initial:'佐' },
+  { id:2, name:'鈴木 美咲', role:'デザイナー',       color:'#9b59b6', initial:'鈴' },
+  { id:3, name:'高橋 健二', role:'バックエンドエンジニア', color:'#e67e22', initial:'高' },
+  { id:4, name:'田中 さくら', role:'プロジェクトマネージャー', color:'#e91e63', initial:'田' },
+  { id:5, name:'伊藤 拓也', role:'フロントエンドエンジニア', color:'#1abc9c', initial:'伊' },
+  { id:6, name:'山本 千尋', role:'QAエンジニア',     color:'#8d6e63', initial:'山' },
+];
+
+const attendanceData = [
+  { memberId:1, scheduledDays:20, plannedDays:19, actualDays:19, scheduledHours:152, actualHours:156, overtime:12, paidLeave:0, status:'pending' },
+  { memberId:2, scheduledDays:20, plannedDays:20, actualDays:18, scheduledHours:160, actualHours:144, overtime:0,  paidLeave:2, status:'pending' },
+  { memberId:3, scheduledDays:20, plannedDays:20, actualDays:20, scheduledHours:160, actualHours:175, overtime:23, paidLeave:0, status:'pending' },
+  { memberId:4, scheduledDays:20, plannedDays:18, actualDays:18, scheduledHours:160, actualHours:152, overtime:8,  paidLeave:2, status:'pending' },
+  { memberId:5, scheduledDays:20, plannedDays:20, actualDays:21, scheduledHours:160, actualHours:168, overtime:16, paidLeave:0, status:'pending' },
+  { memberId:6, scheduledDays:20, plannedDays:20, actualDays:20, scheduledHours:160, actualHours:160, overtime:5,  paidLeave:0, status:'pending' },
+];
+
+const commuteData = [
+  { memberId:1, transport:'電車',   route:'武蔵小杉 → 渋谷',    limit:30000, applied:28400, actual:28400, receipt:'あり',  status:'pending' },
+  { memberId:2, transport:'電車＋バス', route:'三鷹 → 新宿',      limit:25000, applied:24800, actual:24800, receipt:'あり',  status:'pending' },
+  { memberId:3, transport:'電車',   route:'横浜 → 品川',        limit:35000, applied:33600, actual:33600, receipt:'あり',  status:'pending' },
+  { memberId:4, transport:'自転車', route:'自宅 → 渋谷',        limit:10000, applied:2000,  actual:2000,  receipt:'なし',  status:'pending' },
+  { memberId:5, transport:'電車',   route:'池袋 → 渋谷',        limit:20000, applied:19800, actual:19800, receipt:'あり',  status:'pending' },
+  { memberId:6, transport:'電車',   route:'川崎 → 恵比寿',      limit:30000, applied:31200, actual:31200, receipt:'あり',  status:'pending' },
+];
+
+let currentAction = 'approve';
+
+/* ===== Render helpers ===== */
+function memberOf(id) { return members.find(m => m.id === id); }
+
+function statusBadge(s) {
+  if (s === 'approved') return '<span class="status status-approved">&#10003; 承認済み</span>';
+  if (s === 'rejected') return '<span class="status status-rejected">&#10005; 差戻し</span>';
+  return '<span class="status status-pending">&#9711; 承認待ち</span>';
+}
+
+function memberCell(m) {
+  return `<div class="member-cell">
+    <div class="avatar" style="background:${m.color}">${m.initial}</div>
+    <div><div class="member-name">${m.name}</div><div class="member-role">${m.role}</div></div>
+  </div>`;
+}
+
+/* ===== Render attendance table ===== */
+function renderAttendance() {
+  const tbody = document.getElementById('attendanceTbody');
+  tbody.innerHTML = '';
+  attendanceData.forEach(d => {
+    const m = memberOf(d.memberId);
+    const dayDiff = d.actualDays - d.plannedDays;
+    const hrDiff  = d.actualHours - d.scheduledHours;
+    const rate    = Math.round((d.actualDays / d.scheduledDays) * 100);
+
+    let pfClass = 'pf-ok';
+    if (rate < 90) pfClass = 'pf-bad';
+    else if (rate < 100) pfClass = 'pf-warn';
+
+    const dayDiffStr = dayDiff === 0
+      ? '<span class="diff-zero">±0</span>'
+      : dayDiff > 0
+        ? `<span class="diff-pos">+${dayDiff}</span>`
+        : `<span class="diff-neg">${dayDiff}</span>`;
+
+    const hrDiffStr = hrDiff === 0
+      ? '<span class="diff-zero">±0</span>'
+      : hrDiff > 0
+        ? `<span class="diff-pos">+${hrDiff}h</span>`
+        : `<span class="diff-neg">${hrDiff}h</span>`;
+
+    const otClass = d.overtime >= 20 ? 'diff-neg' : d.overtime >= 10 ? '' : 'diff-zero';
+
+    const tr = document.createElement('tr');
+    tr.dataset.memberId  = d.memberId;
+    tr.dataset.status    = d.status;
+    tr.dataset.tableType = 'attendance';
+    tr.innerHTML = `
+      <td class="col-check"><input type="checkbox" class="row-checkbox" data-id="${d.memberId}" data-type="attendance" onchange="onCheckChange()" ${d.status !== 'pending' ? 'disabled' : ''}></td>
+      <td>${memberCell(m)}</td>
+      <td>${d.scheduledDays}日</td>
+      <td>${d.plannedDays}日</td>
+      <td>${d.actualDays}日</td>
+      <td>${dayDiffStr}</td>
+      <td>${d.scheduledHours}h</td>
+      <td>${d.actualHours}h</td>
+      <td>${hrDiffStr}</td>
+      <td><span class="${otClass}">${d.overtime}h</span></td>
+      <td>${d.paidLeave}日</td>
+      <td>
+        <div class="progress-wrap">
+          <div class="progress-bar"><div class="progress-fill ${pfClass}" style="width:${Math.min(rate,100)}%"></div></div>
+          <span style="font-size:12px;font-weight:600;color:#555;">${rate}%</span>
+        </div>
+      </td>
+      <td>${statusBadge(d.status)}</td>
+      <td><button class="btn-detail" onclick="alert('${m.name}の勤怠詳細を表示します（モックアップ）')">詳細</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ===== Render commute table ===== */
+function renderCommute() {
+  const tbody = document.getElementById('commuteTbody');
+  tbody.innerHTML = '';
+  commuteData.forEach(d => {
+    const m = memberOf(d.memberId);
+    const diff = d.actual - d.applied;
+    const over = d.applied > d.limit;
+
+    const diffStr = diff === 0
+      ? '<span class="diff-zero">±0</span>'
+      : diff > 0
+        ? `<span class="diff-pos">+¥${diff.toLocaleString()}</span>`
+        : `<span class="diff-neg">-¥${Math.abs(diff).toLocaleString()}</span>`;
+
+    const tr = document.createElement('tr');
+    tr.dataset.memberId  = d.memberId;
+    tr.dataset.status    = d.status;
+    tr.dataset.tableType = 'commute';
+    tr.innerHTML = `
+      <td class="col-check"><input type="checkbox" class="row-checkbox" data-id="${d.memberId}" data-type="commute" onchange="onCheckChange()" ${d.status !== 'pending' ? 'disabled' : ''}></td>
+      <td>${memberCell(m)}</td>
+      <td>${d.transport}</td>
+      <td style="text-align:left;">${d.route}</td>
+      <td><span class="amount">¥${d.limit.toLocaleString()}</span></td>
+      <td><span class="amount ${over ? 'amount-over' : ''}">¥${d.applied.toLocaleString()}${over ? ' ⚠' : ''}</span></td>
+      <td><span class="amount">¥${d.actual.toLocaleString()}</span></td>
+      <td>${diffStr}</td>
+      <td><span style="font-size:12px;padding:2px 8px;border-radius:4px;background:${d.receipt==='あり'?'#e9f7ef':'#fdf0ee'};color:${d.receipt==='あり'?'#27ae60':'#e74c3c'};font-weight:600;">${d.receipt}</span></td>
+      <td>${statusBadge(d.status)}</td>
+      <td><button class="btn-detail" onclick="alert('${m.name}の通勤費詳細を表示します（モックアップ）')">詳細</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ===== Checkbox logic ===== */
+function onCheckChange() {
+  const checks = document.querySelectorAll('.row-checkbox:not(:disabled)');
+  const checked = document.querySelectorAll('.row-checkbox:checked');
+  const all = document.getElementById('checkAll');
+  all.indeterminate = checked.length > 0 && checked.length < checks.length;
+  all.checked = checks.length > 0 && checked.length === checks.length;
+  updateSelectedCount();
+}
+
+function toggleAll(el) {
+  const visibleChecks = document.querySelectorAll('.row-checkbox:not(:disabled)');
+  visibleChecks.forEach(c => {
+    // only toggle visible rows
+    const row = c.closest('tr');
+    if (row && row.style.display !== 'none') c.checked = el.checked;
+  });
+  updateSelectedCount();
+}
+
+function updateSelectedCount() {
+  const n = document.querySelectorAll('.row-checkbox:checked').length;
+  document.getElementById('selectedCount').textContent = `${n} 件選択中`;
+  document.getElementById('btnApprove').disabled = n === 0;
+  document.getElementById('btnReject').disabled  = n === 0;
+}
+
+/* ===== Filter ===== */
+function filterRows(type, btn) {
+  document.querySelectorAll('.filter-tabs button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#attendanceTbody tr, #commuteTbody tr').forEach(tr => {
+    if (type === 'all' || tr.dataset.status === type) {
+      tr.style.display = '';
+    } else {
+      tr.style.display = 'none';
+      const cb = tr.querySelector('.row-checkbox');
+      if (cb) cb.checked = false;
+    }
+  });
+  updateSelectedCount();
+}
+
+/* ===== Modal ===== */
+function openModal(action) {
+  currentAction = action;
+  const n = document.querySelectorAll('.row-checkbox:checked').length;
+  const overlay = document.getElementById('modalOverlay');
+  document.getElementById('modalCount').textContent = n;
+  if (action === 'approve') {
+    document.getElementById('modalIcon').textContent  = '✅';
+    document.getElementById('modalTitle').textContent = '一括承認の確認';
+    document.getElementById('modalBody').innerHTML    = `選択した <strong>${n}</strong> 件を承認します。<br>この操作は取り消せません。よろしいですか？`;
+    document.getElementById('modalOkBtn').textContent = '承認する';
+    document.getElementById('modalOkBtn').style.background = 'linear-gradient(135deg,#27ae60,#2ecc71)';
+  } else {
+    document.getElementById('modalIcon').textContent  = '↩️';
+    document.getElementById('modalTitle').textContent = '一括差戻しの確認';
+    document.getElementById('modalBody').innerHTML    = `選択した <strong>${n}</strong> 件を差戻します。<br>申請者への通知が送信されます。よろしいですか？`;
+    document.getElementById('modalOkBtn').textContent = '差戻しする';
+    document.getElementById('modalOkBtn').style.background = 'linear-gradient(135deg,#e74c3c,#c0392b)';
+  }
+  overlay.classList.add('show');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+
+/* ===== Execute action ===== */
+function execAction() {
+  closeModal();
+  const newStatus = currentAction === 'approve' ? 'approved' : 'rejected';
+
+  // Update data
+  document.querySelectorAll('.row-checkbox:checked').forEach(cb => {
+    const id   = parseInt(cb.dataset.id);
+    const type = cb.dataset.type;
+    if (type === 'attendance') {
+      const d = attendanceData.find(x => x.memberId === id);
+      if (d) d.status = newStatus;
+    } else {
+      const d = commuteData.find(x => x.memberId === id);
+      if (d) d.status = newStatus;
+    }
+  });
+
+  // Re-render
+  renderAttendance();
+  renderCommute();
+  updateSummary();
+  document.getElementById('checkAll').checked = false;
+  document.getElementById('checkAll').indeterminate = false;
+  updateSelectedCount();
+
+  showToast(currentAction === 'approve' ? '✅ 承認が完了しました' : '↩ 差戻しが完了しました');
+}
+
+/* ===== Summary ===== */
+function updateSummary() {
+  const allStatuses = [
+    ...attendanceData.map(d => d.status),
+    ...commuteData.map(d => d.status),
+  ];
+  // Per-member unique pending (count member having at least one pending)
+  const pendingMembers  = new Set(attendanceData.filter(d=>d.status==='pending').map(d=>d.memberId));
+  const approvedMembers = new Set(attendanceData.filter(d=>d.status==='approved').map(d=>d.memberId));
+  const rejectedMembers = new Set(attendanceData.filter(d=>d.status==='rejected').map(d=>d.memberId));
+
+  document.getElementById('pendingCount').textContent  = pendingMembers.size;
+  document.getElementById('approvedCount').textContent = approvedMembers.size;
+  document.getElementById('rejectedCount').textContent = rejectedMembers.size;
+
+  const totalAmt = commuteData.reduce((s,d) => s + d.applied, 0);
+  document.getElementById('totalCommuteAmt').textContent = totalAmt.toLocaleString();
+}
+
+/* ===== Toast ===== */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+/* ===== Period select (mock) ===== */
+function updatePeriod() {
+  showToast('📅 対象月を変更しました（モックアップ）');
+}
+
+/* ===== Init ===== */
+renderAttendance();
+renderCommute();
+updateSummary();
+</script>
+</body>
+</html>
