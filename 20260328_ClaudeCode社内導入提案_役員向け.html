@@ -310,6 +310,84 @@
     .agent-orchestrator h5 { color: white; }
     .agent-orchestrator p { color: rgba(255,255,255,0.8); }
 
+    /* COMPARISON */
+    .vs-header {
+      display: grid;
+      grid-template-columns: 1fr 80px 1fr;
+      gap: 0;
+      margin-bottom: 4px;
+    }
+    .vs-header-cell {
+      padding: 14px 20px;
+      font-weight: 700;
+      font-size: 15px;
+      text-align: center;
+      color: white;
+      border-radius: 10px 10px 0 0;
+    }
+    .vs-header-cell.copilot { background: #107c41; }
+    .vs-header-cell.claude  { background: var(--primary); }
+    .vs-header-cell.mid     { background: transparent; display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--gray); font-weight: 600; }
+    .vs-row {
+      display: grid;
+      grid-template-columns: 1fr 80px 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+    .vs-row:last-child { border-bottom: none; }
+    .vs-cell {
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+    }
+    .vs-cell.copilot-cell { background: #f0faf5; border-right: 1px solid var(--border); }
+    .vs-cell.claude-cell  { background: var(--accent-light); border-left: 1px solid var(--border); }
+    .vs-cell.label-cell   { background: var(--gray-light); justify-content: center; font-weight: 700; font-size: 11px; color: var(--gray); text-align: center; line-height: 1.4; }
+    .vs-win { font-weight: 700; color: var(--text); }
+    .vs-lose { color: #aab; }
+    .vs-badge {
+      display: inline-block;
+      padding: 1px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 700;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .vs-badge-blue { background: var(--primary); color: white; }
+    .vs-badge-green { background: #107c41; color: white; }
+    .vs-wrap { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+
+    .ms-note {
+      background: linear-gradient(135deg, #0f2444, #1a4080);
+      color: white;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-top: 20px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .ms-note-icon { font-size: 32px; flex-shrink: 0; margin-top: 2px; }
+    .ms-note h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .ms-note p { font-size: 13px; opacity: 0.88; line-height: 1.6; }
+    .ms-note strong { color: #7dd3fc; }
+
+    .vs-strategy {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .vs-strategy-card {
+      border-radius: 10px;
+      padding: 16px 18px;
+      border: 1.5px solid var(--border);
+    }
+    .vs-strategy-card h5 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+    .vs-strategy-card ul { padding-left: 16px; font-size: 12px; color: var(--text-sub); line-height: 1.8; }
+
     /* MERIT / DEMERIT */
     .md-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
     .merit-box, .demerit-box { border-radius: 12px; padding: 24px; }
@@ -610,10 +688,100 @@
     </div>
   </div>
 
-  <!-- 04 MERIT / DEMERIT -->
+  <!-- 04 COMPARISON -->
   <div class="section">
     <div class="section-header">
       <div class="section-num">04</div>
+      <h2 class="section-title">Microsoft Copilot との比較</h2>
+    </div>
+
+    <div class="vs-wrap">
+      <div class="vs-header">
+        <div class="vs-header-cell copilot">Microsoft Copilot<span style="font-size:11px;font-weight:400;opacity:0.85;margin-left:8px;">（現在導入中）</span></div>
+        <div class="vs-header-cell mid">比較項目</div>
+        <div class="vs-header-cell claude">Claude Code<span style="font-size:11px;font-weight:400;opacity:0.85;margin-left:8px;">（提案）</span></div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell copilot-cell"><span class="vs-lose">IDE上でのコード補完が中心。エージェントとしての自律実行は限定的</span></div>
+        <div class="vs-cell label-cell">基本<br>コンセプト</div>
+        <div class="vs-cell claude-cell"><span class="vs-win">複数システムをまたいで自律的にタスクを完遂するAIエージェントハブ</span> <span class="vs-badge vs-badge-blue">優位</span></div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell copilot-cell"><span class="vs-lose">約128K tokens（大規模コードベースでは限界あり）</span></div>
+        <div class="vs-cell label-cell">コンテキスト<br>ウィンドウ</div>
+        <div class="vs-cell claude-cell"><span class="vs-win">200K tokens — 大規模システムの全体把握が可能</span> <span class="vs-badge vs-badge-blue">優位</span></div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell copilot-cell"><span class="vs-lose">M365アプリ（Teams・SharePoint・Outlook）中心。外部システム連携は限定的</span></div>
+        <div class="vs-cell label-cell">外部システム<br>連携</div>
+        <div class="vs-cell claude-cell"><span class="vs-win">MCPにより社内DB・Slack・Jira・Stripe・GitHub等あらゆるシステムと接続</span> <span class="vs-badge vs-badge-blue">優位</span></div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell copilot-cell"><span class="vs-lose">Word・Excel・Teams等の操作補助が主。業務自動化の範囲はM365内に限られる</span></div>
+        <div class="vs-cell label-cell">業務自動化<br>の範囲</div>
+        <div class="vs-cell claude-cell"><span class="vs-win">開発・営業・管理・会計・採用など全業務領域をシステム横断で自動化</span> <span class="vs-badge vs-badge-blue">優位</span></div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell copilot-cell"><span class="vs-win">SWE-benchスコア：約44%（IDE補完に最適化）</span> <span class="vs-badge vs-badge-green">得意</span></div>
+        <div class="vs-cell label-cell">コード補完<br>（日常開発）</div>
+        <div class="vs-cell claude-cell"><span class="vs-lose">ターミナルベースのため、インライン補完はCopilotが上。用途が異なる</span></div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell copilot-cell"><span class="vs-lose">複数ファイル横断の大規模変更・フレームワーク移行は苦手</span></div>
+        <div class="vs-cell label-cell">複雑タスクの<br>自律実行</div>
+        <div class="vs-cell claude-cell"><span class="vs-win">SWE-bench 72.5%達成。40ファイル超の大規模改修も自律実行</span> <span class="vs-badge vs-badge-blue">大きく優位</span></div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell copilot-cell"><span class="vs-win">M365ライセンスに追加。$30/user/月（M365 Copilot）</span> <span class="vs-badge vs-badge-green">既存環境</span></div>
+        <div class="vs-cell label-cell">コスト・<br>導入容易性</div>
+        <div class="vs-cell claude-cell"><span class="vs-lose">別途APIコスト必要。ただし全社20名で月約¥75,000（1名あたり¥3,750）</span></div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell copilot-cell"><span class="vs-lose">Microsoft主導のロードマップに依存。自社独自の連携構築は困難</span></div>
+        <div class="vs-cell label-cell">拡張性・<br>カスタマイズ</div>
+        <div class="vs-cell claude-cell"><span class="vs-win">MCPサーバーを自社開発可能。顧客システムへの独自連携を構築・提供できる</span> <span class="vs-badge vs-badge-blue">優位</span></div>
+      </div>
+    </div>
+
+    <div class="ms-note">
+      <div class="ms-note-icon">💡</div>
+      <div>
+        <h4>注目：Microsoft 自身が Claude（Anthropic）を選んだ</h4>
+        <p>2026年3月、Microsoftは新機能「<strong>Copilot Cowork</strong>」をAnthropicのClaudeをベースに構築・発表しました。<br>
+        Microsoftが競合のGPTではなく<strong>Claudeの知性を自社製品に採用した</strong>という事実は、Claude Codeの優位性を端的に示しています。<br>
+        つまり「MicrosoftとのリレーションシップとClaude Code導入は矛盾しない」——むしろMicrosoftも認めたAIを先行活用することになります。</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:15px; color:var(--primary); margin: 20px 0 12px;">■ 推奨：Copilotと Claude Code の役割分担で最大効果</h3>
+    <div class="vs-strategy">
+      <div class="vs-strategy-card" style="background:#f0faf5; border-color:#a8dfc0;">
+        <h5 style="color:#107c41;">✅ Microsoft Copilot が担う領域（継続利用）</h5>
+        <ul>
+          <li>VS Code / IDEでのインラインコード補完</li>
+          <li>Word・Excel・PowerPointの文書作成補助</li>
+          <li>Teams会議の議事録・要約生成</li>
+          <li>Outlook メールの下書き支援</li>
+          <li>M365環境内の日常的なナレッジ活用</li>
+        </ul>
+      </div>
+      <div class="vs-strategy-card" style="background:var(--accent-light); border-color:#90caf9;">
+        <h5 style="color:var(--primary);">🚀 Claude Code が担う領域（新規追加）</h5>
+        <ul>
+          <li>社内DB・基幹システムとのMCP連携・自動化</li>
+          <li>大規模コードベースの横断的改修・移行</li>
+          <li>営業提案書・報告書の情報収集〜自動生成</li>
+          <li>M365外のシステム（Jira・Stripe等）との連携</li>
+          <li>顧客向けAIエージェント導入支援サービス</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 MERIT / DEMERIT -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">05</div>
       <h2 class="section-title">メリット・デメリット</h2>
     </div>
     <div class="md-grid">
@@ -696,10 +864,10 @@
     </div>
   </div>
 
-  <!-- 05 SECURITY -->
+  <!-- 06 SECURITY -->
   <div class="section">
     <div class="section-header">
-      <div class="section-num">05</div>
+      <div class="section-num">06</div>
       <h2 class="section-title">セキュリティ対策（独立系SIerとして最重要）</h2>
     </div>
     <div class="security-grid">
@@ -766,10 +934,10 @@
     </table>
   </div>
 
-  <!-- 06 ROADMAP -->
+  <!-- 07 ROADMAP -->
   <div class="section">
     <div class="section-header">
-      <div class="section-num">06</div>
+      <div class="section-num">07</div>
       <h2 class="section-title">導入ロードマップ（推奨）</h2>
     </div>
     <div class="roadmap">
@@ -821,10 +989,10 @@
     </div>
   </div>
 
-  <!-- 07 COST -->
+  <!-- 08 COST -->
   <div class="section">
     <div class="section-header">
-      <div class="section-num">07</div>
+      <div class="section-num">08</div>
       <h2 class="section-title">概算コストと投資対効果（試算）</h2>
     </div>
     <div class="cost-grid">
@@ -851,10 +1019,10 @@
     </div>
   </div>
 
-  <!-- 08 CONCLUSION -->
+  <!-- 09 CONCLUSION -->
   <div class="section">
     <div class="section-header">
-      <div class="section-num">08</div>
+      <div class="section-num">09</div>
       <h2 class="section-title">まとめ・経営への提言</h2>
     </div>
 
