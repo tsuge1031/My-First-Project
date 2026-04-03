@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>自己紹介 — 告野 孝彰</title>
+<title>プロフィール — 告野 孝彰</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
@@ -19,10 +19,11 @@
 
   body {
     font-family: 'Noto Sans JP', sans-serif;
-    font-size: 14px;
-    color: var(--black);
     background: #f3f4f6;
-    line-height: 1.7;
+    color: var(--black);
+    font-size: 14px;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
   }
 
   /* PDF保存ボタン */
@@ -47,12 +48,6 @@
   }
   .pdf-btn:hover { background: #1e40af; }
 
-  @media print {
-    .pdf-btn { display: none; }
-    body { background: #fff; }
-    .page { box-shadow: none; margin: 0; }
-  }
-
   /* ページ */
   .page {
     max-width: 800px;
@@ -62,64 +57,55 @@
     box-shadow: 0 2px 24px rgba(0,0,0,0.07);
   }
 
+  /* ヘッダー */
   .page-header {
     padding: 52px 56px 44px;
     border-bottom: 1px solid var(--border);
   }
-
   .header-label {
     font-size: 10px;
     font-weight: 700;
     letter-spacing: .22em;
     color: var(--blue);
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
-
   .header-name {
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 700;
     letter-spacing: .04em;
-    line-height: 1.2;
-    color: var(--black);
+    line-height: 1.3;
   }
-
-  .header-name-sub {
+  .header-name-kana {
     font-size: 13px;
     color: var(--gray);
-    margin-top: 6px;
-    letter-spacing: .08em;
+    margin-top: 4px;
+    letter-spacing: .1em;
   }
-
-  .header-meta {
-    display: flex;
-    gap: 24px;
-    margin-top: 24px;
-    flex-wrap: wrap;
+  .header-role {
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--gray);
   }
-
-  .meta-item {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .meta-label {
-    font-size: 10px;
+  .header-role strong {
+    color: var(--black);
     font-weight: 700;
-    letter-spacing: .18em;
+  }
+  .header-meta {
+    margin-top: 20px;
+    display: flex;
+    gap: 32px;
+    font-size: 12px;
     color: var(--gray);
   }
-
-  .meta-value {
-    font-size: 13px;
-    font-weight: 500;
+  .header-meta span strong {
     color: var(--black);
+    font-weight: 500;
   }
 
-  /* 本文 */
+  /* ボディ */
   .page-body { padding: 0 56px; }
 
-  /* 行レイアウト */
+  /* 二列ラベル行 */
   .row {
     display: grid;
     grid-template-columns: 108px 1fr;
@@ -127,7 +113,6 @@
     padding: 40px 0;
     border-bottom: 1px solid var(--border);
   }
-
   .row-label {
     font-size: 10px;
     font-weight: 700;
@@ -135,36 +120,24 @@
     color: var(--blue);
     padding-top: 2px;
   }
-
-  .row-content {}
-
-  .section-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--black);
-    margin-bottom: 12px;
-  }
+  .row-content { }
 
   /* キャリアフロー */
   .career-flow {
     display: flex;
     margin-bottom: 20px;
   }
-
   .flow-item {
     flex: 1;
     padding: 14px 18px;
     border: 1px solid var(--border);
   }
-
   .flow-item + .flow-item { border-left: none; }
-
   .flow-item.current {
     background: var(--blue);
     border-color: var(--blue);
     color: #fff;
   }
-
   .flow-num {
     font-size: 10px;
     font-weight: 700;
@@ -172,160 +145,152 @@
     opacity: .6;
     margin-bottom: 6px;
   }
-
-  .flow-item.current .flow-num { opacity: .7; color: #fff; }
-
   .flow-title {
     font-size: 13px;
     font-weight: 700;
+    line-height: 1.4;
   }
-
   .flow-sub {
     font-size: 11px;
-    color: var(--gray);
-    margin-top: 3px;
-    line-height: 1.5;
-  }
-
-  .flow-item.current .flow-sub { color: rgba(255,255,255,0.75); }
-
-  /* 技術タグ */
-  .tech-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
     margin-top: 4px;
+    opacity: .75;
   }
 
-  .tech-tag {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--gray);
-    border: 1px solid var(--border);
-    padding: 3px 10px;
-  }
-
-  /* AI フェーズ */
-  .ai-phases {
+  /* AI歩みタイムライン */
+  .ai-timeline {
     display: flex;
     flex-direction: column;
     gap: 0;
-    border: 1px solid var(--border);
   }
-
-  .ai-phase {
+  .ai-step {
     display: grid;
-    grid-template-columns: 80px 1fr;
+    grid-template-columns: 72px 1fr;
+    gap: 16px;
+    padding: 14px 0;
     border-bottom: 1px solid var(--border);
   }
-
-  .ai-phase:last-child { border-bottom: none; }
-
-  .ai-phase.highlight .ai-phase-label {
-    background: var(--blue);
-    color: #fff;
-  }
-
-  .ai-phase-label {
-    padding: 12px 14px;
+  .ai-step:last-child { border-bottom: none; }
+  .ai-step-label {
     font-size: 10px;
     font-weight: 700;
-    letter-spacing: .1em;
+    letter-spacing: .12em;
     color: var(--gray);
-    background: #f9fafb;
-    border-right: 1px solid var(--border);
-    display: flex;
-    align-items: center;
+    padding-top: 2px;
   }
-
-  .ai-phase.highlight .ai-phase-label { border-right-color: var(--blue); }
-
-  .ai-phase-content {
-    padding: 12px 16px;
+  .ai-step-content {
     font-size: 13px;
-    color: var(--black);
-    display: flex;
-    align-items: center;
+    line-height: 1.7;
+  }
+  .ai-step.highlight .ai-step-label { color: var(--blue); }
+  .ai-step.highlight .ai-step-content { font-weight: 700; }
+
+  /* 技術スタック */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+  }
+  .tech-cell {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tech-cell:nth-last-child(-n+2) { border-bottom: none; }
+  .tech-cell:nth-child(odd) { border-right: 1px solid var(--border); }
+  .tech-cell-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .15em;
+    color: var(--gray);
+    margin-bottom: 6px;
+  }
+  .tech-cell-content {
+    font-size: 13px;
+    line-height: 1.7;
   }
 
   /* 目標リスト */
   .goal-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-top: 8px;
+    gap: 0;
   }
-
   .goal-item {
-    display: flex;
+    display: grid;
+    grid-template-columns: 28px 1fr;
     gap: 14px;
-    align-items: flex-start;
-    padding: 12px 16px;
-    border: 1px solid var(--border);
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
   }
-
+  .goal-item:last-child { border-bottom: none; }
   .goal-num {
-    font-size: 10px;
+    font-size: 18px;
     font-weight: 700;
-    letter-spacing: .1em;
     color: var(--blue);
-    flex-shrink: 0;
-    padding-top: 1px;
+    line-height: 1;
+    padding-top: 3px;
   }
-
   .goal-text {
     font-size: 13px;
-    line-height: 1.6;
+    line-height: 1.75;
   }
 
-  .goal-text strong { color: var(--blue); }
-
-  /* 強みグリッド */
+  /* 強みカード */
   .strength-grid {
     display: flex;
     flex-direction: column;
     gap: 0;
-    border: 1px solid var(--border);
   }
-
   .strength-item {
-    display: grid;
-    grid-template-columns: 90px 1fr;
+    padding: 16px 0;
     border-bottom: 1px solid var(--border);
   }
-
   .strength-item:last-child { border-bottom: none; }
-
-  .strength-key {
-    padding: 14px 16px;
-    font-size: 11px;
+  .strength-title {
+    font-size: 13px;
     font-weight: 700;
-    color: var(--black);
-    background: #f9fafb;
-    border-right: 1px solid var(--border);
-    display: flex;
-    align-items: center;
+    margin-bottom: 4px;
+  }
+  .strength-desc {
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.7;
   }
 
-  .strength-val {
-    padding: 14px 16px;
+  /* 趣味 */
+  .hobby-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+  }
+  .hobby-item {
+    padding: 18px 20px;
+  }
+  .hobby-item + .hobby-item { border-left: 1px solid var(--border); }
+  .hobby-name {
     font-size: 13px;
-    color: var(--black);
-    line-height: 1.6;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .hobby-desc {
+    font-size: 12px;
+    color: var(--gray);
+    line-height: 1.7;
   }
 
   /* プルクオート */
   .pull-quote {
     padding-left: 20px;
     border-left: 3px solid var(--blue);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     line-height: 1.75;
-    color: var(--black);
-    margin: 16px 0;
+    margin: 20px 0;
   }
 
-  /* サイドノート */
+  /* 状況ノート */
   .situation-note {
     padding: 14px 0;
     border-top: 1px solid var(--border);
@@ -333,69 +298,21 @@
     font-size: 13px;
     color: var(--gray);
     line-height: 1.9;
-    margin: 12px 0;
   }
-
   .situation-note strong { color: var(--black); }
 
-  /* 趣味リスト */
-  .hobby-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .hobby-item {
-    font-size: 13px;
-    color: var(--black);
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-  }
-
-  .hobby-item:first-child { border-top: 1px solid var(--border); }
-
-  .hobby-name { font-weight: 700; }
-  .hobby-sub { font-size: 12px; color: var(--gray); }
-
-  /* コミュニケーション */
-  .comm-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    border: 1px solid var(--border);
-  }
-
-  .comm-item {
-    padding: 12px 16px;
-    font-size: 13px;
-    border-bottom: 1px solid var(--border);
-    line-height: 1.6;
-  }
-
-  .comm-item:last-child { border-bottom: none; }
-  .comm-item strong { color: var(--black); }
-
   /* エピソード */
-  .episode-title {
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 12px;
-  }
-
   .episode-body {
     font-size: 13px;
-    color: var(--black);
-    line-height: 1.9;
+    line-height: 1.85;
+    color: var(--gray);
   }
+  .episode-body strong { color: var(--black); }
 
   /* フッター */
   .page-footer {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     margin: 0 56px;
     padding: 20px 0;
     border-top: 1px solid var(--border);
@@ -403,24 +320,14 @@
     color: var(--gray);
   }
 
-  .footer-message {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--black);
-  }
-
-  /* 一言 */
-  .closing-box {
-    margin: 32px 0 0;
-    padding: 24px 28px;
-    border: 1px solid var(--blue);
-  }
-
-  .closing-text {
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.8;
-    color: var(--black);
+  @media print {
+    .pdf-btn { display: none; }
+    body { background: #fff; }
+    .page {
+      margin: 0;
+      box-shadow: none;
+      max-width: 100%;
+    }
   }
 </style>
 </head>
@@ -439,24 +346,14 @@
   <header class="page-header">
     <div class="header-label">自己紹介</div>
     <div class="header-name">告野 孝彰</div>
-    <div class="header-name-sub">つげの たかあき　／　ニックネーム：つげ</div>
+    <div class="header-name-kana">つげの たかあき</div>
+    <div class="header-role">
+      <strong>SE（システムエンジニア）/ 課長職</strong> &nbsp;|&nbsp; SIer・業務アプリケーション開発
+    </div>
     <div class="header-meta">
-      <div class="meta-item">
-        <span class="meta-label">年齢</span>
-        <span class="meta-value">42歳</span>
-      </div>
-      <div class="meta-item">
-        <span class="meta-label">居住地</span>
-        <span class="meta-value">東京都</span>
-      </div>
-      <div class="meta-item">
-        <span class="meta-label">家族</span>
-        <span class="meta-value">既婚・息子1人（6歳、4月から小学生）</span>
-      </div>
-      <div class="meta-item">
-        <span class="meta-label">スクール</span>
-        <span class="meta-value">AI Driven School</span>
-      </div>
+      <span>年齢 <strong>42歳</strong></span>
+      <span>居住地 <strong>東京都</strong></span>
+      <span>家族 <strong>既婚・息子1人（6歳）</strong></span>
     </div>
   </header>
 
@@ -469,103 +366,101 @@
         <div class="career-flow">
           <div class="flow-item">
             <div class="flow-num">第1期</div>
-            <div class="flow-title">開発エンジニア</div>
-            <div class="flow-sub">業務アプリ設計・実装・運用</div>
+            <div class="flow-title">開発現場</div>
+            <div class="flow-sub">設計・実装・運用<br>約20年</div>
           </div>
           <div class="flow-item">
             <div class="flow-num">第2期</div>
-            <div class="flow-title">シニアSE</div>
-            <div class="flow-sub">要件定義・プロジェクト主導</div>
+            <div class="flow-title">マネジメント職</div>
+            <div class="flow-sub">チーム管理<br>プロジェクト管理</div>
           </div>
           <div class="flow-item current">
             <div class="flow-num">現在</div>
-            <div class="flow-title">課長職</div>
-            <div class="flow-sub">マネジメント・AI 導入推進</div>
+            <div class="flow-title">課長職 + AI推進</div>
+            <div class="flow-sub">社内 AI 活用推進<br>業務効率化</div>
           </div>
         </div>
-        <div class="situation-note">
-          東証プライム上場 SIer にて約 <strong>20年</strong>、業務アプリケーションの開発から運用まで上流〜下流を一貫して経験。ここ数年は組織マネジメントと社内 AI 活用推進を担う。
-        </div>
-        <div class="tech-list">
-          <span class="tech-tag">Java</span>
-          <span class="tech-tag">.NET</span>
-          <span class="tech-tag">SQL</span>
-          <span class="tech-tag">Azure</span>
-          <span class="tech-tag">AWS</span>
-          <span class="tech-tag">Claude Code</span>
-          <span class="tech-tag">Cursor</span>
+        <div class="tech-grid">
+          <div class="tech-cell">
+            <div class="tech-cell-label">得意領域</div>
+            <div class="tech-cell-content">業務システム設計・要件定義・プロジェクトマネジメント</div>
+          </div>
+          <div class="tech-cell">
+            <div class="tech-cell-label">経験技術</div>
+            <div class="tech-cell-content">Java、.NET、SQL、Azure / AWS</div>
+          </div>
+          <div class="tech-cell" style="grid-column: 1 / -1; border-right: none;">
+            <div class="tech-cell-label">最近の取り組み</div>
+            <div class="tech-cell-content">社内向け AI 活用推進、Claude Code を使った業務効率化</div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- AIとの歩み -->
+    <!-- AI との歩み -->
     <div class="row">
       <div class="row-label">AIとの歩み</div>
       <div class="row-content">
-        <div class="ai-phases">
-          <div class="ai-phase">
-            <div class="ai-phase-label">試用期</div>
-            <div class="ai-phase-content">ChatGPT 登場直後から個人的に使い始める</div>
+        <div class="ai-timeline">
+          <div class="ai-step">
+            <div class="ai-step-label">きっかけ</div>
+            <div class="ai-step-content">ChatGPT 登場の頃から個人的に試用を開始</div>
           </div>
-          <div class="ai-phase">
-            <div class="ai-phase-label">業務活用</div>
-            <div class="ai-phase-content">ドキュメント作成・コードレビュー補助に日常利用</div>
+          <div class="ai-step">
+            <div class="ai-step-label">業務活用</div>
+            <div class="ai-step-content">ドキュメント作成・RAG による社内情報の整理に活用中</div>
           </div>
-          <div class="ai-phase highlight">
-            <div class="ai-phase-label">現在地</div>
-            <div class="ai-phase-content">Claude Code・Cursor で本格的な AI 駆動開発に入門中</div>
-          </div>
-          <div class="ai-phase">
-            <div class="ai-phase-label">社内実績</div>
-            <div class="ai-phase-content">役員向け AI 導入提案資料を作成・プレゼン済み</div>
+          <div class="ai-step highlight">
+            <div class="ai-step-label">現在の挑戦</div>
+            <div class="ai-step-content">Claude Code・Cursor を使った本格的な AI 駆動開発に挑戦</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 受講動機と目標 -->
+    <!-- 受講の動機と目標 -->
     <div class="row">
-      <div class="row-label">受講動機と目標</div>
+      <div class="row-label">動機と目標</div>
       <div class="row-content">
-        <div class="pull-quote">
-          自分自身が AI トレンドの波に乗って、組織を引っ張っていきたい！
-        </div>
         <div class="situation-note">
-          管理職になって技術から離れ、<strong>政治的な仕事が増えた</strong>ことへの危機感がきっかけ。マコなり社長の YouTube でこのスクールを知り、チャレンジを決意。
+          管理職になって技術から離れ、<strong>政治的な仕事が増えてきたことへの危機感</strong>から、ADS 受講を決意。マコなり社長の YouTube がきっかけ。
         </div>
-        <div class="goal-list">
+        <blockquote class="pull-quote" style="margin-top: 20px;">
+          自分自身が AI トレンドの波に乗って、組織を引っ張っていきたい！
+        </blockquote>
+        <div class="goal-list" style="margin-top: 20px;">
           <div class="goal-item">
-            <span class="goal-num">目標 01</span>
-            <span class="goal-text"><strong>自分で動くものを作れる</strong>エンジニア感覚を取り戻す</span>
+            <div class="goal-num">1</div>
+            <div class="goal-text"><strong>自分で動くものを作れる</strong>エンジニア感覚を取り戻す</div>
           </div>
           <div class="goal-item">
-            <span class="goal-num">目標 02</span>
-            <span class="goal-text"><strong>AI × マネジメント</strong>の掛け算で、チームの生産性を上げる打ち手を身につける</span>
+            <div class="goal-num">2</div>
+            <div class="goal-text"><strong>AI × マネジメント</strong>の掛け算で、チームの生産性を上げる打ち手を身につける</div>
           </div>
           <div class="goal-item">
-            <span class="goal-num">目標 03</span>
-            <span class="goal-text">社内で「<strong>AI 活用といえばつげさん</strong>」と言われる存在になる</span>
+            <div class="goal-num">3</div>
+            <div class="goal-text">社内で「AI 活用といえばつげさん」と言われる存在になる</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 強み -->
+    <!-- 得意なこと・強み -->
     <div class="row">
-      <div class="row-label">得意なこと</div>
+      <div class="row-label">強みと特長</div>
       <div class="row-content">
         <div class="strength-grid">
           <div class="strength-item">
-            <div class="strength-key">橋渡し役</div>
-            <div class="strength-val">技術者と非エンジニア（経営層・営業）の間を翻訳する対話が得意</div>
+            <div class="strength-title">橋渡し役</div>
+            <div class="strength-desc">技術者と非エンジニア（経営層・営業）の間を翻訳する会話が得意。複雑な技術的内容をわかりやすく整理して伝える。</div>
           </div>
           <div class="strength-item">
-            <div class="strength-key">全体俯瞰</div>
-            <div class="strength-val">上流〜下流を経験しているので、プロジェクト全体像を見やすい</div>
+            <div class="strength-title">全体俯瞰</div>
+            <div class="strength-desc">開発から運用まで上流〜下流を経験。プロジェクト全体像を見渡す視点を持つ。</div>
           </div>
           <div class="strength-item">
-            <div class="strength-key">巻き込み力</div>
-            <div class="strength-val">社内提案・プレゼンを通じて新しい取り組みを組織に広げる経験あり</div>
+            <div class="strength-title">巻き込み力</div>
+            <div class="strength-desc">人とのコミュニケーションが得意で、チームで一つのゴールに向かうプロセスを楽しめる。</div>
           </div>
         </div>
       </div>
@@ -577,65 +472,51 @@
       <div class="row-content">
         <div class="hobby-list">
           <div class="hobby-item">
-            <span class="hobby-name">ゴルフ</span>
-            <span class="hobby-sub">スコアは修行中</span>
+            <div class="hobby-name">ゴルフ</div>
+            <div class="hobby-desc">スコアは二の次のエンジョイ勢。仲間と楽しむことが最優先。</div>
           </div>
           <div class="hobby-item">
-            <span class="hobby-name">サウナ</span>
-            <span class="hobby-sub">ととのい重視派</span>
-          </div>
-          <div class="hobby-item">
-            <span class="hobby-name">マコなり社長の YouTube</span>
-            <span class="hobby-sub">毎週チェック、このスクールとの出会いのきっかけ</span>
+            <div class="hobby-name">サウナ</div>
+            <div class="hobby-desc">ホームサウナでのリラックスと、各地のサウナ巡りの新鮮味、どちらも最高。</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- コミュニケーション -->
+    <!-- おすすめ体験 -->
     <div class="row">
-      <div class="row-label">コミュニ<br>ケーション</div>
-      <div class="row-content">
-        <div class="comm-list">
-          <div class="comm-item">返信は早め。テキストより<strong>気軽な一言</strong>のほうが嬉しいです</div>
-          <div class="comm-item">分からないことは素直に「<strong>分からない</strong>」と言うタイプ</div>
-          <div class="comm-item">困ったときはお互い様、<strong>助け合い優先</strong>で行きましょう！</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- エピソード -->
-    <div class="row" style="border-bottom: none;">
       <div class="row-label">おすすめ体験</div>
       <div class="row-content">
-        <div class="episode-title">バンジージャンプ（群馬県・みなかみ）</div>
         <div class="episode-body">
-          元々<strong>高所恐怖症気味</strong>で、絶叫系が大嫌いでした。ディズニーランドのビッグサンダーマウンテンでさえ限界ギリギリ……。<br><br>
-          友人にみなかみバンジーへ誘われ、「断るのはなんかダサい」と意を決してチャレンジ。落下中はアドレナリン大放出で、<strong>最高に楽しかった！</strong>
-          それ以降、絶叫系が全く怖くなくなるという嬉しい副産物まで。
+          <strong>バンジージャンプ（群馬県・みなかみ）</strong><br>
+          元々は高所恐怖症気味で絶叫系が大嫌いでした。友人の誘いに「断るのはなんかダサい」と意を決してチャレンジ。落下中はアドレナリン大放出で、<strong>最高に楽しかった！</strong>
+          その後、絶叫系が全く怖くなくなるという嬉しい副産物も。
         </div>
-        <div class="pull-quote" style="margin-top: 20px;">
-          毛嫌いしていることにあえて飛び込んだら、思いもよらず視界が開けた。
-        </div>
+        <blockquote class="pull-quote" style="margin-top: 20px;">
+          毛嫌いしていることにあえてチャレンジしてみたら、思いもよらず視界が開けた——そんな特別な体験でした。
+        </blockquote>
       </div>
     </div>
 
-    <!-- 一言 -->
-    <div class="closing-box">
-      <div class="closing-text">
-        SE 歴約 20 年のベテランが、AI の波に全力で挑んでいきます。<br>
-        一緒に楽しく学びましょう！何でも気軽に話しかけてください。
+    <!-- メッセージ -->
+    <div class="row" style="border-bottom: none;">
+      <div class="row-label">ひとこと</div>
+      <div class="row-content">
+        <p style="font-size: 14px; line-height: 1.85;">
+          42歳、SE 歴約 20 年、開発現場からはしばらく離れてしまっていますが、AI の波に全力で挑んでいきます。<br>
+          一緒に楽しく学びましょう！何でも気軽に話しかけてください。
+        </p>
       </div>
     </div>
 
-  </div>
+  </div><!-- /page-body -->
 
-  <!-- フッター -->
   <footer class="page-footer">
-    <span>告野 孝彰 — つげ</span>
-    <span>AI Driven School</span>
+    <span>告野 孝彰 — プロフィール</span>
+    <span>2026年4月</span>
   </footer>
 
-</div>
+</div><!-- /page -->
+
 </body>
 </html>
