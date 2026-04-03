@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code 社内導入提案｜役員向け図解資料</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:   #1d4ed8;
+      --black:  #111827;
+      --gray:   #6b7280;
+      --border: #e5e7eb;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f3f4f6; font-family: 'Noto Sans JP', sans-serif; color: var(--black); -webkit-font-smoothing: antialiased; }
+
+    /* ─── PAGE SHELL ─── */
+    .page {
+      max-width: 840px;
+      margin: 48px auto;
+      background: #fff;
+      border-top: 3px solid var(--blue);
+      box-shadow: 0 2px 24px rgba(0,0,0,0.07);
+    }
+    .page-header {
+      padding: 56px 60px 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-body { padding: 0 60px; }
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 60px;
+      padding: 20px 0;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--gray);
+    }
+
+    /* ─── ROW LAYOUT ─── */
+    .row {
+      display: grid;
+      grid-template-columns: 112px 1fr;
+      gap: 44px;
+      padding: 44px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .row:last-child { border-bottom: none; }
+    .row-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      color: var(--blue);
+      text-transform: uppercase;
+      padding-top: 2px;
+      line-height: 1.6;
+    }
+
+    /* ─── COVER ─── */
+    .cover-kicker {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 14px;
+    }
+    .cover-title {
+      font-size: 30px;
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+    .cover-tagline {
+      font-size: 14px;
+      color: var(--gray);
+      margin-bottom: 36px;
+      line-height: 1.65;
+    }
+    .cover-meta {
+      display: flex;
+      gap: 36px;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+    .cover-meta-item strong {
+      display: block;
+      font-size: 9px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--blue);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .cover-meta-item span { font-size: 12px; color: var(--gray); }
+
+    /* ─── SECTION HEADER ─── */
+    .sec-no {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .2em;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .sec-title {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.45;
+      margin-bottom: 4px;
+    }
+    .sec-desc {
+      font-size: 12px;
+      color: var(--gray);
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+
+    /* ─── PULL QUOTE ─── */
+    .pull-quote {
+      padding: 0 0 0 18px;
+      border-left: 3px solid var(--blue);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.8;
+      margin: 20px 0;
+      color: var(--black);
+    }
+
+    /* ─── SITUATION NOTE ─── */
+    .situation-note {
+      padding: 14px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--gray);
+      line-height: 1.9;
+      margin: 18px 0;
+    }
+    .situation-note strong { color: var(--black); }
+
+    /* ─── MCP HUB DIAGRAM ─── */
+    .hub-wrap {
+      margin: 4px 0 0;
+    }
+    .hub-grid {
+      display: grid;
+      grid-template-columns: 1fr 140px 1fr;
+      gap: 0;
+      align-items: center;
+    }
+    .hub-side { display: flex; flex-direction: column; gap: 7px; }
+    .hub-side.right { align-items: flex-end; }
+    .hub-item {
+      padding: 9px 13px;
+      border: 1px solid var(--border);
+      width: 180px;
+    }
+    .hub-item-cat {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 3px;
+    }
+    .hub-item-name { font-size: 12px; font-weight: 700; }
+    .hub-item-sub { font-size: 10px; color: var(--gray); }
+    .hub-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      padding: 0 8px;
+    }
+    .hub-arrow {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 12px;
+    }
+    .hub-arrow-line {
+      width: 100%;
+      height: 1px;
+      background: var(--gray);
+      position: relative;
+    }
+    .hub-core {
+      width: 116px;
+      height: 116px;
+      border: 2px solid var(--blue);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .hub-core-logo {
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--blue);
+      letter-spacing: -.02em;
+      line-height: 1.2;
+    }
+    .hub-core-sub {
+      font-size: 8px;
+      color: var(--gray);
+      margin-top: 5px;
+      letter-spacing: .08em;
+      line-height: 1.5;
+    }
+    .hub-mcp {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gray);
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+    }
+
+    /* ─── MULTI-AGENT DIAGRAM ─── */
+    .agent-diagram {
+      border: 1px solid var(--border);
+      margin-top: 20px;
+    }
+    .agent-orch {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      background: var(--blue);
+    }
+    .agent-orch-label {
+      font-size: 9px; font-weight: 700; letter-spacing: .2em;
+      text-transform: uppercase; color: rgba(255,255,255,.7); margin-bottom: 3px;
+    }
+    .agent-orch-title {
+      font-size: 13px; font-weight: 700; color: #fff;
+    }
+    .agent-orch-sub { font-size: 10px; color: rgba(255,255,255,.75); margin-top: 2px; }
+    .agent-sub-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .agent-item {
+      padding: 14px 18px;
+      border-right: 1px solid var(--border);
+    }
+    .agent-item:last-child { border-right: none; }
+    .agent-item-label {
+      font-size: 9px; font-weight: 700; letter-spacing: .15em;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 4px;
+    }
+    .agent-item-name { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+    .agent-item-sub { font-size: 10px; color: var(--gray); line-height: 1.5; }
+
+    /* ─── BUSINESS AREAS ─── */
+    .biz-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--border);
+    }
+    .biz-item {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+    .biz-item:nth-child(2n) { border-right: none; }
+    .biz-item:nth-last-child(-n+2) { border-bottom: none; }
+    .biz-dept {
+      font-size: 9px; font-weight: 700; letter-spacing: .15em;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 5px;
+    }
+    .biz-name { font-size: 13px; font-weight: 700; margin-bottom: 5px; }
+    .biz-desc { font-size: 11px; color: var(--gray); line-height: 1.6; }
+
+    /* ─── CASE STUDIES ─── */
+    .case-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border: 1px solid var(--border);
+    }
+    .case-item {
+      padding: 20px 18px;
+      border-right: 1px solid var(--border);
+    }
+    .case-item:last-child { border-right: none; }
+    .case-company {
+      font-size: 10px; font-weight: 700; letter-spacing: .12em;
+      color: var(--gray); text-transform: uppercase; margin-bottom: 10px;
+    }
+    .case-result {
+      font-size: 19px; font-weight: 900; color: var(--blue);
+      line-height: 1.25; margin-bottom: 10px;
+    }
+    .case-desc { font-size: 11px; color: var(--gray); line-height: 1.65; }
+    .case-tool {
+      display: inline-block; margin-top: 10px;
+      font-size: 9px; font-weight: 700; letter-spacing: .1em;
+      color: var(--gray); border: 1px solid var(--border); padding: 2px 7px;
+    }
+
+    /* ─── COMPARE TABLE ─── */
+    .compare-table {
+      width: 100%; border-collapse: collapse; font-size: 11px;
+    }
+    .compare-table th {
+      padding: 9px 12px; text-align: left;
+      border-bottom: 2px solid var(--border);
+      font-size: 9px; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--gray); font-weight: 700;
+    }
+    .compare-table td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top; line-height: 1.55;
+    }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table .col-item { font-weight: 700; font-size: 11px; }
+    .compare-table .col-copilot { color: var(--gray); }
+    .win { color: var(--blue); font-weight: 700; }
+
+    /* ─── ROLE SPLIT ─── */
+    .role-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--border); margin-top: 20px;
+    }
+    .role-col { padding: 18px 20px; }
+    .role-col + .role-col { border-left: 1px solid var(--border); }
+    .role-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--gray); margin-bottom: 12px;
+    }
+    .role-col.after .role-label { color: var(--blue); }
+    .role-col ul { list-style: none; }
+    .role-col ul li {
+      font-size: 11px; padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--gray); line-height: 1.5;
+    }
+    .role-col ul li:last-child { border-bottom: none; }
+    .role-col.after ul li { color: var(--black); }
+
+    /* ─── PROS CONS ─── */
+    .proscons-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--border);
+    }
+    .pros-col { padding: 20px; border-right: 1px solid var(--border); }
+    .cons-col { padding: 20px; }
+    .proscons-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .2em;
+      text-transform: uppercase; margin-bottom: 14px;
+    }
+    .proscons-label.pros { color: var(--blue); }
+    .proscons-label.cons { color: var(--gray); }
+    .pc-item {
+      display: flex; gap: 10px;
+      padding: 9px 0; border-bottom: 1px solid var(--border);
+    }
+    .pc-item:last-child { border-bottom: none; }
+    .pc-num {
+      font-size: 10px; font-weight: 700; color: var(--blue);
+      min-width: 18px; padding-top: 1px;
+    }
+    .cons-col .pc-num { color: var(--gray); }
+    .pc-text { font-size: 11px; line-height: 1.55; }
+    .pc-text b { display: block; margin-bottom: 2px; }
+    .pc-text small { color: var(--gray); font-size: 10px; }
+
+    /* ─── SECURITY ─── */
+    .security-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--border);
+    }
+    .sec-item {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+    .sec-item:nth-child(2n) { border-right: none; }
+    .sec-item:nth-last-child(-n+2) { border-bottom: none; }
+    .sec-item-name { font-size: 11px; font-weight: 700; margin-bottom: 4px; }
+    .sec-item-desc { font-size: 11px; color: var(--gray); line-height: 1.6; }
+
+    .deploy-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 18px; }
+    .deploy-table th {
+      padding: 9px 12px; text-align: left;
+      border-bottom: 2px solid var(--border);
+      font-size: 9px; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--gray); font-weight: 700;
+    }
+    .deploy-table td {
+      padding: 11px 12px; border-bottom: 1px solid var(--border); vertical-align: top;
+    }
+    .deploy-table tr:last-child td { border-bottom: none; }
+    .deploy-table .recommend { color: var(--blue); font-weight: 700; }
+    .badge {
+      display: inline-block; font-size: 9px; font-weight: 700;
+      letter-spacing: .08em; padding: 2px 7px;
+      border: 1px solid var(--blue); color: var(--blue);
+    }
+
+    /* ─── ROADMAP ─── */
+    .roadmap-flow {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      border: 1px solid var(--border);
+    }
+    .rm-phase { padding: 20px 18px; border-right: 1px solid var(--border); }
+    .rm-phase:last-child { border-right: none; }
+    .rm-phase.active { background: var(--blue); }
+    .rm-num {
+      font-size: 10px; font-weight: 700; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--gray); margin-bottom: 6px;
+    }
+    .rm-phase.active .rm-num { color: rgba(255,255,255,.65); }
+    .rm-title { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+    .rm-phase.active .rm-title { color: #fff; }
+    .rm-period { font-size: 11px; color: var(--gray); margin-bottom: 12px; }
+    .rm-phase.active .rm-period { color: rgba(255,255,255,.65); }
+    .rm-items { list-style: none; }
+    .rm-items li {
+      font-size: 11px; color: var(--gray); padding: 4px 0;
+      border-bottom: 1px solid var(--border); line-height: 1.5;
+    }
+    .rm-phase.active .rm-items li {
+      color: rgba(255,255,255,.85); border-color: rgba(255,255,255,.2);
+    }
+    .rm-items li:last-child { border-bottom: none; }
+    .rm-kpi {
+      margin-top: 12px; font-size: 10px; font-weight: 700;
+      letter-spacing: .04em; color: var(--blue); line-height: 1.5;
+    }
+    .rm-phase.active .rm-kpi { color: rgba(255,255,255,.9); }
+
+    /* ─── COST & ROI ─── */
+    .costroi-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--border);
+    }
+    .cost-col { padding: 20px; border-right: 1px solid var(--border); }
+    .roi-col { padding: 20px; }
+    .costlabel {
+      font-size: 10px; font-weight: 700; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--gray); margin-bottom: 14px;
+    }
+    .cost-row {
+      display: flex; justify-content: space-between;
+      padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 11px;
+    }
+    .cost-row:last-child { border-bottom: none; }
+    .cost-row.total { font-weight: 700; font-size: 12px; }
+    .cost-row-name { color: var(--gray); }
+    .roi-big {
+      font-size: 52px; font-weight: 900; color: var(--blue);
+      line-height: 1; margin-bottom: 2px;
+    }
+    .roi-bigunit { font-size: 14px; color: var(--gray); margin-bottom: 16px; }
+    .roi-breakdown { font-size: 11px; color: var(--gray); line-height: 1.9; }
+    .roi-breakdown b { color: var(--black); }
+
+    /* ─── SUMMARY STATS ─── */
+    .stats-row {
+      display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+      border: 1px solid var(--border); margin-bottom: 20px;
+    }
+    .stat {
+      padding: 18px 14px; border-right: 1px solid var(--border); text-align: center;
+    }
+    .stat:last-child { border-right: none; }
+    .stat-lbl {
+      font-size: 9px; font-weight: 700; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--gray); margin-bottom: 7px;
+    }
+    .stat-val { font-size: 22px; font-weight: 900; color: var(--blue); line-height: 1.1; }
+    .stat-unit { font-size: 10px; color: var(--gray); margin-top: 3px; }
+
+    /* ─── MANAGEMENT POINTS ─── */
+    .mgmt-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--border);
+    }
+    .mgmt-item {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+    .mgmt-item:nth-child(2n) { border-right: none; }
+    .mgmt-item:nth-last-child(-n+2) { border-bottom: none; }
+    .mgmt-num {
+      font-size: 10px; font-weight: 700; letter-spacing: .1em;
+      color: var(--blue); margin-bottom: 7px;
+    }
+    .mgmt-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+    .mgmt-desc { font-size: 11px; color: var(--gray); line-height: 1.65; }
+
+    /* ─── ACTION BOX ─── */
+    .action-box {
+      border: 1px solid var(--blue); padding: 20px 24px; margin-top: 20px;
+    }
+    .action-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 8px;
+    }
+    .action-text { font-size: 13px; font-weight: 700; line-height: 1.75; }
+
+    /* ─── MS NOTE ─── */
+    .ms-note {
+      border: 1px solid var(--border); padding: 15px 18px; margin-top: 18px;
+      background: #fafafa;
+    }
+    .ms-note-lbl {
+      font-size: 9px; font-weight: 700; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--gray); margin-bottom: 7px;
+    }
+    .ms-note-text { font-size: 11px; color: var(--gray); line-height: 1.8; }
+    .ms-note-text strong { color: var(--black); }
+
+    /* ─── PDF BUTTON ─── */
+    .pdf-btn {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 16px;
+      background: var(--blue);
+      color: #fff;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(29,78,216,0.25);
+      text-decoration: none;
+    }
+    .pdf-btn:hover { background: #1e40af; }
+    .pdf-btn svg { flex-shrink: 0; }
+
+    @media print {
+      body { background: #fff; }
+      .page { margin: 0; box-shadow: none; }
+      .pdf-btn { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<button class="pdf-btn" onclick="window.print()">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 9V2h12v7"/><rect x="6" y="17" width="12" height="5"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+  </svg>
+  PDFとして保存
+</button>
+
+<div class="page">
+
+  <!-- ══════════════════ COVER ══════════════════ -->
+  <header class="page-header">
+    <div class="cover-kicker">役員向け説明資料｜AI戦略</div>
+    <h1 class="cover-title">Claude Code 社内導入提案</h1>
+    <p class="cover-tagline">AIエージェントハブとして、全業務を変える<br>コードを書くツールではなく、社内すべてのシステムをつなぐ次世代AI基盤の導入について</p>
+    <div class="cover-meta">
+      <div class="cover-meta-item"><strong>作成日</strong><span>2026年3月28日</span></div>
+      <div class="cover-meta-item"><strong>対象</strong><span>全部門・役員</span></div>
+      <div class="cover-meta-item"><strong>機密区分</strong><span>社内限り</span></div>
+    </div>
+  </header>
+
+  <div class="page-body">
+
+    <!-- ══════════════════ 01 WHAT IS CLAUDE CODE ══════════════════ -->
+    <div class="row">
+      <div class="row-label">01<br>概要</div>
+      <div>
+        <div class="sec-no">Claude Code とは何か</div>
+        <h2 class="sec-title">「AIのハブ」——あらゆるシステムをつなぎ、自律的に業務を完遂する</h2>
+        <p class="sec-desc">中核技術は MCP（Model Context Protocol）。「AIのUSB-C」とも呼ばれる業界標準プロトコルにより、社内のあらゆるシステムと接続する。</p>
+
+        <div class="hub-wrap">
+          <div class="hub-grid">
+            <!-- 左側：入力システム -->
+            <div class="hub-side">
+              <div class="hub-item">
+                <div class="hub-item-cat">通信</div>
+                <div class="hub-item-name">メール / カレンダー</div>
+                <div class="hub-item-sub">Gmail / Outlook</div>
+              </div>
+              <div class="hub-item">
+                <div class="hub-item-cat">管理</div>
+                <div class="hub-item-name">プロジェクト管理</div>
+                <div class="hub-item-sub">Jira / Notion</div>
+              </div>
+              <div class="hub-item">
+                <div class="hub-item-cat">社内連絡</div>
+                <div class="hub-item-name">コミュニケーション</div>
+                <div class="hub-item-sub">Slack / Teams</div>
+              </div>
+              <div class="hub-item">
+                <div class="hub-item-cat">基幹データ</div>
+                <div class="hub-item-name">社内DB / 基幹システム</div>
+                <div class="hub-item-sub">PostgreSQL / SAP</div>
+              </div>
+            </div>
+
+            <!-- 中央：Claude Code ハブ -->
+            <div class="hub-center">
+              <div class="hub-core">
+                <div class="hub-core-logo">Claude<br>Code</div>
+                <div class="hub-core-sub">AIエージェント<br>ハブ</div>
+              </div>
+            </div>
+
+            <!-- 右側：出力・実行システム -->
+            <div class="hub-side right">
+              <div class="hub-item">
+                <div class="hub-item-cat">情報収集</div>
+                <div class="hub-item-name">Web検索・情報収集</div>
+                <div class="hub-item-sub">Google / Bing</div>
+              </div>
+              <div class="hub-item">
+                <div class="hub-item-cat">開発</div>
+                <div class="hub-item-name">開発ツール</div>
+                <div class="hub-item-sub">GitHub / CI/CD</div>
+              </div>
+              <div class="hub-item">
+                <div class="hub-item-cat">会計・決済</div>
+                <div class="hub-item-name">決済 / 会計</div>
+                <div class="hub-item-sub">Stripe / 弥生</div>
+              </div>
+              <div class="hub-item">
+                <div class="hub-item-cat">自動操作</div>
+                <div class="hub-item-name">ブラウザ操作</div>
+                <div class="hub-item-sub">Playwright MCP</div>
+              </div>
+            </div>
+          </div>
+          <div class="hub-mcp">すべて MCP（Model Context Protocol）で接続</div>
+        </div>
+
+        <div class="pull-quote">
+          「指示するだけで、AIが複数のシステムをまたいで自律的に業務を完遂する」<br>
+          人間は「何を達成したいか」を伝えるだけ。Claude Codeがシステムを横断し、調査・判断・実行・報告まで一気通貫で行う。
+        </div>
+
+        <!-- Multi-agent -->
+        <div class="agent-diagram">
+          <div class="agent-orch">
+            <div class="agent-orch-label">統括役</div>
+            <div class="agent-orch-title">マスターエージェント</div>
+            <div class="agent-orch-sub">タスクを分解し、各サブエージェントに指示・統括</div>
+          </div>
+          <div class="agent-sub-row">
+            <div class="agent-item">
+              <div class="agent-item-label">担当 甲</div>
+              <div class="agent-item-name">提案書の骨子作成</div>
+              <div class="agent-item-sub">情報収集・構成設計・ドラフト生成</div>
+            </div>
+            <div class="agent-item">
+              <div class="agent-item-label">担当 乙</div>
+              <div class="agent-item-name">コードレビュー・品質確認</div>
+              <div class="agent-item-sub">関連コードの解析・改善提案</div>
+            </div>
+            <div class="agent-item">
+              <div class="agent-item-label">担当 丙</div>
+              <div class="agent-item-name">コスト試算・スケジュール</div>
+              <div class="agent-item-sub">見積・工数・リソース計算</div>
+            </div>
+          </div>
+        </div>
+        <div class="situation-note" style="margin-top:16px;">
+          複数タスクを<strong>並列実行</strong>することで、単独のAIより大幅に高速・高品質なアウトプットを実現。大規模案件でも一気通貫の自動処理が可能。
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ 02 BUSINESS AREAS ══════════════════ -->
+    <div class="row">
+      <div class="row-label">02<br>適用範囲</div>
+      <div>
+        <div class="sec-no">活用できる業務領域</div>
+        <h2 class="sec-title">SIerとしての全方位活用——開発部門だけでなく全部門が対象</h2>
+        <p class="sec-desc">MCPにより接続したシステムを横断し、あらゆる業務プロセスを自動化・高速化する。</p>
+
+        <div class="biz-grid">
+          <div class="biz-item">
+            <div class="biz-dept">営業部門</div>
+            <div class="biz-name">提案・営業支援</div>
+            <div class="biz-desc">顧客情報・過去案件・市場データを横断収集し、提案書・見積書・RFP回答を自動ドラフト。営業担当の提案準備時間を大幅削減。</div>
+          </div>
+          <div class="biz-item">
+            <div class="biz-dept">開発部門</div>
+            <div class="biz-name">開発業務の自動化</div>
+            <div class="biz-desc">コード生成・レビュー・テスト・ドキュメント作成を自動化。設計書からコードへの変換、バグ調査・修正も指示一つで実行。</div>
+          </div>
+          <div class="biz-item">
+            <div class="biz-dept">全部門</div>
+            <div class="biz-name">報告書・議事録作成</div>
+            <div class="biz-desc">会議録音・メモをSlack/Notionから取得し、議事録・月次報告書・進捗サマリーを自動生成。フォーマット統一も自動化。</div>
+          </div>
+          <div class="biz-item">
+            <div class="biz-dept">管理部門</div>
+            <div class="biz-name">業務フロー自動化</div>
+            <div class="biz-desc">申請→承認→通知→記録の一連フローをシステム横断で自動実行。入会手続き・請求処理・勤怠集計などの定型業務を無人化。</div>
+          </div>
+          <div class="biz-item">
+            <div class="biz-dept">企画・広報</div>
+            <div class="biz-name">情報収集・競合分析</div>
+            <div class="biz-desc">Web検索・業界サイト・公開情報を自律的に収集・整理し、競合他社動向・技術トレンドのリサーチレポートを自動生成。</div>
+          </div>
+          <div class="biz-item">
+            <div class="biz-dept">新規事業</div>
+            <div class="biz-name">顧客向けAI導入支援</div>
+            <div class="biz-desc">自社での導入・運用ノウハウを活かし、顧客へのAIエージェント導入を新たなサービスメニューとして提供。新規収益源に。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ 03 CASE STUDIES ══════════════════ -->
+    <div class="row">
+      <div class="row-label">03<br>導入実績</div>
+      <div>
+        <div class="sec-no">国内企業の導入実績（2025〜2026年）</div>
+        <h2 class="sec-title">数字が証明する——現場での実証済みROI</h2>
+        <p class="sec-desc">実際の業務に適用し、劇的な工数削減・コスト削減を達成した事例。</p>
+
+        <div class="case-grid">
+          <div class="case-item">
+            <div class="case-company">Findy</div>
+            <div class="case-result">1時間<br>→ 5分</div>
+            <div class="case-desc">求人票作成時間を96%削減。Notion MCPで企業情報を自動取得し、エンジニア以外のビジネス職が独立して利用できるカスタムコマンドとして実装。</div>
+            <div class="case-tool">Notion MCP</div>
+          </div>
+          <div class="case-item">
+            <div class="case-company">LINEヤフー</div>
+            <div class="case-result">週6時間<br>削減</div>
+            <div class="case-desc">レビュー準備工数を全自動化。GitHub・Jira・Confluence MCPを連携し、PRレビューに必要な設計書・企画書・関連タスク収集を手作業ゼロで実現。</div>
+            <div class="case-tool">GitHub / Jira / Confluence MCP</div>
+          </div>
+          <div class="case-item">
+            <div class="case-company">Room8（中小企業）</div>
+            <div class="case-result">150万円<br>→ 700円</div>
+            <div class="case-desc">業務自動化コストを99.95%削減。申込→決済→サブスク設定→入金確認のフローをStripe APIで完全無人化。月額500円VPS上で運用。</div>
+            <div class="case-tool">Stripe API MCP</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ 04 COMPARISON ══════════════════ -->
+    <div class="row">
+      <div class="row-label">04<br>比較検討</div>
+      <div>
+        <div class="sec-no">Microsoft Copilot との比較</div>
+        <h2 class="sec-title">競合ではなく補完——最大効果を得る役割分担</h2>
+        <p class="sec-desc">現在導入中のMicrosoft Copilotと組み合わせることで、相互補完的な最大効果を実現する。</p>
+
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th style="width:26%">比較項目</th>
+              <th style="width:37%">Microsoft Copilot（継続利用）</th>
+              <th style="width:37%">Claude Code（新規追加）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="col-item">基本コンセプト</td>
+              <td class="col-copilot">IDE上でのコード補完が中心。エージェントとしての自律実行は限定的</td>
+              <td class="win">複数システムをまたいで自律的にタスクを完遂するAIエージェントハブ</td>
+            </tr>
+            <tr>
+              <td class="col-item">コンテキスト<br>ウィンドウ</td>
+              <td class="col-copilot">約128K tokens（大規模コードベースでは限界あり）</td>
+              <td class="win">200K tokens — 大規模システムの全体把握が可能</td>
+            </tr>
+            <tr>
+              <td class="col-item">外部システム連携</td>
+              <td class="col-copilot">M365アプリ中心。外部システム連携は限定的</td>
+              <td class="win">MCPにより社内DB・Slack・Jira・Stripe・GitHub等あらゆるシステムと接続</td>
+            </tr>
+            <tr>
+              <td class="col-item">複雑タスクの<br>自律実行</td>
+              <td class="col-copilot">複数ファイル横断の大規模変更・移行は苦手（SWE-bench 約44%）</td>
+              <td class="win">SWE-bench 72.5%達成。40ファイル超の大規模改修も自律実行</td>
+            </tr>
+            <tr>
+              <td class="col-item">業務自動化の範囲</td>
+              <td class="col-copilot">Word・Excel・Teams等の操作補助。M365内に限られる</td>
+              <td class="win">開発・営業・管理・会計・採用など全業務領域をシステム横断で自動化</td>
+            </tr>
+            <tr>
+              <td class="col-item">コスト</td>
+              <td>$30/user/月（M365ライセンスに追加）</td>
+              <td>全社20名で月約¥75,000（1名あたり¥3,750）</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="ms-note">
+          <div class="ms-note-lbl">注目すべき事実</div>
+          <div class="ms-note-text">2026年3月、<strong>Microsoft自身が新機能「Copilot Cowork」をAnthropicのClaudeをベースに構築・発表</strong>しました。MicrosoftがGPTではなく<strong>Claudeの知性を自社製品に採用</strong>した事実は、Claude Codeの優位性を端的に示しています。「MicrosoftとのリレーションシップとClaude Code導入は矛盾しない」——むしろMicrosoftも認めたAIを先行活用することになります。</div>
+        </div>
+
+        <div class="role-grid">
+          <div class="role-col">
+            <div class="role-label">Copilot が継続担当する領域</div>
+            <ul>
+              <li>VS Code / IDEでのインラインコード補完</li>
+              <li>Word・Excel・PowerPointの文書作成補助</li>
+              <li>Teams会議の議事録・要約生成</li>
+              <li>Outlookメールの下書き支援</li>
+              <li>M365環境内の日常的なナレッジ活用</li>
+            </ul>
+          </div>
+          <div class="role-col after">
+            <div class="role-label">Claude Code が新たに担う領域</div>
+            <ul>
+              <li>社内DB・基幹システムとのMCP連携・自動化</li>
+              <li>大規模コードベースの横断的改修・移行</li>
+              <li>営業提案書・報告書の情報収集〜自動生成</li>
+              <li>M365外のシステム（Jira・Stripe等）との連携</li>
+              <li>顧客向けAIエージェント導入支援サービス</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ 05 PROS & CONS ══════════════════ -->
+    <div class="row">
+      <div class="row-label">05<br>効果と課題</div>
+      <div>
+        <div class="sec-no">メリット・デメリット</div>
+        <h2 class="sec-title">期待効果と留意点——リスクを把握した上での判断</h2>
+
+        <div class="proscons-grid">
+          <div class="pros-col">
+            <div class="proscons-label pros">導入効果</div>
+            <div class="pc-item">
+              <div class="pc-num">01</div>
+              <div class="pc-text"><b>全業務部門の生産性向上</b>開発だけでなく営業・管理・企画も対象。定型業務・情報収集・文書作成をAIが代替し、人材を高付加価値業務に集中させる。</div>
+            </div>
+            <div class="pc-item">
+              <div class="pc-num">02</div>
+              <div class="pc-text"><b>既存システムとの即時連携</b>MCPにより社内DB・Slack・Jira・基幹システムと接続。新規開発不要で既存IT資産をAIから活用できる。</div>
+            </div>
+            <div class="pc-item">
+              <div class="pc-num">03</div>
+              <div class="pc-text"><b>顧客への新サービス展開</b>自社導入のノウハウを武器に、AIエージェント導入支援・MCP構築を顧客向けサービスとして提供。新規収益源を創出。</div>
+            </div>
+            <div class="pc-item">
+              <div class="pc-num">04</div>
+              <div class="pc-text"><b>業界標準技術の先行習得</b>MCPはOpenAI・Googleも採用する業界標準。今から習熟することで、AI統合案件における技術的優位性を確立。</div>
+            </div>
+            <div class="pc-item">
+              <div class="pc-num">05</div>
+              <div class="pc-text"><b>競争力・差別化の実現</b>「AIを使いこなすSIer」としてのブランドイメージ向上と、工数削減による価格競争力向上を両立。</div>
+            </div>
+          </div>
+          <div class="cons-col">
+            <div class="proscons-label cons">留意点と対策</div>
+            <div class="pc-item">
+              <div class="pc-num">01</div>
+              <div class="pc-text"><b>顧客情報の外部送信リスク</b><small>→ AWS Bedrock経由で自社環境内に閉じた構成で解決（06参照）</small></div>
+            </div>
+            <div class="pc-item">
+              <div class="pc-num">02</div>
+              <div class="pc-text"><b>エージェントの暴走リスク</b><small>→ MCPアクセス権限制御で最小権限の原則を実装。重要操作には承認フローを設置</small></div>
+            </div>
+            <div class="pc-item">
+              <div class="pc-num">03</div>
+              <div class="pc-text"><b>MCP設計・管理の専門知識</b><small>→ Phase 1 PoCで知見のある担当者を育成。スモールスタートで学習</small></div>
+            </div>
+            <div class="pc-item">
+              <div class="pc-num">04</div>
+              <div class="pc-text"><b>ランニングコストの変動</b><small>→ 利用量の上限設定と月次コスト監視で管理。概算月¥75,000（20名）</small></div>
+            </div>
+            <div class="pc-item">
+              <div class="pc-num">05</div>
+              <div class="pc-text"><b>AI出力への過信リスク</b><small>→ 重要業務にはヒューマンインザループ（人間の最終確認）を維持するルール設計</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ 06 SECURITY ══════════════════ -->
+    <div class="row">
+      <div class="row-label">06<br>安全性</div>
+      <div>
+        <div class="sec-no">セキュリティ対策</div>
+        <h2 class="sec-title">独立系SIerとして最重要——顧客情報を守る多層防御</h2>
+
+        <div class="security-grid">
+          <div class="sec-item">
+            <div class="sec-item-name">学習利用なし</div>
+            <div class="sec-item-desc">Team/Enterprise/APIプランでは送信データがモデル学習に一切使用されないことを契約で保証</div>
+          </div>
+          <div class="sec-item">
+            <div class="sec-item-name">ゼロデータ保持（ZDR）</div>
+            <div class="sec-item-desc">Enterpriseプランで申請可能。推論後にプロンプト・レスポンスをサーバーから即時削除。官公庁・金融案件にも対応</div>
+          </div>
+          <div class="sec-item">
+            <div class="sec-item-name">自社クラウド内完結</div>
+            <div class="sec-item-desc">AWS Bedrock / Google Vertex AI経由でデータがAnthropicサーバーに送られず自社環境内で完結</div>
+          </div>
+          <div class="sec-item">
+            <div class="sec-item-name">MCPアクセス権限制御</div>
+            <div class="sec-item-desc">MCP接続先ごとに読み取り専用・書き込み禁止などの権限を細かく設定可能。最小権限の原則を実装</div>
+          </div>
+          <div class="sec-item">
+            <div class="sec-item-name">監査ログ完備</div>
+            <div class="sec-item-desc">AWS CloudTrailによる自動記録。AIの全アクションを追跡・証跡化。コンプライアンス対応に活用</div>
+          </div>
+          <div class="sec-item">
+            <div class="sec-item-name">国際認証取得済み</div>
+            <div class="sec-item-desc">SOC 2 Type II・ISO 27001・ISO/IEC 42001（AI管理）・HIPAA BAA対応済み</div>
+          </div>
+        </div>
+
+        <table class="deploy-table">
+          <thead>
+            <tr>
+              <th>導入方式</th>
+              <th>データの流れ</th>
+              <th>監査ログ</th>
+              <th>セキュリティ</th>
+              <th>推奨度</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Anthropic API直接</td>
+              <td>Anthropicサーバー経由</td>
+              <td>なし</td>
+              <td>標準</td>
+              <td style="color:var(--gray);font-size:11px;">PoC・検証用のみ</td>
+            </tr>
+            <tr>
+              <td class="recommend">AWS Bedrock経由</td>
+              <td class="recommend">自社AWSの範囲内で完結</td>
+              <td class="recommend">CloudTrail自動記録</td>
+              <td class="recommend">高い</td>
+              <td><span class="badge">推奨</span></td>
+            </tr>
+            <tr>
+              <td>Enterprise + ZDR</td>
+              <td>推論後即時削除</td>
+              <td>Compliance API</td>
+              <td>最高水準</td>
+              <td style="color:var(--gray);font-size:11px;">官公庁・金融案件向け</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════ 07 ROADMAP ══════════════════ -->
+    <div class="row">
+      <div class="row-label">07<br>導入計画</div>
+      <div>
+        <div class="sec-no">導入ロードマップ（推奨）</div>
+        <h2 class="sec-title">スモールスタートから全社展開・収益化へ——3フェーズで着実に推進</h2>
+
+        <div class="roadmap-flow">
+          <div class="rm-phase active">
+            <div class="rm-num">第1段階</div>
+            <div class="rm-title">PoC検証</div>
+            <div class="rm-period">1〜2ヶ月</div>
+            <ul class="rm-items">
+              <li>開発5〜10名・非開発2〜3名で試験導入</li>
+              <li>AWS Bedrock経由のセキュア環境構築</li>
+              <li>Slack / Notion / GitHub MCP から開始</li>
+              <li>利用ガイドライン・アクセス権限設計</li>
+              <li>業務別の効果を定量計測</li>
+            </ul>
+            <div class="rm-kpi">目標：文書作成・情報収集工数 30%削減</div>
+          </div>
+          <div class="rm-phase">
+            <div class="rm-num">第2段階</div>
+            <div class="rm-title">部門展開</div>
+            <div class="rm-period">2〜4ヶ月</div>
+            <ul class="rm-items">
+              <li>全部門に展開・業務別MCP整備</li>
+              <li>社内DB・基幹システムとのMCP連携</li>
+              <li>部門別カスタムコマンド整備</li>
+              <li>マルチエージェント活用の試験運用</li>
+              <li>社員教育・活用推進担当の設置</li>
+            </ul>
+            <div class="rm-kpi">目標：定型業務 50%自動化・残業削減</div>
+          </div>
+          <div class="rm-phase">
+            <div class="rm-num">第3段階</div>
+            <div class="rm-title">外部展開・収益化</div>
+            <div class="rm-period">5ヶ月以降</div>
+            <ul class="rm-items">
+              <li>顧客向けAIエージェント導入支援</li>
+              <li>MCP構築サービスの提供開始</li>
+              <li>AI活用実績を営業ツールとして活用</li>
+              <li>提案書への「AI活用実績」訴求追加</li>
+              <li>継続的なコスト最適化</li>
+            </ul>
+            <div class="rm-kpi">目標：新規AIサービス売上の創出</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ 08 COST & ROI ══════════════════ -->
+    <div class="row">
+      <div class="row-label">08<br>費用対効果</div>
+      <div>
+        <div class="sec-no">概算コストと投資対効果</div>
+        <h2 class="sec-title">月次投資対効果 約21倍——圧倒的な費用対効果</h2>
+        <p class="sec-desc">試算：社員20名利用。開発だけでなく全部門の業務改善効果を含む。</p>
+
+        <div class="costroi-grid">
+          <div class="cost-col">
+            <div class="costlabel">月次ランニングコスト（20名）</div>
+            <div class="cost-row">
+              <span class="cost-row-name">Claude API利用料（Bedrock経由）</span>
+              <span>〜¥60,000</span>
+            </div>
+            <div class="cost-row">
+              <span class="cost-row-name">AWS Bedrock基盤コスト</span>
+              <span>〜¥10,000</span>
+            </div>
+            <div class="cost-row">
+              <span class="cost-row-name">MCP管理・監視コスト</span>
+              <span>〜¥5,000</span>
+            </div>
+            <div class="cost-row total">
+              <span class="cost-row-name">月次合計（20名）</span>
+              <span>約 ¥75,000</span>
+            </div>
+            <div style="margin-top:10px;font-size:11px;color:var(--gray);">1名あたり約¥3,750/月。利用量により変動。</div>
+          </div>
+          <div class="roi-col">
+            <div class="costlabel">月次投資対効果</div>
+            <div class="roi-big">21倍</div>
+            <div class="roi-bigunit">月次投資対効果（試算）</div>
+            <div class="roi-breakdown">
+              平均月給（エンジニア・非エンジニア含む）<b>¥400,000</b><br>
+              全業務の生産性向上率（保守的見積）<b>20%</b><br>
+              20名換算の月次創出価値<b>¥1,600,000</b><br>
+              月次コスト<b>¥75,000</b><br>
+              <br>
+              <b>月次ROI = ¥1,600,000 ÷ ¥75,000 ≒ 21倍</b>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ 09 SUMMARY ══════════════════ -->
+    <div class="row">
+      <div class="row-label">09<br>経営提言</div>
+      <div>
+        <div class="sec-no">まとめ・経営への提言</div>
+        <h2 class="sec-title">今すぐPoC承認を——先行習熟が競争優位になる</h2>
+
+        <div class="stats-row">
+          <div class="stat">
+            <div class="stat-lbl">活用対象</div>
+            <div class="stat-val">全</div>
+            <div class="stat-unit">部門（開発・営業・管理・企画）</div>
+          </div>
+          <div class="stat">
+            <div class="stat-lbl">月次投資対効果</div>
+            <div class="stat-val">21倍</div>
+            <div class="stat-unit">20名・生産性20%向上ベース</div>
+          </div>
+          <div class="stat">
+            <div class="stat-lbl">月次コスト</div>
+            <div class="stat-val">¥75K</div>
+            <div class="stat-unit">20名全社導入時</div>
+          </div>
+          <div class="stat">
+            <div class="stat-lbl">接続技術</div>
+            <div class="stat-val">MCP</div>
+            <div class="stat-unit">OpenAI・Googleも採用する業界標準</div>
+          </div>
+        </div>
+
+        <div class="mgmt-grid">
+          <div class="mgmt-item">
+            <div class="mgmt-num">提言 01</div>
+            <div class="mgmt-title">「コードを書くAI」ではなく「業務基盤としてのAI」</div>
+            <div class="mgmt-desc">Claude Codeは開発部門だけのツールではない。MCPによって営業・管理・企画のあらゆる業務システムと接続し、全社の生産性を底上げする基盤投資として捉えるべきである。</div>
+          </div>
+          <div class="mgmt-item">
+            <div class="mgmt-num">提言 02</div>
+            <div class="mgmt-title">シャドーAIを放置することの方がリスクが大きい</div>
+            <div class="mgmt-desc">社員が個人でAIツールを無断利用している可能性が高い。公式導入により利用をガバナンスの下に置く方が、顧客情報漏洩リスクを確実に低減できる。</div>
+          </div>
+          <div class="mgmt-item">
+            <div class="mgmt-num">提言 03</div>
+            <div class="mgmt-title">MCP習熟は今後の受注競争力に直結する</div>
+            <div class="mgmt-desc">MCPはOpenAI・Googleも採用する業界標準。今から自社に実装することで、顧客のAIシステム統合案件を受注する技術的優位性を早期に確立できる。</div>
+          </div>
+          <div class="mgmt-item">
+            <div class="mgmt-num">提言 04</div>
+            <div class="mgmt-title">推奨アクション：まずPoC承認を</div>
+            <div class="mgmt-desc">AWS Bedrock経由のセキュアな環境で、開発・非開発混合チームによる1〜2ヶ月のPoC実施を承認いただきたい。定量効果の確認後に全社展開・顧客サービス化を判断する。</div>
+          </div>
+        </div>
+
+        <div class="action-box">
+          <div class="action-label">承認要請</div>
+          <div class="action-text">
+            AWS Bedrock経由のセキュアな環境での<strong>PoC実施を承認</strong>ください。<br>
+            開発・非開発混合チーム（7〜13名）、期間1〜2ヶ月、月次コスト上限¥30,000から開始します。
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /page-body -->
+
+  <footer class="page-footer">
+    <span>Claude Code 社内導入提案｜役員向け</span>
+    <span>2026年3月28日｜社内限り・機密　次回レビュー：2026年6月</span>
+  </footer>
+
+</div><!-- /page -->
+
+</body>
+</html>
