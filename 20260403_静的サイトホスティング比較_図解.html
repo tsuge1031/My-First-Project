@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>静的サイトホスティングサービス比較</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:   #1d4ed8;
+      --black:  #111827;
+      --gray:   #6b7280;
+      --border: #e5e7eb;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #f3f4f6;
+      color: var(--black);
+      line-height: 1.7;
+    }
+    .page {
+      max-width: 800px;
+      margin: 48px auto;
+      background: #fff;
+      border-top: 3px solid var(--blue);
+      box-shadow: 0 2px 24px rgba(0,0,0,0.07);
+    }
+    .page-header {
+      padding: 52px 56px 44px;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-body { padding: 0 56px; }
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 56px;
+      padding: 20px 0;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--gray);
+    }
+
+    /* ヘッダー */
+    .header-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      color: var(--blue);
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+    .header-meta {
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    /* セクション共通 */
+    .row {
+      padding: 40px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .row:last-child { border-bottom: none; }
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      color: var(--blue);
+      margin-bottom: 20px;
+    }
+
+    /* サービス一覧 */
+    .group-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .15em;
+      color: var(--gray);
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+    .service-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .service-table td {
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      font-size: 12px;
+    }
+    .service-table tr:last-child td { border-bottom: none; }
+    .service-table .col-name {
+      width: 148px;
+      font-size: 13px;
+      font-weight: 700;
+      padding-right: 20px;
+    }
+    .service-table .col-name a {
+      color: var(--black);
+      text-decoration: none;
+    }
+    .service-table .col-name a:hover { color: var(--blue); }
+    .service-table .col-desc {
+      color: var(--gray);
+      padding-right: 24px;
+      line-height: 1.65;
+    }
+    .service-table .col-cli {
+      width: 190px;
+      font-family: 'Menlo', 'Monaco', monospace;
+      font-size: 10px;
+      color: var(--gray);
+      background: #f3f4f6;
+      padding: 4px 8px !important;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    .group-spacer { height: 24px; }
+
+    /* 3軸評価表 */
+    .eval-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--border);
+    }
+    .eval-table th, .eval-table td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: center;
+      font-size: 12px;
+    }
+    .eval-table th {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      color: var(--gray);
+      background: #f9fafb;
+    }
+    .eval-table th.surge-col {
+      color: var(--blue);
+      background: #eff6ff;
+    }
+    .eval-table td.axis {
+      text-align: left;
+      font-weight: 700;
+      font-size: 12px;
+      background: #f9fafb;
+    }
+    .eval-table td.surge-col { background: #eff6ff; }
+    .dots {
+      display: flex;
+      gap: 3px;
+      justify-content: center;
+      align-items: center;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+    .dot.on { background: var(--blue); }
+    .eval-note {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--gray);
+    }
+
+    /* 用途別おすすめ */
+    .usecase-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--border);
+    }
+    .usecase-table th, .usecase-table td {
+      border: 1px solid var(--border);
+      padding: 12px 14px;
+      font-size: 12px;
+      vertical-align: top;
+    }
+    .usecase-table th {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      color: var(--gray);
+      background: #f9fafb;
+      text-align: left;
+    }
+    .usecase-table th.hl {
+      color: var(--blue);
+      background: #eff6ff;
+    }
+    .rec-service {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 2px;
+    }
+    .rec-reason {
+      font-size: 11px;
+      color: var(--gray);
+      line-height: 1.65;
+    }
+    .usecase-table td { line-height: 1.65; }
+
+    /* 結論 */
+    .pull-quote {
+      padding-left: 20px;
+      border-left: 3px solid var(--blue);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.85;
+      margin-bottom: 16px;
+    }
+    .situation-note {
+      padding: 14px 0;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--gray);
+      line-height: 1.9;
+    }
+    .situation-note strong { color: var(--black); }
+
+    /* PDFボタン */
+    .pdf-btn {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 16px;
+      background: var(--blue);
+      color: #fff;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(29,78,216,0.25);
+    }
+    .pdf-btn:hover { background: #1e40af; }
+
+    @media print {
+      .pdf-btn { display: none; }
+      body { background: #fff; }
+      .page { margin: 0; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+
+<button class="pdf-btn" onclick="window.print()">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 9V2h12v7"/><rect x="6" y="17" width="12" height="5"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+  </svg>
+  PDFとして保存
+</button>
+
+<div class="page">
+  <header class="page-header">
+    <div class="header-label">サービス比較</div>
+    <h1>静的サイトホスティング<br>サービス比較</h1>
+    <div class="header-meta">調査日：2026年4月3日　｜　対象：HTMLファイルを手軽に公開できるサービス</div>
+  </header>
+
+  <div class="page-body">
+
+    <!-- サービス一覧 -->
+    <div class="row">
+      <div class="section-label">サービス一覧</div>
+
+      <div class="group-label">手軽系（CLIワンコマンド）</div>
+      <table class="service-table">
+        <tr>
+          <td class="col-name"><a href="https://surge.sh" target="_blank">Surge</a></td>
+          <td class="col-desc">CLIワンコマンドで公開。ドメイン名を自由に指定できる</td>
+          <td class="col-cli">npx surge . --domain xxx.surge.sh</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://app.netlify.com/drop" target="_blank">Netlify Drop</a></td>
+          <td class="col-desc">ブラウザにドラッグ＆ドロップするだけで公開。CLIも使える</td>
+          <td class="col-cli">npx netlify deploy</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://vercel.com" target="_blank">Vercel</a></td>
+          <td class="col-desc">Next.js作者が作成。CLIワンコマンドで公開</td>
+          <td class="col-cli">npx vercel</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://pages.github.com" target="_blank">GitHub Pages</a></td>
+          <td class="col-desc">GitHubリポジトリから自動公開。無料・独自ドメイン対応</td>
+          <td class="col-cli">git push</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://pages.cloudflare.com" target="_blank">Cloudflare Pages</a></td>
+          <td class="col-desc">CDN世界最大手。高速・無料プランが充実</td>
+          <td class="col-cli">npx wrangler pages deploy</td>
+        </tr>
+      </table>
+
+      <div class="group-spacer"></div>
+      <div class="group-label">上位系（初期設定が必要）</div>
+      <table class="service-table">
+        <tr>
+          <td class="col-name"><a href="https://firebase.google.com/products/hosting" target="_blank">Firebase Hosting</a></td>
+          <td class="col-desc">Google製。firebase deploy 一発。SSL自動</td>
+          <td class="col-cli">firebase deploy</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://render.com" target="_blank">Render</a></td>
+          <td class="col-desc">静的サイト＋サーバーも動く。GitHubと連携して自動デプロイ</td>
+          <td class="col-cli">git push（連携後）</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 3軸評価 -->
+    <div class="row">
+      <div class="section-label">3軸評価（主要5サービス）</div>
+      <table class="eval-table">
+        <thead>
+          <tr>
+            <th style="text-align:left; width:110px">評価軸</th>
+            <th class="surge-col">Surge</th>
+            <th>Netlify</th>
+            <th>Vercel</th>
+            <th>Cloudflare<br>Pages</th>
+            <th>GitHub<br>Pages</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="axis">手軽さ</td>
+            <td class="surge-col"><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span></div></td>
+            <td><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span></div></td>
+            <td><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span></div></td>
+            <td><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+          </tr>
+          <tr>
+            <td class="axis">速度・CDN</td>
+            <td class="surge-col"><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span></div></td>
+            <td><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span></div></td>
+            <td><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span></div></td>
+            <td><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+          </tr>
+          <tr>
+            <td class="axis">無料枠</td>
+            <td class="surge-col"><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span></div></td>
+            <td><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span></div></td>
+            <td><div class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span><span class="dot"></span></div></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="eval-note">● 5段階評価　青ハイライト列＝現在利用中のSurge　全サービスでカスタムドメイン・HTTPS対応</div>
+    </div>
+
+    <!-- 用途別おすすめ -->
+    <div class="row">
+      <div class="section-label">用途別おすすめ</div>
+      <table class="usecase-table">
+        <thead>
+          <tr>
+            <th style="width:200px">用途</th>
+            <th class="hl" style="width:148px">おすすめ</th>
+            <th>選ぶ理由</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>社内提案・図解資料の一時共有</td>
+            <td><div class="rec-service">Surge</div></td>
+            <td><span class="rec-reason">ドメイン名を内容に合わせて指定できる。GitHubリポジトリ不要。ワンコマンド完結</span></td>
+          </tr>
+          <tr>
+            <td>手軽に試したい（ブラウザのみ）</td>
+            <td><div class="rec-service">Netlify Drop</div></td>
+            <td><span class="rec-reason">ファイルをドラッグするだけ。アカウント不要で即公開できる</span></td>
+          </tr>
+          <tr>
+            <td>継続的に運用するサイト</td>
+            <td><div class="rec-service">Cloudflare Pages</div></td>
+            <td><span class="rec-reason">無料枠が最も充実。CDN高速で本番運用に耐える</span></td>
+          </tr>
+          <tr>
+            <td>GitHubで管理しているプロジェクト</td>
+            <td><div class="rec-service">GitHub Pages</div></td>
+            <td><span class="rec-reason">git push するだけで自動公開。既存のCI/CDフローに組み込みやすい</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 結論 -->
+    <div class="row">
+      <div class="section-label">結論</div>
+      <blockquote class="pull-quote">
+        社内提案・図解資料の共有用途には Surge が最適。<br>
+        次に試すとしたら Netlify Drop（ブラウザでドラッグするだけ）が手軽でおすすめ。
+      </blockquote>
+      <div class="situation-note">
+        全サービスで<strong>カスタムドメイン・HTTPS自動化</strong>は標準提供。用途に応じて使い分けることで、状況に最適なデプロイ環境を構築できる。
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="page-footer">
+    <span>静的サイトホスティングサービス比較</span>
+    <span>調査日：2026年4月3日</span>
+  </footer>
+</div>
+
+</body>
+</html>
