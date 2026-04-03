@@ -1,414 +1,641 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>自己紹介 — 告野 孝彰</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --blue:   #1d4ed8;
-      --black:  #111827;
-      --gray:   #6b7280;
-      --border: #e5e7eb;
-      --light:  #f9fafb;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自己紹介 — 告野 孝彰</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:   #1d4ed8;
+    --black:  #111827;
+    --gray:   #6b7280;
+    --border: #e5e7eb;
+  }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: 'Noto Sans JP', sans-serif;
-      background: var(--light);
-      color: var(--black);
-      line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
-    }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    color: var(--black);
+    background: #f3f4f6;
+    line-height: 1.7;
+  }
 
-    /* ─── PAGE SHELL ─── */
-    .page {
-      max-width: 800px;
-      margin: 48px auto;
-      background: #fff;
-      border-top: 3px solid var(--blue);
-      box-shadow: 0 2px 24px rgba(0,0,0,0.07);
-    }
+  /* PDF保存ボタン */
+  .pdf-btn {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 16px;
+    background: var(--blue);
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(29,78,216,0.25);
+  }
+  .pdf-btn:hover { background: #1e40af; }
 
-    /* ─── HEADER ─── */
-    .page-header {
-      padding: 52px 56px 44px;
-      border-bottom: 1px solid var(--border);
-    }
+  @media print {
+    .pdf-btn { display: none; }
+    body { background: #fff; }
+    .page { box-shadow: none; margin: 0; }
+  }
 
-    .furigana {
-      font-size: 11px;
-      letter-spacing: .22em;
-      color: var(--gray);
-      font-weight: 300;
-      margin-bottom: 8px;
-    }
+  /* ページ */
+  .page {
+    max-width: 800px;
+    margin: 48px auto;
+    background: #fff;
+    border-top: 3px solid var(--blue);
+    box-shadow: 0 2px 24px rgba(0,0,0,0.07);
+  }
 
-    .page-header h1 {
-      font-size: 38px;
-      font-weight: 700;
-      letter-spacing: .03em;
-      line-height: 1.15;
-      margin-bottom: 18px;
-    }
+  .page-header {
+    padding: 52px 56px 44px;
+    border-bottom: 1px solid var(--border);
+  }
 
-    .header-tags {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
+  .header-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .22em;
+    color: var(--blue);
+    margin-bottom: 16px;
+  }
 
-    .tag-primary {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .12em;
-      color: var(--blue);
-      border: 1px solid var(--blue);
-      padding: 3px 12px;
-    }
+  .header-name {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    line-height: 1.2;
+    color: var(--black);
+  }
 
-    .tag-meta {
-      font-size: 13px;
-      color: var(--gray);
-    }
+  .header-name-sub {
+    font-size: 13px;
+    color: var(--gray);
+    margin-top: 6px;
+    letter-spacing: .08em;
+  }
 
-    .tag-divider {
-      width: 1px;
-      height: 12px;
-      background: var(--border);
-    }
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
 
-    /* ─── CONTENT ROWS ─── */
-    .page-body {
-      padding: 0 56px;
-    }
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
 
-    .row {
-      display: grid;
-      grid-template-columns: 108px 1fr;
-      gap: 40px;
-      padding: 40px 0;
-      border-bottom: 1px solid var(--border);
-      align-items: start;
-    }
+  .meta-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    color: var(--gray);
+  }
 
-    .row:last-child { border-bottom: none; }
+  .meta-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--black);
+  }
 
-    .row-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .22em;
-      color: var(--blue);
-      text-transform: uppercase;
-      padding-top: 3px;
-    }
+  /* 本文 */
+  .page-body { padding: 0 56px; }
 
-    .row-content {
-      font-size: 14px;
-      line-height: 1.85;
-    }
+  /* 行レイアウト */
+  .row {
+    display: grid;
+    grid-template-columns: 108px 1fr;
+    gap: 40px;
+    padding: 40px 0;
+    border-bottom: 1px solid var(--border);
+  }
 
-    .row-content p + p { margin-top: 10px; }
+  .row-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .22em;
+    color: var(--blue);
+    padding-top: 2px;
+  }
 
-    /* ─── CAREER FLOW ─── */
-    .career-flow {
-      display: flex;
-      margin-top: 20px;
-    }
+  .row-content {}
 
-    .flow-item {
-      flex: 1;
-      padding: 14px 18px 16px;
-      border: 1px solid var(--border);
-    }
+  .section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 12px;
+  }
 
-    .flow-item + .flow-item { border-left: none; }
+  /* キャリアフロー */
+  .career-flow {
+    display: flex;
+    margin-bottom: 20px;
+  }
 
-    .flow-item.current {
-      background: var(--blue);
-      border-color: var(--blue);
-      color: #fff;
-    }
+  .flow-item {
+    flex: 1;
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+  }
 
-    .flow-num {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .1em;
-      color: var(--gray);
-      margin-bottom: 6px;
-    }
+  .flow-item + .flow-item { border-left: none; }
 
-    .flow-item.current .flow-num { color: rgba(255,255,255,.55); }
+  .flow-item.current {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: #fff;
+  }
 
-    .flow-title {
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 2px;
-    }
+  .flow-num {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .15em;
+    opacity: .6;
+    margin-bottom: 6px;
+  }
 
-    .flow-sub {
-      font-size: 11px;
-      color: var(--gray);
-    }
+  .flow-item.current .flow-num { opacity: .7; color: #fff; }
 
-    .flow-item.current .flow-sub { color: rgba(255,255,255,.7); }
+  .flow-title {
+    font-size: 13px;
+    font-weight: 700;
+  }
 
-    /* ─── INTERESTS ─── */
-    .interest-list {
-      display: flex;
-      gap: 36px;
-    }
+  .flow-sub {
+    font-size: 11px;
+    color: var(--gray);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
 
-    .interest-item {
-      font-size: 14px;
-      font-weight: 500;
-    }
+  .flow-item.current .flow-sub { color: rgba(255,255,255,0.75); }
 
-    /* ─── MOTIVATION ─── */
-    .situation-note {
-      margin: 16px 0;
-      padding: 14px 0;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      font-size: 13px;
-      color: var(--gray);
-      line-height: 1.9;
-    }
+  /* 技術タグ */
+  .tech-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
 
-    .situation-note strong { color: var(--black); }
+  .tech-tag {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--gray);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+  }
 
-    .pull-quote {
-      margin: 20px 0 0;
-      padding-left: 20px;
-      border-left: 3px solid var(--blue);
-      font-size: 15px;
-      font-weight: 700;
-      line-height: 1.75;
-    }
+  /* AI フェーズ */
+  .ai-phases {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+  }
 
-    .path-flow {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
+  .ai-phase {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    border-bottom: 1px solid var(--border);
+  }
 
-    .path-step {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--gray);
-    }
+  .ai-phase:last-child { border-bottom: none; }
 
-    .path-step.goal {
-      color: var(--blue);
-      font-weight: 700;
-    }
+  .ai-phase.highlight .ai-phase-label {
+    background: var(--blue);
+    color: #fff;
+  }
 
-    .path-arrow {
-      color: var(--border);
-      font-size: 12px;
-    }
+  .ai-phase-label {
+    padding: 12px 14px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: var(--gray);
+    background: #f9fafb;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+  }
 
-    /* ─── BEFORE / AFTER ─── */
-    .ba-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      border: 1px solid var(--border);
-      margin-top: 16px;
-    }
+  .ai-phase.highlight .ai-phase-label { border-right-color: var(--blue); }
 
-    .ba-col { padding: 18px 20px; }
-    .ba-col + .ba-col { border-left: 1px solid var(--border); }
+  .ai-phase-content {
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--black);
+    display: flex;
+    align-items: center;
+  }
 
-    .ba-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .2em;
-      color: var(--gray);
-      margin-bottom: 12px;
-    }
+  /* 目標リスト */
+  .goal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+  }
 
-    .ba-col.after .ba-label { color: var(--blue); }
+  .goal-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+  }
 
-    .ba-col ul {
-      list-style: none;
-      font-size: 13px;
-      line-height: 2;
-    }
+  .goal-num {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: var(--blue);
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
 
-    .ba-col ul li::before {
-      content: '— ';
-      color: var(--gray);
-    }
+  .goal-text {
+    font-size: 13px;
+    line-height: 1.6;
+  }
 
-    .ba-col.after ul li::before { color: var(--blue); }
+  .goal-text strong { color: var(--blue); }
 
-    .lesson {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-      font-size: 13px;
-      color: var(--gray);
-      line-height: 1.95;
-    }
+  /* 強みグリッド */
+  .strength-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+  }
 
-    .lesson strong { color: var(--black); }
+  .strength-item {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    border-bottom: 1px solid var(--border);
+  }
 
-    /* ─── FOOTER ─── */
-    .page-footer {
-      display: flex;
-      justify-content: space-between;
-      margin: 0 56px;
-      padding: 20px 0;
-      border-top: 1px solid var(--border);
-      font-size: 11px;
-      color: var(--gray);
-      letter-spacing: .04em;
-    }
+  .strength-item:last-child { border-bottom: none; }
 
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 640px) {
-      .page { margin: 0; box-shadow: none; }
-      .page-header { padding: 36px 24px 32px; }
-      .page-body { padding: 0 24px; }
-      .page-footer { margin: 0 24px; }
-      .row { grid-template-columns: 1fr; gap: 10px; padding: 28px 0; }
-      .career-flow { flex-direction: column; }
-      .flow-item + .flow-item { border-left: 1px solid var(--border); border-top: none; }
-      .flow-item.current { border-left-color: var(--blue); }
-      .ba-grid { grid-template-columns: 1fr; }
-      .ba-col + .ba-col { border-left: none; border-top: 1px solid var(--border); }
-    }
+  .strength-key {
+    padding: 14px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--black);
+    background: #f9fafb;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+  }
 
-    @media print {
-      body { background: #fff; }
-      .page { margin: 0; box-shadow: none; }
-    }
-  </style>
+  .strength-val {
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--black);
+    line-height: 1.6;
+  }
+
+  /* プルクオート */
+  .pull-quote {
+    padding-left: 20px;
+    border-left: 3px solid var(--blue);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.75;
+    color: var(--black);
+    margin: 16px 0;
+  }
+
+  /* サイドノート */
+  .situation-note {
+    padding: 14px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.9;
+    margin: 12px 0;
+  }
+
+  .situation-note strong { color: var(--black); }
+
+  /* 趣味リスト */
+  .hobby-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .hobby-item {
+    font-size: 13px;
+    color: var(--black);
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .hobby-item:first-child { border-top: 1px solid var(--border); }
+
+  .hobby-name { font-weight: 700; }
+  .hobby-sub { font-size: 12px; color: var(--gray); }
+
+  /* コミュニケーション */
+  .comm-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+  }
+
+  .comm-item {
+    padding: 12px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.6;
+  }
+
+  .comm-item:last-child { border-bottom: none; }
+  .comm-item strong { color: var(--black); }
+
+  /* エピソード */
+  .episode-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .episode-body {
+    font-size: 13px;
+    color: var(--black);
+    line-height: 1.9;
+  }
+
+  /* フッター */
+  .page-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 56px;
+    padding: 20px 0;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--gray);
+  }
+
+  .footer-message {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--black);
+  }
+
+  /* 一言 */
+  .closing-box {
+    margin: 32px 0 0;
+    padding: 24px 28px;
+    border: 1px solid var(--blue);
+  }
+
+  .closing-text {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.8;
+    color: var(--black);
+  }
+</style>
 </head>
 <body>
 
+<button class="pdf-btn" onclick="window.print()">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 9V2h12v7"/><rect x="6" y="17" width="12" height="5"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+  </svg>
+  PDFとして保存
+</button>
+
 <div class="page">
 
-  <!-- HEADER -->
+  <!-- ヘッダー -->
   <header class="page-header">
-    <p class="furigana">つげの たかあき</p>
-    <h1>告野 孝彰</h1>
-    <div class="header-tags">
-      <span class="tag-primary">システムエンジニア / 課長</span>
-      <span class="tag-divider"></span>
-      <span class="tag-meta">42歳</span>
-      <span class="tag-divider"></span>
-      <span class="tag-meta">既婚・息子1人（6歳・4月より小学生）</span>
-      <span class="tag-divider"></span>
-      <span class="tag-meta">ニックネーム：つげ</span>
+    <div class="header-label">自己紹介</div>
+    <div class="header-name">告野 孝彰</div>
+    <div class="header-name-sub">つげの たかあき　／　ニックネーム：つげ</div>
+    <div class="header-meta">
+      <div class="meta-item">
+        <span class="meta-label">年齢</span>
+        <span class="meta-value">42歳</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">居住地</span>
+        <span class="meta-value">東京都</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">家族</span>
+        <span class="meta-value">既婚・息子1人（6歳、4月から小学生）</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">スクール</span>
+        <span class="meta-value">AI Driven School</span>
+      </div>
     </div>
   </header>
 
   <div class="page-body">
 
-    <!-- CAREER -->
+    <!-- キャリア -->
     <div class="row">
-      <div class="row-label">Career</div>
+      <div class="row-label">キャリア</div>
       <div class="row-content">
-        <p>SIer にて業務アプリケーションの開発・構築・運用に長年携わる。<br>
-           近年は <strong>課長職</strong> として、現場開発よりも組織マネジメントの比率が高まっている。</p>
         <div class="career-flow">
           <div class="flow-item">
-            <div class="flow-num">01</div>
-            <div class="flow-title">開発現場</div>
-            <div class="flow-sub">設計・実装・運用</div>
+            <div class="flow-num">第1期</div>
+            <div class="flow-title">開発エンジニア</div>
+            <div class="flow-sub">業務アプリ設計・実装・運用</div>
           </div>
           <div class="flow-item">
-            <div class="flow-num">02</div>
-            <div class="flow-title">技術の深化</div>
-            <div class="flow-sub">スキル・経験の蓄積</div>
+            <div class="flow-num">第2期</div>
+            <div class="flow-title">シニアSE</div>
+            <div class="flow-sub">要件定義・プロジェクト主導</div>
           </div>
           <div class="flow-item current">
-            <div class="flow-num">03</div>
+            <div class="flow-num">現在</div>
             <div class="flow-title">課長職</div>
-            <div class="flow-sub">組織マネジメント</div>
+            <div class="flow-sub">マネジメント・AI 導入推進</div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- INTERESTS -->
-    <div class="row">
-      <div class="row-label">Interests</div>
-      <div class="row-content">
-        <div class="interest-list">
-          <span class="interest-item">ゴルフ</span>
-          <span class="interest-item">サウナ</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- MOTIVATION -->
-    <div class="row">
-      <div class="row-label">Motivation</div>
-      <div class="row-content">
-        <p>マコなり社長の YouTube をきっかけにこの講座を知り、受講を決意。</p>
         <div class="situation-note">
-          管理職への移行後、技術から離れ政治的な業務が増加。<br>
-          AI トレンドに取り残されることへの<strong>危機感</strong>を強く感じていた。
+          東証プライム上場 SIer にて約 <strong>20年</strong>、業務アプリケーションの開発から運用まで上流〜下流を一貫して経験。ここ数年は組織マネジメントと社内 AI 活用推進を担う。
         </div>
-        <blockquote class="pull-quote">
-          自分自身が AI トレンドの波に乗って、<br>組織を引っ張っていきたい。
-        </blockquote>
-        <div class="path-flow">
-          <span class="path-step">ADS 受講</span>
-          <span class="path-arrow">→</span>
-          <span class="path-step">AI スキル習得</span>
-          <span class="path-arrow">→</span>
-          <span class="path-step goal">組織を牽引するマネージャーへ</span>
+        <div class="tech-list">
+          <span class="tech-tag">Java</span>
+          <span class="tech-tag">.NET</span>
+          <span class="tech-tag">SQL</span>
+          <span class="tech-tag">Azure</span>
+          <span class="tech-tag">AWS</span>
+          <span class="tech-tag">Claude Code</span>
+          <span class="tech-tag">Cursor</span>
         </div>
       </div>
     </div>
 
-    <!-- EXPERIENCE -->
+    <!-- AIとの歩み -->
     <div class="row">
-      <div class="row-label">Experience</div>
+      <div class="row-label">AIとの歩み</div>
       <div class="row-content">
-        <p><strong>バンジージャンプ　—　群馬県・みなかみ</strong></p>
-        <div class="ba-grid">
-          <div class="ba-col">
-            <div class="ba-label">BEFORE</div>
-            <ul>
-              <li>高所恐怖症気味</li>
-              <li>絶叫系が苦手</li>
-              <li>ビッグサンダーマウンテンで限界</li>
-            </ul>
+        <div class="ai-phases">
+          <div class="ai-phase">
+            <div class="ai-phase-label">試用期</div>
+            <div class="ai-phase-content">ChatGPT 登場直後から個人的に使い始める</div>
           </div>
-          <div class="ba-col after">
-            <div class="ba-label">AFTER</div>
-            <ul>
-              <li>アドレナリン大放出</li>
-              <li>最高に楽しかった</li>
-              <li>絶叫系が全く怖くなくなった</li>
-            </ul>
+          <div class="ai-phase">
+            <div class="ai-phase-label">業務活用</div>
+            <div class="ai-phase-content">ドキュメント作成・コードレビュー補助に日常利用</div>
+          </div>
+          <div class="ai-phase highlight">
+            <div class="ai-phase-label">現在地</div>
+            <div class="ai-phase-content">Claude Code・Cursor で本格的な AI 駆動開発に入門中</div>
+          </div>
+          <div class="ai-phase">
+            <div class="ai-phase-label">社内実績</div>
+            <div class="ai-phase-content">役員向け AI 導入提案資料を作成・プレゼン済み</div>
           </div>
         </div>
-        <p class="lesson">
-          毛嫌いしていることにあえてチャレンジしてみたら、思いもよらず<strong>視界が開けた</strong>。<br>
-          チャレンジが新しい自分を作る——そんな特別な体験でした。
-        </p>
+      </div>
+    </div>
+
+    <!-- 受講動機と目標 -->
+    <div class="row">
+      <div class="row-label">受講動機と目標</div>
+      <div class="row-content">
+        <div class="pull-quote">
+          自分自身が AI トレンドの波に乗って、組織を引っ張っていきたい！
+        </div>
+        <div class="situation-note">
+          管理職になって技術から離れ、<strong>政治的な仕事が増えた</strong>ことへの危機感がきっかけ。マコなり社長の YouTube でこのスクールを知り、チャレンジを決意。
+        </div>
+        <div class="goal-list">
+          <div class="goal-item">
+            <span class="goal-num">目標 01</span>
+            <span class="goal-text"><strong>自分で動くものを作れる</strong>エンジニア感覚を取り戻す</span>
+          </div>
+          <div class="goal-item">
+            <span class="goal-num">目標 02</span>
+            <span class="goal-text"><strong>AI × マネジメント</strong>の掛け算で、チームの生産性を上げる打ち手を身につける</span>
+          </div>
+          <div class="goal-item">
+            <span class="goal-num">目標 03</span>
+            <span class="goal-text">社内で「<strong>AI 活用といえばつげさん</strong>」と言われる存在になる</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 強み -->
+    <div class="row">
+      <div class="row-label">得意なこと</div>
+      <div class="row-content">
+        <div class="strength-grid">
+          <div class="strength-item">
+            <div class="strength-key">橋渡し役</div>
+            <div class="strength-val">技術者と非エンジニア（経営層・営業）の間を翻訳する対話が得意</div>
+          </div>
+          <div class="strength-item">
+            <div class="strength-key">全体俯瞰</div>
+            <div class="strength-val">上流〜下流を経験しているので、プロジェクト全体像を見やすい</div>
+          </div>
+          <div class="strength-item">
+            <div class="strength-key">巻き込み力</div>
+            <div class="strength-val">社内提案・プレゼンを通じて新しい取り組みを組織に広げる経験あり</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 趣味 -->
+    <div class="row">
+      <div class="row-label">趣味</div>
+      <div class="row-content">
+        <div class="hobby-list">
+          <div class="hobby-item">
+            <span class="hobby-name">ゴルフ</span>
+            <span class="hobby-sub">スコアは修行中</span>
+          </div>
+          <div class="hobby-item">
+            <span class="hobby-name">サウナ</span>
+            <span class="hobby-sub">ととのい重視派</span>
+          </div>
+          <div class="hobby-item">
+            <span class="hobby-name">マコなり社長の YouTube</span>
+            <span class="hobby-sub">毎週チェック、このスクールとの出会いのきっかけ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- コミュニケーション -->
+    <div class="row">
+      <div class="row-label">コミュニ<br>ケーション</div>
+      <div class="row-content">
+        <div class="comm-list">
+          <div class="comm-item">返信は早め。テキストより<strong>気軽な一言</strong>のほうが嬉しいです</div>
+          <div class="comm-item">分からないことは素直に「<strong>分からない</strong>」と言うタイプ</div>
+          <div class="comm-item">困ったときはお互い様、<strong>助け合い優先</strong>で行きましょう！</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- エピソード -->
+    <div class="row" style="border-bottom: none;">
+      <div class="row-label">おすすめ体験</div>
+      <div class="row-content">
+        <div class="episode-title">バンジージャンプ（群馬県・みなかみ）</div>
+        <div class="episode-body">
+          元々<strong>高所恐怖症気味</strong>で、絶叫系が大嫌いでした。ディズニーランドのビッグサンダーマウンテンでさえ限界ギリギリ……。<br><br>
+          友人にみなかみバンジーへ誘われ、「断るのはなんかダサい」と意を決してチャレンジ。落下中はアドレナリン大放出で、<strong>最高に楽しかった！</strong>
+          それ以降、絶叫系が全く怖くなくなるという嬉しい副産物まで。
+        </div>
+        <div class="pull-quote" style="margin-top: 20px;">
+          毛嫌いしていることにあえて飛び込んだら、思いもよらず視界が開けた。
+        </div>
+      </div>
+    </div>
+
+    <!-- 一言 -->
+    <div class="closing-box">
+      <div class="closing-text">
+        SE 歴約 20 年のベテランが、AI の波に全力で挑んでいきます。<br>
+        一緒に楽しく学びましょう！何でも気軽に話しかけてください。
       </div>
     </div>
 
   </div>
 
+  <!-- フッター -->
   <footer class="page-footer">
-    <span>告野 孝彰 — 自己紹介</span>
-    <span>2026年4月3日</span>
+    <span>告野 孝彰 — つげ</span>
+    <span>AI Driven School</span>
   </footer>
 
 </div>
-
 </body>
 </html>
