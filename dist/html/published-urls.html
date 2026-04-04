@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>公開図解 URL 一覧</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Noto Sans JP', 'sans-serif'] },
+          colors: {
+            ink:   '#111827',
+            quiet: '#6b7280',
+            rule:  '#e5e7eb',
+            wash:  '#f9fafb',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .lbl    { letter-spacing: .22em; }
+    .lbl-sm { letter-spacing: .14em; }
+    @media print {
+      .pdf-btn { display: none !important; }
+      body     { background: white !important; }
+      #card    { margin: 0 !important; box-shadow: none !important; }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans text-ink antialiased py-14">
+
+<button onclick="window.print()" class="pdf-btn fixed top-5 right-6 z-50 flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white text-[11px] font-bold px-4 py-2.5 lbl-sm shadow-lg shadow-blue-700/20 transition-colors">
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 9V2h12v7"/><rect x="6" y="17" width="12" height="5"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+  </svg>
+  PDFとして保存
+</button>
+
+<div id="card" class="max-w-[800px] mx-auto bg-white shadow-[0_4px_40px_rgba(0,0,0,0.07)] border-t-[3px] border-blue-700">
+
+  <header class="px-14 pt-14 pb-11 border-b border-rule">
+    <p class="text-[10px] font-bold lbl text-blue-700 mb-4">公開資料管理</p>
+    <h1 class="text-[28px] font-black leading-tight tracking-tight text-ink">公開図解 URL 一覧</h1>
+    <p class="mt-4 text-xs text-quiet">surge-publish スキルで公開するたびに自動更新されます</p>
+  </header>
+
+  <main class="px-14">
+
+    <!-- 説明 -->
+    <section class="py-10 border-b border-rule">
+      <p class="text-[10px] font-bold lbl text-blue-700 mb-5">このページについて</p>
+      <p class="text-[14px] text-quiet leading-[1.9]">
+        Cursor の <strong class="font-bold text-ink">surge-publish スキル</strong>を使って公開したHTML図解・資料のURL一覧です。<br>
+        図解を公開するたびに、このページのエントリが追加されます。
+      </p>
+    </section>
+
+    <!-- URL一覧テーブル -->
+    <section class="py-10 border-b border-rule">
+      <p class="text-[10px] font-bold lbl text-blue-700 mb-6">公開済みURL一覧</p>
+
+      <!-- テーブルヘッダー -->
+      <div class="grid grid-cols-[96px_1fr_180px] gap-0 border border-rule text-[10px] font-bold lbl text-quiet bg-wash">
+        <div class="px-4 py-3 border-r border-rule">公開日</div>
+        <div class="px-4 py-3 border-r border-rule">タイトル・概要</div>
+        <div class="px-4 py-3">URL</div>
+      </div>
+
+      <!-- データ行 (surge-publish スキルがここに行を追加する) -->
+      <!-- URL_LIST_START -->
+      <div class="grid grid-cols-[96px_1fr_180px] gap-0 border-x border-b border-rule text-[13px] hover:bg-wash transition-colors">
+        <div class="px-4 py-5 border-r border-rule text-[11px] text-quiet">2026.04.04</div>
+        <div class="px-4 py-5 border-r border-rule">
+          <p class="text-[13px] text-ink font-bold mb-1">Claude Code 社内導入提案｜役員向け図解資料</p>
+          <p class="text-[11px] text-quiet">MCPハブ構成・活用領域・Copilot比較・ロードマップ・投資対効果を網羅した役員向け図解。</p>
+        </div>
+        <div class="px-4 py-5">
+          <a href="https://tsuge-claudecode-proposal.surge.sh" target="_blank"
+             class="text-[11px] text-blue-700 hover:underline break-all">tsuge-claudecode-proposal.surge.sh</a>
+        </div>
+      </div>
+      <!-- URL_LIST_END -->
+
+    </section>
+
+    <!-- 使い方メモ -->
+    <section class="py-10">
+      <p class="text-[10px] font-bold lbl text-blue-700 mb-5">使い方</p>
+      <div class="flex flex-col gap-0 border border-rule overflow-hidden">
+
+        <div class="grid grid-cols-[88px_1fr] gap-0 border-b border-rule">
+          <div class="px-5 py-4 border-r border-rule bg-wash flex items-center">
+            <p class="text-[10px] font-bold lbl text-blue-700">手順 01</p>
+          </div>
+          <div class="px-5 py-4">
+            <p class="text-[12px] text-ink font-bold mb-1">図解を作成する</p>
+            <p class="text-[11px] text-quiet leading-relaxed">html-diagram スキルでHTML図解を生成する</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-[88px_1fr] gap-0 border-b border-rule">
+          <div class="px-5 py-4 border-r border-rule bg-wash flex items-center">
+            <p class="text-[10px] font-bold lbl text-blue-700">手順 02</p>
+          </div>
+          <div class="px-5 py-4">
+            <p class="text-[12px] text-ink font-bold mb-1">surge-publish スキルで公開する</p>
+            <p class="text-[11px] text-quiet leading-relaxed">「HTMLを公開して」と伝えると、Surge へデプロイされURLが発行される</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-[88px_1fr] gap-0">
+          <div class="px-5 py-4 border-r border-rule bg-wash flex items-center">
+            <p class="text-[10px] font-bold lbl text-blue-700">手順 03</p>
+          </div>
+          <div class="px-5 py-4">
+            <p class="text-[12px] text-ink font-bold mb-1">URL一覧が自動更新される</p>
+            <p class="text-[11px] text-quiet leading-relaxed">このページ（published-urls.html）に公開日・タイトル・URLが追記される</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="flex justify-between items-center px-14 py-5 border-t border-rule text-[11px] text-quiet">
+    <span>公開図解 URL 一覧</span>
+    <span id="last-updated">2026.04.04</span>
+  </footer>
+
+</div>
+
+</body>
+</html>
