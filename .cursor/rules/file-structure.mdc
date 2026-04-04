@@ -1,0 +1,45 @@
+---
+description: ファイル生成・保存時のフォルダ構成ルール（SSoT原則）
+alwaysApply: true
+---
+
+# My-First-Project フォルダ構成ルール
+
+このプロジェクトはSSoT（Single Source of Truth）原則でファイルを管理する。
+ファイルを新規作成・保存する際は必ず以下のルールに従うこと。
+
+## 保存先ルール
+
+| ファイル種別 | 保存先 |
+|---|---|
+| Markdownファイル（`.md`） | `src/` |
+| HTMLファイル（`.html`） ※生成物 | `dist/html/` |
+| PowerPointファイル（`.pptx`） | `dist/pptx/` |
+| Pythonスクリプト等（`.py`） | `scripts/` |
+| エントリーポイント（`index.html`, `approval.html`） | プロジェクトルート（例外） |
+
+## 鉄則
+
+- **編集は `src/` 内の `.md` ファイルでのみ行う**
+- `dist/` 内のファイルは生成物。直接編集しない
+- HTMLを新規生成する場合は、必ず対応する `.md` を `src/` に先に作成してから `dist/html/` にHTMLを生成する
+
+## ファイル命名規則
+
+```
+src/[YYYYMMDD]_[内容].md
+dist/html/[YYYYMMDD]_[内容].html
+dist/pptx/[YYYYMMDD]_[内容].pptx
+```
+
+## 現在のファイル対応表
+
+| 原本（src/） | 生成物（dist/） |
+|---|---|
+| `src/profile.md` | `dist/html/20260403_つげの_プロフィール.html` |
+| `src/tsuzuki-denki.md` | `dist/html/tsuzuki-denki.html` |
+| `src/20260328_ClaudeCode社内導入提案_役員向け.md` | `dist/html/20260328_ClaudeCode社内導入提案_役員向け.html` |
+| `src/20260328_ClaudeCode社内導入提案_役員向け.md` | `dist/html/20260328_ClaudeCode社内導入提案_図解.html` |
+| `src/20260328_ClaudeCode社内導入提案_役員向け.md` | `dist/pptx/20260328_ClaudeCode社内導入提案_役員向け.pptx` |
+| `src/20260403_図解skill工夫点_解説.md` | `dist/html/20260403_図解skill工夫点_解説.html` |
+| `src/20260403_静的サイトホスティングサービス比較.md` | `dist/html/20260403_静的サイトホスティング比較_図解.html` |
