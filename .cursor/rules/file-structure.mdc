@@ -44,3 +44,4 @@ dist/pptx/[YYYYMMDD]_[内容].pptx
 | `src/20260403_図解skill工夫点_解説.md` | `dist/html/20260403_図解skill工夫点_解説.html` |
 | `src/20260403_静的サイトホスティングサービス比較.md` | `dist/html/20260403_静的サイトホスティング比較_図解.html` |
 | `src/published-urls.md` | `dist/html/published-urls.html` |
+| `src/20260416_バディカフェニックス_洗車施工順_図解.md` | `dist/html/20260416_バディカフェニックス_洗車施工順_図解.html` |

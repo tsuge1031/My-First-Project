@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="BUDDICA PHOENIX BODY（バディカフェニックス）の洗車からベース・コーティングまでの推奨順序と日常メンテを図解した非公式整理資料。">
+<title>バディカフェニックス｜洗車・施工の順番（図解）</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Noto Sans JP', 'sans-serif'] },
+        colors: {
+          ink:    '#111827',
+          quiet:  '#6b7280',
+          rule:   '#e5e7eb',
+          wash:   '#f9fafb',
+        },
+        boxShadow: {
+          card: '0 4px 40px rgba(0,0,0,0.07)',
+        }
+      }
+    }
+  }
+</script>
+<style>
+  .lbl { letter-spacing: .22em; }
+  .lbl-sm { letter-spacing: .14em; }
+  .mono { font-family: 'Courier New', 'Menlo', monospace; }
+  @media print {
+    .pdf-btn { display: none !important; }
+    body { background: white !important; }
+    #card { margin: 0 !important; box-shadow: none !important; }
+  }
+</style>
+</head>
+<body class="bg-gray-100 font-sans text-ink antialiased py-14">
+
+<button type="button" class="pdf-btn fixed top-5 right-6 z-50 flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white text-[11px] font-bold px-4 py-2.5 lbl-sm shadow-lg shadow-blue-700/20 transition-colors" onclick="window.print()">
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 9V2h12v7"/><rect x="6" y="17" width="12" height="5"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+  </svg>
+  PDFとして保存
+</button>
+
+<div id="card" class="max-w-[800px] mx-auto bg-white shadow-card border-t-[3px] border-blue-700">
+
+  <header class="px-14 pt-14 pb-11 border-b border-rule">
+    <p class="text-[10px] font-bold lbl text-blue-700 mb-4">カーケア｜調査メモの図解</p>
+    <h1 class="text-[28px] font-black leading-tight tracking-tight text-ink">
+      バディカフェニックス<br>洗車・施工の順番
+    </h1>
+    <p class="mt-4 text-xs text-quiet">BUDDICA PHOENIX BODY（ボディ用）を中心に整理 — 2026.04.16</p>
+  </header>
+
+  <main class="px-14">
+
+    <section class="py-10 border-b border-rule">
+      <p class="text-[10px] font-bold lbl text-blue-700 mb-5">この資料について</p>
+      <p class="text-[14px] text-quiet leading-[1.9] mb-5">
+        本ページは<strong class="font-bold text-ink">公開情報の再整理</strong>であり、メーカー公式の取扱説明書ではありません。
+        希釈倍率・禁止部位・保管条件は<strong class="font-bold text-ink">製品表示および同梱資料</strong>を最優先してください。
+      </p>
+      <blockquote class="border-l-[3px] border-blue-700 pl-6 text-[15px] font-bold leading-[1.9] text-ink">
+        同一洗車セッション内の基本線は<br>
+        <span class="text-blue-700">シャンプー洗浄 → すすぎ → PHOENIX BASE → PHOENIX COATING</span>
+      </blockquote>
+    </section>
+
+    <!-- 全体フロー図（SVG） -->
+    <section class="py-10 border-b border-rule">
+      <p class="text-[10px] font-bold lbl text-blue-700 mb-6">全体の流れ（俯瞰）</p>
+      <div class="border border-rule bg-wash overflow-x-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 200" class="min-w-[640px] w-full h-auto" role="img" aria-label="洗車からコーティングまでの順序を左から右へ示す図">
+          <title>施工の順序</title>
+          <defs>
+            <marker id="arrowHead" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <polygon points="0 0, 8 4, 0 8" fill="#9ca3af"/>
+            </marker>
+          </defs>
+          <rect x="16" y="36" width="112" height="72" rx="2" fill="#ffffff" stroke="#e5e7eb"/>
+          <text x="72" y="68" text-anchor="middle" font-size="12" font-weight="700" fill="#111827">下回り</text>
+          <text x="72" y="88" text-anchor="middle" font-size="10" fill="#6b7280">別製品時</text>
+          <line x1="128" y1="72" x2="152" y2="72" stroke="#d1d5db" stroke-width="1.5" marker-end="url(#arrowHead)"/>
+
+          <rect x="152" y="36" width="112" height="72" rx="2" fill="#ffffff" stroke="#e5e7eb"/>
+          <text x="208" y="64" text-anchor="middle" font-size="12" font-weight="700" fill="#111827">予洗い</text>
+          <text x="208" y="88" text-anchor="middle" font-size="10" fill="#6b7280">砂・泥を流す</text>
+          <line x1="264" y1="72" x2="288" y2="72" stroke="#d1d5db" stroke-width="1.5" marker-end="url(#arrowHead)"/>
+
+          <rect x="288" y="36" width="120" height="72" rx="2" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"/>
+          <text x="348" y="64" text-anchor="middle" font-size="11" font-weight="700" fill="#1d4ed8">PHOENIX</text>
+          <text x="348" y="80" text-anchor="middle" font-size="11" font-weight="700" fill="#1d4ed8">SHAMPOO</text>
+          <text x="348" y="98" text-anchor="middle" font-size="9" fill="#6b7280">洗車</text>
+          <line x1="408" y1="72" x2="432" y2="72" stroke="#d1d5db" stroke-width="1.5" marker-end="url(#arrowHead)"/>
+
+          <rect x="432" y="36" width="112" height="72" rx="2" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"/>
+          <text x="488" y="64" text-anchor="middle" font-size="11" font-weight="700" fill="#1d4ed8">PHOENIX</text>
+          <text x="488" y="80" text-anchor="middle" font-size="11" font-weight="700" fill="#1d4ed8">BASE</text>
+          <text x="488" y="98" text-anchor="middle" font-size="9" fill="#6b7280">濡れボディ</text>
+          <line x1="544" y1="72" x2="568" y2="72" stroke="#d1d5db" stroke-width="1.5" marker-end="url(#arrowHead)"/>
+
+          <rect x="568" y="36" width="136" height="72" rx="2" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"/>
+          <text x="636" y="64" text-anchor="middle" font-size="11" font-weight="700" fill="#1d4ed8">PHOENIX</text>
+          <text x="636" y="80" text-anchor="middle" font-size="11" font-weight="700" fill="#1d4ed8">COATING</text>
+          <text x="636" y="98" text-anchor="middle" font-size="9" fill="#6b7280">湿式・少量</text>
+
+          <text x="348" y="24" text-anchor="middle" font-size="10" fill="#6b7280">すすぎのあと（水滴が残る状態でベース／コーティング）</text>
+        </svg>
+      </div>
+      <p class="mt-4 text-[12px] text-quiet leading-relaxed">
+        シャンプー前後に、塗装がザラつく場合は<strong class="font-bold text-ink">鉄粉除去剤・粘土</strong>などを挟む説明があります。ホイール洗浄はボディより先が一般的です。
+      </p>
+    </section>
+
+    <!-- 詳細ステップ -->
+    <section class="py-10 border-b border-rule">
+      <p class="text-[10px] font-bold lbl text-blue-700 mb-6">フル施工の日（推奨の作業順）</p>
+
+      <div class="flex flex-col">
+        <div class="bg-wash border border-rule p-6">
+          <p class="text-[10px] font-bold lbl text-blue-700 mb-3">ステップ 01</p>
+          <p class="text-[15px] font-bold text-ink mb-2">ホイール・下回り</p>
+          <p class="text-[12px] text-quiet leading-relaxed">別製品でホイールを洗う場合は先に済ませ、ボディ洗浄中に汚水が飛び散って戻らないようにします。</p>
+        </div>
+        <div class="flex justify-center py-2 text-rule">
+          <svg width="22" height="28" viewBox="0 0 22 28" fill="none" aria-hidden="true">
+            <line x1="11" y1="2" x2="11" y2="18" stroke="currentColor" stroke-width="1.5"/>
+            <polyline points="5,13 11,22 17,13" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="bg-wash border border-rule p-6">
+          <p class="text-[10px] font-bold lbl text-blue-700 mb-3">ステップ 02</p>
+          <p class="text-[15px] font-bold text-ink mb-2">流水で予洗い</p>
+          <p class="text-[12px] text-quiet leading-relaxed">高圧洗浄機やホースで砂・泥をできるだけ流してから、ボディに手やミットを当てます。</p>
+        </div>
+        <div class="flex justify-center py-2 text-rule">
+          <svg width="22" height="28" viewBox="0 0 22 28" fill="none" aria-hidden="true">
+            <line x1="11" y1="2" x2="11" y2="18" stroke="currentColor" stroke-width="1.5"/>
+            <polyline points="5,13 11,22 17,13" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="bg-wash border border-rule p-6">
+          <p class="text-[10px] font-bold lbl text-blue-700 mb-3">ステップ 03</p>
+          <p class="text-[15px] font-bold text-ink mb-2">PHOENIX SHAMPOO で洗車</p>
+          <p class="text-[12px] text-quiet leading-relaxed">潤滑性のある泡洗いで汚れを落とします。塗装を撫でてザラつく場合は、この前後で鉄粉除去や粘土を検討する解説があります。</p>
+        </div>
+        <div class="flex justify-center py-2 text-rule">
+          <svg width="22" height="28" viewBox="0 0 22 28" fill="none" aria-hidden="true">
+            <line x1="11" y1="2" x2="11" y2="18" stroke="currentColor" stroke-width="1.5"/>
+            <polyline points="5,13 11,22 17,13" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="bg-wash border border-rule p-6">
+          <p class="text-[10px] font-bold lbl text-blue-700 mb-3">ステップ 04</p>
+          <p class="text-[15px] font-bold text-ink mb-2">すすぎ</p>
+          <p class="text-[12px] text-quiet leading-relaxed">シャンプー残りをしっかり流します。ここからベース・コーティング工程へ入ります。</p>
+        </div>
+        <div class="flex justify-center py-2 text-rule">
+          <svg width="22" height="28" viewBox="0 0 22 28" fill="none" aria-hidden="true">
+            <line x1="11" y1="2" x2="11" y2="18" stroke="currentColor" stroke-width="1.5"/>
+            <polyline points="5,13 11,22 17,13" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="bg-wash border border-rule p-6 border-l-[3px] border-l-blue-700">
+          <p class="text-[10px] font-bold lbl text-blue-700 mb-3">ステップ 05</p>
+          <p class="text-[15px] font-bold text-ink mb-2">PHOENIX BASE（下地・充填）</p>
+          <p class="text-[12px] text-quiet leading-relaxed mb-3">洗車直後の<strong class="font-bold text-ink">濡れたボディ</strong>（水滴が残る状態）から、パネル単位で塗り広げる説明が一般的です。余剰は水で流すか、固く絞った濡れクロスで拭き取ります。</p>
+          <p class="mono text-[11px] text-blue-700">コンパウンドで削る方式ではなく、成分で凹凸を埋めて見た目を整えるタイプの説明があります。</p>
+        </div>
+        <div class="flex justify-center py-2 text-rule">
+          <svg width="22" height="28" viewBox="0 0 22 28" fill="none" aria-hidden="true">
+            <line x1="11" y1="2" x2="11" y2="18" stroke="currentColor" stroke-width="1.5"/>
+            <polyline points="5,13 11,22 17,13" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="bg-wash border border-rule p-6 border-l-[3px] border-l-blue-700">
+          <p class="text-[10px] font-bold lbl text-blue-700 mb-3">ステップ 06</p>
+          <p class="text-[15px] font-bold text-ink mb-2">PHOENIX COATING（トップ）</p>
+          <p class="text-[12px] text-quiet leading-relaxed mb-3"><strong class="font-bold text-ink">湿式施工</strong>が推奨される説明が多いです。1パネルあたり<strong class="font-bold text-ink">少量</strong>（例として2〜3プッシュ程度とする記事あり）→濡れクロスで伸ばす→<strong class="font-bold text-ink">別のクロス</strong>で拭き上げ、とムラ対策が繰り返し書かれています。</p>
+          <p class="text-[12px] text-quiet leading-relaxed">施工後は<strong class="font-bold text-ink">数時間〜24時間は水濡れを避ける</strong>、雨予報に注意、などの注意書きがあります。</p>
+        </div>
+        <div class="flex justify-center py-2 text-rule">
+          <svg width="22" height="28" viewBox="0 0 22 28" fill="none" aria-hidden="true">
+            <line x1="11" y1="2" x2="11" y2="18" stroke="currentColor" stroke-width="1.5"/>
+            <polyline points="5,13 11,22 17,13" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="bg-wash border border-rule p-6">
+          <p class="text-[10px] font-bold lbl text-blue-700 mb-3">ステップ 07</p>
+          <p class="text-[15px] font-bold text-ink mb-2">ガラス・樹脂・タイヤなど</p>
+          <p class="text-[12px] text-quiet leading-relaxed">ボディのベース／コーティングが終わったあとに、別製品でガラスや未塗装樹脂、タイヤを仕上げるのが一般的です。部位の可否は各ラベルで確認してください。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 注意事項 -->
+    <section class="grid grid-cols-[88px_1fr] gap-10 py-10 border-b border-rule">
+      <p class="text-[10px] font-bold lbl text-blue-700 pt-0.5 leading-loose">施工<br>注意</p>
+      <div class="flex flex-col gap-2.5">
+        <p class="text-[13px] text-quiet leading-[1.75] pl-4 border-l-2 border-rule">炎天下やボディが熱い状態では、液剤がすぐ乾いてムラやシミの原因になりやすいです。</p>
+        <p class="text-[13px] text-quiet leading-[1.75] pl-4 border-l-2 border-rule">コーティングの拭き残しや油膜状のムラは、記事では濡れたクロスでの追い拭きや、必要に応じてベースでリセットする例が紹介されています。</p>
+      </div>
+    </section>
+
+    <!-- メンテ -->
+    <section class="grid grid-cols-[88px_1fr] gap-10 py-10 border-b border-rule">
+      <p class="text-[10px] font-bold lbl text-blue-700 pt-0.5 leading-loose">日常<br>メンテ</p>
+      <div>
+        <p class="text-[14px] text-quiet leading-[1.9] mb-6">頻度は走行・保管環境で変わります。以下は公開解説でよく見られる<strong class="font-bold text-ink">目安</strong>です。</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-7">
+          <div class="pl-4 border-l-[3px] border-blue-700">
+            <p class="text-[10px] font-bold lbl text-blue-700 mb-2">普段の洗車</p>
+            <p class="text-[13px] text-ink leading-[1.8]">PHOENIX SHAMPOO を中心に洗浄。コーティング被膜を意識したメンテナンス、という位置づけの説明があります。</p>
+          </div>
+          <div class="pl-4 border-l-[3px] border-blue-700">
+            <p class="text-[10px] font-bold lbl text-blue-700 mb-2">撥水・艶が弱いとき</p>
+            <p class="text-[13px] text-ink leading-[1.8]">PHOENIX COATING を追加してトップ層を補います。</p>
+          </div>
+          <div class="pl-4 border-l-[3px] border-blue-700">
+            <p class="text-[10px] font-bold lbl text-blue-700 mb-2">水シミ・小傷が気になるとき</p>
+            <p class="text-[13px] text-ink leading-[1.8]">PHOENIX BASE で下地を整え直す。解説では数ヶ月に一度から半年に一度程度、といった言及があります。</p>
+          </div>
+          <div class="pl-4 border-l-[3px] border-blue-700">
+            <p class="text-[10px] font-bold lbl text-blue-700 mb-2">失敗しても</p>
+            <p class="text-[13px] text-ink leading-[1.8]">コーティングのムラが気になる場合にベースでリセットできる、という説明があります（製品表示に従うこと）。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 出典 -->
+    <section class="py-10 border-b border-rule">
+      <p class="text-[10px] font-bold lbl text-blue-700 mb-5">出典リンク</p>
+      <ul class="text-[13px] text-ink leading-[2] list-none space-y-2">
+        <li class="pl-4 border-l-2 border-rule">
+          <a href="https://tsuyalog.com/phoenix-coating/" class="text-blue-700 hover:underline break-all" target="_blank" rel="noopener noreferrer">https://tsuyalog.com/phoenix-coating/</a>
+          <span class="text-quiet text-[12px]">（施工手順・注意点の整理）</span>
+        </li>
+        <li class="pl-4 border-l-2 border-rule">
+          <a href="https://blog-buddica.jp/3340/" class="text-blue-700 hover:underline break-all" target="_blank" rel="noopener noreferrer">https://blog-buddica.jp/3340/</a>
+          <span class="text-quiet text-[12px]">（シリーズ紹介・動画案内）</span>
+        </li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer class="flex justify-between items-center px-14 py-5 border-t border-rule text-[11px] text-quiet">
+    <span>バディカフェニックス｜洗車・施工の順番（図解）</span>
+    <span>2026.04.16</span>
+  </footer>
+
+</div>
+
+</body>
+</html>
