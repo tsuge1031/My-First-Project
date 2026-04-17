@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>かんじ れんしゅう（1ねんせい）</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fff8e7;
+      --card: #ffffff;
+      --ink: #2d2a32;
+      --muted: #6b6570;
+      --accent: #7ec8e3;
+      --accent2: #ffb74d;
+      --ok: #66bb6a;
+      --ng: #ef5350;
+      --line: rgba(45, 42, 50, 0.1);
+      --shadow: 0 8px 28px rgba(45, 42, 50, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100dvh;
+      font-family: "M PLUS Rounded 1c", system-ui, sans-serif;
+      background: radial-gradient(120% 80% at 50% -20%, #ffe0b2 0%, var(--bg) 45%);
+      color: var(--ink);
+      padding: 16px;
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
+    }
+    .wrap { max-width: 420px; margin: 0 auto; }
+    h1 {
+      font-size: clamp(1.35rem, 5vw, 1.75rem);
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+    .sub {
+      text-align: center;
+      font-size: 0.95rem;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 22px 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+    }
+    .emoji { font-size: 2.5rem; text-align: center; margin-bottom: 8px; }
+    .btn {
+      display: block;
+      width: 100%;
+      font: inherit;
+      font-weight: 700;
+      font-size: 1.15rem;
+      padding: 16px 14px;
+      border-radius: 18px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.15s;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.08);
+      margin-bottom: 12px;
+      min-height: 52px;
+    }
+    .btn:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.06); }
+    .btn:disabled { opacity: 0.55; cursor: default; }
+    .btn-primary { background: linear-gradient(180deg, #90caf9 0%, var(--accent) 100%); color: #1a237e; }
+    .btn-secondary { background: linear-gradient(180deg, #ffe082 0%, var(--accent2) 100%); color: #4e342e; }
+    .btn-choice { background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 100%); color: #1b5e20; font-size: clamp(1.1rem, 4.5vw, 1.35rem); }
+    .btn-choice.wrong { background: linear-gradient(180deg, #ffcdd2 0%, #ef9a9a 100%); color: #b71c1c; }
+    .btn-choice.correct { background: linear-gradient(180deg, #c8e6c9 0%, var(--ok) 100%); color: #fff; }
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      box-shadow: none;
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+    .kanji-display {
+      text-align: center;
+      font-size: clamp(4.5rem, 22vw, 6.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 8px 0 18px;
+      user-select: none;
+    }
+    .progress {
+      text-align: center;
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .feedback {
+      text-align: center;
+      font-size: 1.05rem;
+      font-weight: 700;
+      min-height: 2.6em;
+      margin: 10px 0 6px;
+    }
+    .feedback.ok { color: var(--ok); }
+    .feedback.ng { color: var(--ng); }
+    .hint { text-align: center; font-size: 0.88rem; color: var(--muted); margin-bottom: 8px; }
+    .hidden { display: none !important; }
+    .score-line { text-align: center; font-size: 1rem; margin-top: 8px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div id="screen-home">
+      <div class="emoji" aria-hidden="true">📚</div>
+      <h1>かんじ れんしゅう</h1>
+      <p class="sub" id="home-grade">しょうがく 1ねんせい</p>
+      <div class="card">
+        <p class="hint" id="home-hint">よみかたを 4つのなかから えらぶよ</p>
+        <button type="button" class="btn btn-primary" id="btn-10">10もん チャレンジ</button>
+        <button type="button" class="btn btn-secondary" id="btn-all">80じ ぜんぶ（しゃっふる）</button>
+      </div>
+      <p class="score-line" id="load-err" style="color:var(--ng);margin-top:16px;"></p>
+    </div>
+
+    <div id="screen-quiz" class="hidden">
+      <div class="emoji" aria-hidden="true">✏️</div>
+      <h1>この かんじの よみは？</h1>
+      <p class="progress" id="quiz-progress"></p>
+      <div class="card">
+        <div class="kanji-display" id="quiz-kanji"></div>
+        <p class="hint" id="quiz-hint2">ただしい ひらがなを おしてね</p>
+        <div id="choices"></div>
+        <p class="feedback" id="feedback" aria-live="polite"></p>
+        <button type="button" class="btn btn-primary hidden" id="btn-next">つぎの もんだい</button>
+        <button type="button" class="btn btn-ghost" id="btn-back-home">もどる</button>
+      </div>
+      <p class="score-line" id="score-line"></p>
+    </div>
+
+    <div id="screen-done" class="hidden">
+      <div class="emoji" aria-hidden="true">🎉</div>
+      <h1>おつかれさま！</h1>
+      <p class="sub" id="done-msg"></p>
+      <div class="card">
+        <button type="button" class="btn btn-primary" id="btn-again">もういちど</button>
+        <button type="button" class="btn btn-ghost" id="btn-done-home">がめんを もどる</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="application/json" id="embedded-data">
+  </script>
+
+  <script>
+(function () {
+  const DATA_FILE = "20260416_漢字読みクイズ_grade1.json";
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = (Math.random() * (i + 1)) | 0;
+      const t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function buildChoices(item, pool) {
+    const correct = item.yomi;
+    const others = [];
+    const seen = new Set([correct]);
+    const candidates = shuffle(pool.filter(function (x) { return x !== item; }));
+    for (let i = 0; i < candidates.length && others.length < 3; i++) {
+      const y = candidates[i].yomi;
+      if (!seen.has(y)) {
+        seen.add(y);
+        others.push(y);
+      }
+    }
+    while (others.length < 3) {
+      others.push("あああ" + others.length);
+    }
+    return shuffle([correct].concat(others));
+  }
+
+  var state = {
+    meta: null,
+    items: [],
+    queue: [],
+    qi: 0,
+    correctCount: 0,
+    mode: "10"
+  };
+
+  function $(id) { return document.getElementById(id); }
+
+  function show(id) {
+    ["screen-home", "screen-quiz", "screen-done"].forEach(function (s) {
+      $(s).classList.toggle("hidden", s !== id);
+    });
+  }
+
+  function renderQuestion() {
+    var item = state.queue[state.qi];
+    $("quiz-kanji").textContent = item.kanji;
+    $("quiz-progress").textContent =
+      "もんだい " + (state.qi + 1) + " / " + state.queue.length;
+    $("feedback").textContent = "";
+    $("feedback").className = "feedback";
+    $("btn-next").classList.add("hidden");
+    var choices = buildChoices(item, state.items);
+    var box = $("choices");
+    box.innerHTML = "";
+    choices.forEach(function (y) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "btn btn-choice";
+      b.textContent = y;
+      b.addEventListener("click", function () { onPick(y, b); });
+      box.appendChild(b);
+    });
+    $("score-line").textContent =
+      "せいかい " + state.correctCount + " / " + state.qi;
+  }
+
+  function onPick(y, btn) {
+    var item = state.queue[state.qi];
+    var ok = y === item.yomi;
+    var buttons = $("choices").querySelectorAll("button");
+    buttons.forEach(function (b) {
+      b.disabled = true;
+      if (b.textContent === item.yomi) b.classList.add("correct");
+      else if (b === btn && !ok) b.classList.add("wrong");
+    });
+    var fb = $("feedback");
+    if (ok) {
+      state.correctCount++;
+      fb.textContent = "せいかい！";
+      fb.className = "feedback ok";
+    } else {
+      fb.textContent = "ざんねん… せいかいは「" + item.yomi + "」";
+      fb.className = "feedback ng";
+    }
+    $("btn-next").classList.remove("hidden");
+    $("score-line").textContent =
+      "せいかい " + state.correctCount + " / " + (state.qi + 1);
+  }
+
+  function nextQ() {
+    state.qi++;
+    if (state.qi >= state.queue.length) {
+      $("done-msg").textContent =
+        state.queue.length + "もんちゅう " + state.correctCount + "もん せいかい！";
+      show("screen-done");
+      return;
+    }
+    renderQuestion();
+  }
+
+  function start(mode) {
+    state.mode = mode;
+    state.qi = 0;
+    state.correctCount = 0;
+    var list = shuffle(state.items);
+    state.queue = mode === "all" ? list : list.slice(0, 10);
+    show("screen-quiz");
+    renderQuestion();
+  }
+
+  function initData(data) {
+    state.meta = data.meta;
+    state.items = data.items;
+    if (data.meta) {
+      if (data.meta.gradeLabel) $("home-grade").textContent = data.meta.gradeLabel;
+      if (data.meta.quizHint) $("home-hint").textContent = data.meta.quizHint;
+    }
+    $("load-err").textContent = "";
+  }
+
+  function load() {
+    var embedded = $("embedded-data");
+    if (embedded && embedded.textContent.trim().length > 10) {
+      try {
+        initData(JSON.parse(embedded.textContent));
+        return Promise.resolve();
+      } catch (e) {}
+    }
+    return fetch(DATA_FILE)
+      .then(function (r) {
+        if (!r.ok) throw new Error("fetch " + r.status);
+        return r.json();
+      })
+      .then(initData)
+      .catch(function () {
+        $("load-err").textContent =
+          "データを よみこめませんでした。JSONファイルの なまえを かくにんしてね。";
+      });
+  }
+
+  $("btn-10").addEventListener("click", function () { start("10"); });
+  $("btn-all").addEventListener("click", function () { start("all"); });
+  $("btn-next").addEventListener("click", nextQ);
+  $("btn-back-home").addEventListener("click", function () { show("screen-home"); });
+  $("btn-again").addEventListener("click", function () { start(state.mode); });
+  $("btn-done-home").addEventListener("click", function () { show("screen-home"); });
+
+  load();
+})();
+  </script>
+</body>
+</html>
