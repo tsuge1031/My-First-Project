@@ -4,6 +4,7 @@
 
 ```
 My-First-Project/
+├── sites/        # Cloudflare Pages 等に載せる独立サイト（例: odoranyasonson-blog）
 ├── src/          # ★ SSoT原本（Markdownファイルのみ。ここだけ編集する）
 ├── dist/
 │   ├── html/     # src/ から生成されたHTMLファイル（直接編集しない）

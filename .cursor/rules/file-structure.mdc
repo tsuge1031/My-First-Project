@@ -13,6 +13,7 @@ alwaysApply: true
 | ファイル種別 | 保存先 |
 |---|---|
 | Markdownファイル（`.md`） | `src/` |
+| 静的サイト一式（Cloudflare Pages 等・リポジトリ内完結） | `sites/<サイト名>/` |
 | HTMLファイル（`.html`） ※生成物 | `dist/html/` |
 | PowerPointファイル（`.pptx`） | `dist/pptx/` |
 | Pythonスクリプト等（`.py`） | `scripts/` |
@@ -46,3 +47,4 @@ dist/pptx/[YYYYMMDD]_[内容].pptx
 | `src/published-urls.md` | `dist/html/published-urls.html` |
 | `src/20260416_バディカフェニックス_洗車施工順_図解.md` | `dist/html/20260416_バディカフェニックス_洗車施工順_図解.html` |
 | `src/20260416_漢字読みクイズ.md`・`src/20260416_漢字読みクイズ_grade1.json` | `dist/html/20260416_漢字読みクイズ.html`・`dist/html/20260416_漢字読みクイズ_grade1.json`（JSONは `src` からコピーして同期） |
+| `src/20260419_odoranyasonson_WP移行とドメイン移管_手順.md` | ―（運用手順。図解HTMLなし） |
