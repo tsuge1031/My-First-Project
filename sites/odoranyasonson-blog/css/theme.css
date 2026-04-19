@@ -1,0 +1,304 @@
+/* odoranyasonson — Cloudflare Pages 用（WordPress からの抜本リデザイン） */
+
+:root {
+  --bg: #0c0d10;
+  --bg-elevated: #14161c;
+  --text: #e8eaef;
+  --text-muted: #9aa3b2;
+  --accent: #f0a656;
+  --accent-soft: rgba(240, 166, 86, 0.14);
+  --border: rgba(255, 255, 255, 0.08);
+  --radius: 14px;
+  --font-sans: "IBM Plex Sans JP", system-ui, sans-serif;
+  --font-display: "Shippori Mincho", "Hiragino Mincho ProN", serif;
+  --max: 72rem;
+  --prose: 42rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(240, 166, 86, 0.12), transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, rgba(120, 160, 255, 0.08), transparent 50%),
+    var(--bg);
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: #ffc47a;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip:focus {
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  background: var(--accent);
+  color: #111;
+  z-index: 100;
+  border-radius: 8px;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  background: rgba(12, 13, 16, 0.72);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.site-header__inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 1.1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.brand:hover {
+  color: var(--accent);
+}
+
+.nav {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.nav a {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  text-decoration: none;
+}
+
+.nav a:hover {
+  color: var(--text);
+}
+
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.hero {
+  margin-bottom: 3rem;
+}
+
+.hero__label {
+  display: inline-block;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 0 0 1rem;
+  max-width: 20ch;
+}
+
+.hero p {
+  margin: 0;
+  max-width: 36ch;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+}
+
+.post-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.post-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem 1.5rem;
+  align-items: baseline;
+  padding: 1.25rem 1.35rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.post-card:hover {
+  border-color: rgba(240, 166, 86, 0.35);
+  transform: translateY(-2px);
+}
+
+.post-card__date {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.post-card__title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.post-card__title a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.post-card__title a:hover {
+  color: var(--accent);
+}
+
+.article {
+  max-width: var(--prose);
+  margin: 0 auto;
+}
+
+.article__meta {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.article h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0 0 2rem;
+}
+
+/* WordPress 本文内の要素向け */
+.post-body {
+  font-size: 1.05rem;
+}
+
+.post-body h2,
+.post-body h3 {
+  font-family: var(--font-display);
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.35;
+}
+
+.post-body h2 {
+  font-size: 1.35rem;
+}
+
+.post-body h3 {
+  font-size: 1.15rem;
+}
+
+.post-body p {
+  margin: 0 0 1.1em;
+}
+
+.post-body ul,
+.post-body ol {
+  margin: 0 0 1.1em 1.2em;
+  padding: 0;
+}
+
+.post-body blockquote {
+  margin: 1.5rem 0;
+  padding: 0.75rem 0 0.75rem 1.1rem;
+  border-left: 3px solid var(--accent);
+  color: var(--text-muted);
+  background: var(--accent-soft);
+  border-radius: 0 8px 8px 0;
+}
+
+.post-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.post-body pre,
+.post-body code {
+  font-family: ui-monospace, "Cascadia Code", "IBM Plex Mono", monospace;
+  font-size: 0.9em;
+}
+
+.post-body pre {
+  overflow: auto;
+  padding: 1rem;
+  background: #0a0b0e;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+.site-footer {
+  margin-top: 4rem;
+  padding: 2rem 1.5rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .post-card {
+    grid-template-columns: 1fr;
+  }
+
+  .post-card__date {
+    order: -1;
+  }
+}
