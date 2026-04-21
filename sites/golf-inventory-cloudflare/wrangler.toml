@@ -1,0 +1,29 @@
+# Cloudflare Workers + D1 + 静的アセット（無料枠想定）
+#
+# 初回のみ:
+#   1) cd sites/golf-inventory-cloudflare && npm install
+#   2) D1 を用意して database_id を取得（どちらか一方）
+#        新規: npx wrangler d1 create golf-inventory
+#        既存: npx wrangler d1 list
+#      → 表示された UUID（database_id）を下の database_id に必ず貼り付け
+#      ※ プレースホルダのままだと db:migrate:remote が
+#        「could not be found [code: 7404]」で失敗します
+#   3) npm run db:migrate:local   # ローカル D1（binding 名 golf_inventory）
+#   4) npm run db:migrate:remote  # 本番 D1（デプロイ前に推奨）
+#   5) npm run deploy
+#
+# 任意: API_KEY を wrangler secret put API_KEY で設定すると、
+#       すべての /api/* で Authorization: Bearer <キー> が必須になります。
+
+name = "golf-inventory"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+
+[assets]
+directory = "public"
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "golf_inventory"
+database_name = "golf-inventory"
+database_id = "95530631-2592-4c85-9b61-1e3cc2483a21"
