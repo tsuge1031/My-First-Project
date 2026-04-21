@@ -15,8 +15,6 @@
 # R2: バケット golf-inventory-media を Worker にバインド済み（画像は R2 優先、レガシーは D1 Base64）。
 # 料金: https://developers.cloudflare.com/r2/pricing/
 # 追跡バイト合計が R2_SOFT_LIMIT_BYTES を超える新規／差し替えアップロードは 403（課金リスクの自己防衛。実課金とは一致しない場合あり）。
-[vars]
-R2_SOFT_LIMIT_BYTES = "8589934592"
 #
 # 任意: API_KEY を wrangler secret put API_KEY で設定すると、
 #       すべての /api/* で Authorization: Bearer <キー> が必須になります。
@@ -37,3 +35,6 @@ database_id = "95530631-2592-4c85-9b61-1e3cc2483a21"
 [[r2_buckets]]
 binding = "golf_uploads"
 bucket_name = "golf-inventory-media"
+
+[vars]
+R2_SOFT_LIMIT_BYTES = "8589934592"
