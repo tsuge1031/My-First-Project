@@ -13,12 +13,17 @@ export type Env = {
   golf_uploads?: R2Bucket;
   ASSETS: Fetcher;
   API_KEY?: string;
+  /** R2 追跡バイト合計のソフト上限（文字列の数値）。未設定時は 8 GiB */
+  R2_SOFT_LIMIT_BYTES?: string;
 };
 
 const MAX_NOTES_LEN = 20_000;
 const MAX_IMAGE_BYTES_R2 = 5 * 1024 * 1024;
 const MAX_IMAGE_BYTES_D1 = 2 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/gif", "image/webp"]);
+/** 無料枠手前のデフォルト（10GB ストレージ想定のバッファ）。実課金は Cloudflare 側の真値と一致しない場合あり */
+const DEFAULT_R2_SOFT_LIMIT_BYTES = 8 * 1024 * 1024 * 1024;
+const R2_PRICING_URL = "https://developers.cloudflare.com/r2/pricing/";
 
 type MasterRow = { id: string; category: string; name: string };
 type EventRow = {
@@ -33,6 +38,24 @@ type EventRow = {
 
 function err(c: { json: (b: unknown, s: number) => Response }, status: number, message: string) {
   return c.json({ error: message }, status);
+}
+
+function parseR2SoftLimitBytes(raw: string | undefined): number {
+  const n = raw != null && raw !== "" ? Number(raw) : NaN;
+  if (!Number.isFinite(n) || n <= 0) return DEFAULT_R2_SOFT_LIMIT_BYTES;
+  return Math.floor(n);
+}
+
+function errR2Quota(c: { json: (b: unknown, s: number) => Response }) {
+  return c.json(
+    {
+      error:
+        "このアプリで追跡している R2 保存量が設定上限を超えるためアップロードできません。無料枠・従量課金は Cloudflare の公式（pricing / terms）を確認してください。",
+      pricingUrl: R2_PRICING_URL,
+      termsUrl: "https://www.cloudflare.com/terms/",
+    },
+    403
+  );
 }
 
 function u8ToBase64(u8: Uint8Array): string {
@@ -239,9 +262,9 @@ app.post("/api/events", async (c) => {
 app.post("/api/events/:date/image", async (c) => {
   const date = c.req.param("date");
   const prev = await c.env.golf_inventory
-    .prepare("SELECT image_key FROM events WHERE date = ?")
+    .prepare("SELECT image_key, image_size_bytes FROM events WHERE date = ?")
     .bind(date)
-    .first<{ image_key: string | null }>();
+    .first<{ image_key: string | null; image_size_bytes: number | null }>();
   if (!prev) return err(c, 404, "ラウンドが見つかりません。");
 
   let formData: FormData;
@@ -250,42 +273,57 @@ app.post("/api/events/:date/image", async (c) => {
   } catch {
     return err(c, 400, "multipart 形式で file を送ってください。");
   }
-  const file = formData.get("file");
-  if (!(file instanceof File)) return err(c, 400, "file が必要です。");
+  const fileField = formData.get("file");
+  if (!fileField || typeof fileField === "string") return err(c, 400, "file が必要です。");
+  const file = fileField as File;
   if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
     return err(c, 400, "画像は JPEG / PNG / GIF / WebP のみです。");
   }
-  const useR2 = !!c.env.golf_uploads;
+  const uploads = c.env.golf_uploads;
+  const useR2 = !!uploads;
   const maxBytes = useR2 ? MAX_IMAGE_BYTES_R2 : MAX_IMAGE_BYTES_D1;
   if (file.size > maxBytes) {
     return err(c, 400, useR2 ? "画像は 5MB 以下にしてください。" : "画像は 2MB 以下にしてください。（R2 有効化で 5MB まで）");
   }
 
-  if (prev.image_key && c.env.golf_uploads) {
+  if (useR2) {
+    const others = await c.env.golf_inventory
+      .prepare("SELECT COALESCE(SUM(image_size_bytes), 0) AS s FROM events WHERE date != ?")
+      .bind(date)
+      .first<{ s: number | string | null }>();
+    const othersSum = Number(others?.s ?? 0);
+    const projectedTotal = othersSum + file.size;
+    const limit = parseR2SoftLimitBytes(c.env.R2_SOFT_LIMIT_BYTES);
+    if (projectedTotal > limit) {
+      return errR2Quota(c);
+    }
+  }
+
+  if (prev.image_key && uploads) {
     try {
-      await c.env.golf_uploads.delete(prev.image_key);
+      await uploads.delete(prev.image_key);
     } catch {
       /* ignore */
     }
   }
 
-  if (useR2) {
+  if (useR2 && uploads) {
     const newKey = `round/${crypto.randomUUID()}`;
-    await c.env.golf_uploads.put(newKey, file.stream(), {
+    await uploads.put(newKey, file.stream(), {
       httpMetadata: { contentType: file.type },
     });
     await c.env.golf_inventory
       .prepare(
-        "UPDATE events SET image_key = ?, image_content_type = ?, image_base64 = NULL WHERE date = ?"
+        "UPDATE events SET image_key = ?, image_content_type = ?, image_base64 = NULL, image_size_bytes = ? WHERE date = ?"
       )
-      .bind(newKey, file.type, date)
+      .bind(newKey, file.type, file.size, date)
       .run();
   } else {
     const buf = new Uint8Array(await file.arrayBuffer());
     const b64 = u8ToBase64(buf);
     await c.env.golf_inventory
       .prepare(
-        "UPDATE events SET image_base64 = ?, image_content_type = ?, image_key = NULL WHERE date = ?"
+        "UPDATE events SET image_base64 = ?, image_content_type = ?, image_key = NULL, image_size_bytes = NULL WHERE date = ?"
       )
       .bind(b64, file.type, date)
       .run();
@@ -309,7 +347,9 @@ app.delete("/api/events/:date/image", async (c) => {
     }
   }
   await c.env.golf_inventory
-    .prepare("UPDATE events SET image_base64 = NULL, image_content_type = NULL, image_key = NULL WHERE date = ?")
+    .prepare(
+      "UPDATE events SET image_base64 = NULL, image_content_type = NULL, image_key = NULL, image_size_bytes = NULL WHERE date = ?"
+    )
     .bind(date)
     .run();
   return c.json({ ok: true });

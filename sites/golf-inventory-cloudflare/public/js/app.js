@@ -27,7 +27,12 @@ async function readApiError(res) {
   const t = await res.text();
   try {
     const j = JSON.parse(t);
-    return j.error || t;
+    const parts = [];
+    if (j.error) parts.push(String(j.error));
+    if (j.pricingUrl) parts.push(String(j.pricingUrl));
+    if (j.termsUrl) parts.push(String(j.termsUrl));
+    if (parts.length) return parts.join("\n");
+    return t;
   } catch {
     return t || res.statusText;
   }
@@ -747,7 +752,7 @@ function renderEventDetail() {
   imageHint.className = "hint";
   imageHint.style.marginTop = 0;
   imageHint.textContent =
-    "選択後すぐアップロード（保存ボタン不要）。R2 を有効化して Worker にバケットを紐付けると R2 保存になります。従来の D1 内画像も表示できます。";
+    "選択後すぐアップロード（保存ボタン不要）。R2 を有効化して Worker にバケットを紐付けると R2 保存になります。従来の D1 内画像も表示できます。R2 利用時はアプリ側の追跡合計が上限に達するとアップロードが拒否されます（実課金と一致しない場合あり。公式 pricing / terms を参照）。";
   imageWrap.appendChild(imageHint);
   const hasImg = !!d.hasImage;
   if (hasImg) {
