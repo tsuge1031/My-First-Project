@@ -740,12 +740,14 @@ function renderEventDetail() {
   const imageWrap = document.createElement("div");
   imageWrap.className = "field";
   const imageLabel = document.createElement("label");
-  imageLabel.textContent = "写真（1枚・JPEG / PNG / GIF / WebP・2MB 以下）";
+  imageLabel.textContent =
+    "写真（1枚・JPEG / PNG / GIF / WebP。R2 連携時は最大 5MB、未設定時は D1 に最大 2MB）";
   imageWrap.appendChild(imageLabel);
   const imageHint = document.createElement("p");
   imageHint.className = "hint";
   imageHint.style.marginTop = 0;
-  imageHint.textContent = "選択後すぐアップロードされます。保存ボタンは不要です。";
+  imageHint.textContent =
+    "選択後すぐアップロード（保存ボタン不要）。R2 を有効化して Worker にバケットを紐付けると R2 保存になります。従来の D1 内画像も表示できます。";
   imageWrap.appendChild(imageHint);
   const hasImg = !!d.hasImage;
   if (hasImg) {

@@ -9,12 +9,15 @@ const ALLOWED_CATEGORIES = new Set([
 
 export type Env = {
   golf_inventory: D1Database;
+  /** wrangler.toml に [[r2_buckets]] があるときのみ付与 */
+  golf_uploads?: R2Bucket;
   ASSETS: Fetcher;
   API_KEY?: string;
 };
 
 const MAX_NOTES_LEN = 20_000;
-const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
+const MAX_IMAGE_BYTES_R2 = 5 * 1024 * 1024;
+const MAX_IMAGE_BYTES_D1 = 2 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/gif", "image/webp"]);
 
 type MasterRow = { id: string; category: string; name: string };
@@ -148,10 +151,30 @@ app.get("/api/state", async (c) => {
 app.get("/api/events/:date/image", async (c) => {
   const date = c.req.param("date");
   const row = await c.env.golf_inventory
-    .prepare("SELECT image_base64, image_content_type FROM events WHERE date = ?")
+    .prepare("SELECT image_key, image_base64, image_content_type FROM events WHERE date = ?")
     .bind(date)
-    .first<{ image_base64: string | null; image_content_type: string | null }>();
+    .first<{
+      image_key: string | null;
+      image_base64: string | null;
+      image_content_type: string | null;
+    }>();
   if (!row) return err(c, 404, "ラウンドが見つかりません。");
+
+  if (row.image_key && row.image_key.length > 0) {
+    if (!c.env.golf_uploads) {
+      return err(c, 503, "画像は R2 に保存されていますが、Worker に R2 バインディングがありません。wrangler.toml を確認してください。");
+    }
+    const obj = await c.env.golf_uploads.get(row.image_key);
+    if (!obj?.body) return err(c, 404, "画像を取得できませんでした。");
+    const ct = row.image_content_type || obj.httpMetadata?.contentType || "application/octet-stream";
+    return new Response(obj.body, {
+      headers: {
+        "Content-Type": ct,
+        "Cache-Control": "private, max-age=3600",
+      },
+    });
+  }
+
   if (row.image_base64 && row.image_base64.length > 0) {
     let bytes: Uint8Array;
     try {
@@ -215,8 +238,11 @@ app.post("/api/events", async (c) => {
 
 app.post("/api/events/:date/image", async (c) => {
   const date = c.req.param("date");
-  const exists = await c.env.golf_inventory.prepare("SELECT date FROM events WHERE date = ?").bind(date).first();
-  if (!exists) return err(c, 404, "ラウンドが見つかりません。");
+  const prev = await c.env.golf_inventory
+    .prepare("SELECT image_key FROM events WHERE date = ?")
+    .bind(date)
+    .first<{ image_key: string | null }>();
+  if (!prev) return err(c, 404, "ラウンドが見つかりません。");
 
   let formData: FormData;
   try {
@@ -229,25 +255,59 @@ app.post("/api/events/:date/image", async (c) => {
   if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
     return err(c, 400, "画像は JPEG / PNG / GIF / WebP のみです。");
   }
-  if (file.size > MAX_IMAGE_BYTES) return err(c, 400, "画像は 2MB 以下にしてください。");
+  const useR2 = !!c.env.golf_uploads;
+  const maxBytes = useR2 ? MAX_IMAGE_BYTES_R2 : MAX_IMAGE_BYTES_D1;
+  if (file.size > maxBytes) {
+    return err(c, 400, useR2 ? "画像は 5MB 以下にしてください。" : "画像は 2MB 以下にしてください。（R2 有効化で 5MB まで）");
+  }
 
-  const buf = new Uint8Array(await file.arrayBuffer());
-  const b64 = u8ToBase64(buf);
+  if (prev.image_key && c.env.golf_uploads) {
+    try {
+      await c.env.golf_uploads.delete(prev.image_key);
+    } catch {
+      /* ignore */
+    }
+  }
 
-  await c.env.golf_inventory
-    .prepare(
-      "UPDATE events SET image_base64 = ?, image_content_type = ?, image_key = NULL WHERE date = ?"
-    )
-    .bind(b64, file.type, date)
-    .run();
+  if (useR2) {
+    const newKey = `round/${crypto.randomUUID()}`;
+    await c.env.golf_uploads.put(newKey, file.stream(), {
+      httpMetadata: { contentType: file.type },
+    });
+    await c.env.golf_inventory
+      .prepare(
+        "UPDATE events SET image_key = ?, image_content_type = ?, image_base64 = NULL WHERE date = ?"
+      )
+      .bind(newKey, file.type, date)
+      .run();
+  } else {
+    const buf = new Uint8Array(await file.arrayBuffer());
+    const b64 = u8ToBase64(buf);
+    await c.env.golf_inventory
+      .prepare(
+        "UPDATE events SET image_base64 = ?, image_content_type = ?, image_key = NULL WHERE date = ?"
+      )
+      .bind(b64, file.type, date)
+      .run();
+  }
 
-  return c.json({ ok: true, contentType: file.type });
+  return c.json({ ok: true, contentType: file.type, storage: useR2 ? "r2" : "d1" });
 });
 
 app.delete("/api/events/:date/image", async (c) => {
   const date = c.req.param("date");
-  const row = await c.env.golf_inventory.prepare("SELECT date FROM events WHERE date = ?").bind(date).first();
+  const row = await c.env.golf_inventory
+    .prepare("SELECT image_key FROM events WHERE date = ?")
+    .bind(date)
+    .first<{ image_key: string | null }>();
   if (!row) return err(c, 404, "ラウンドが見つかりません。");
+  if (row.image_key && c.env.golf_uploads) {
+    try {
+      await c.env.golf_uploads.delete(row.image_key);
+    } catch {
+      /* ignore */
+    }
+  }
   await c.env.golf_inventory
     .prepare("UPDATE events SET image_base64 = NULL, image_content_type = NULL, image_key = NULL WHERE date = ?")
     .bind(date)
@@ -257,6 +317,17 @@ app.delete("/api/events/:date/image", async (c) => {
 
 app.delete("/api/events/:date", async (c) => {
   const date = c.req.param("date");
+  const img = await c.env.golf_inventory
+    .prepare("SELECT image_key FROM events WHERE date = ?")
+    .bind(date)
+    .first<{ image_key: string | null }>();
+  if (img?.image_key && c.env.golf_uploads) {
+    try {
+      await c.env.golf_uploads.delete(img.image_key);
+    } catch {
+      /* ignore */
+    }
+  }
   await c.env.golf_inventory.batch([
     c.env.golf_inventory.prepare("DELETE FROM event_items WHERE event_date = ?").bind(date),
     c.env.golf_inventory.prepare("DELETE FROM event_companions WHERE event_date = ?").bind(date),

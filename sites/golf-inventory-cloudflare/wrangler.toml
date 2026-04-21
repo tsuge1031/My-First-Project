@@ -12,6 +12,11 @@
 #   4) npm run db:migrate:remote  # 本番 D1（デプロイ前に推奨）
 #   5) npm run deploy
 #
+# R2（任意・推奨）: ダッシュボードで R2 を有効化 →
+#   npx wrangler r2 bucket create golf-inventory-media
+#   下の [[r2_buckets]] のコメントを外して再デプロイすると、画像は R2 に保存されます（未設定時は D1 Base64 にフォールバック）。
+# 無料枠: https://developers.cloudflare.com/r2/pricing/ （枠内なら追加課金なし、超過で従量）
+#
 # 任意: API_KEY を wrangler secret put API_KEY で設定すると、
 #       すべての /api/* で Authorization: Bearer <キー> が必須になります。
 
@@ -27,3 +32,8 @@ binding = "ASSETS"
 binding = "golf_inventory"
 database_name = "golf-inventory"
 database_id = "95530631-2592-4c85-9b61-1e3cc2483a21"
+
+# R2 有効化 & バケット作成後にコメント解除:
+# [[r2_buckets]]
+# binding = "golf_uploads"
+# bucket_name = "golf-inventory-media"
