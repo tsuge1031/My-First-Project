@@ -1,0 +1,3 @@
+ALTER TABLE events ADD COLUMN notes TEXT NOT NULL DEFAULT '';
+ALTER TABLE events ADD COLUMN image_key TEXT;
+ALTER TABLE events ADD COLUMN image_content_type TEXT;

@@ -76,6 +76,14 @@ async function apiJson(path, options = {}) {
   return res.json();
 }
 
+/** JSON 以外も扱う生 fetch（画像 POST 等） */
+async function apiFetch(path, options = {}) {
+  const headers = { ...authHeaders(), ...options.headers };
+  const res = await fetch(path, { ...options, headers });
+  if (!res.ok) throw new Error(await readApiError(res));
+  return res;
+}
+
 function defaultState() {
   return { masterItems: [], events: [] };
 }
@@ -104,6 +112,8 @@ let bootError = "";
  *   scoreFieldError: string;
  *   companionNames: string[];
  *   itemIds: string[];
+ *   notes: string;
+ *   hasImage: boolean;
  * }}
  */
 let detailDraft = null;
@@ -122,13 +132,45 @@ function initDetailDraftFromServer(date) {
     scoreFieldError: "",
     companionNames: [...(ev.companionNames && ev.companionNames.length ? ev.companionNames : [""])],
     itemIds: [...(ev.itemIds || [])],
+    notes: typeof ev.notes === "string" ? ev.notes : "",
+    hasImage: !!ev.hasImage,
   };
+}
+
+function mergeServerImageIntoDraft(sourceDate) {
+  if (!detailDraft || detailDraft.sourceDate !== sourceDate) return;
+  const ev2 = getEventByDate(sourceDate);
+  if (!ev2) return;
+  detailDraft.hasImage = !!ev2.hasImage;
+}
+
+async function uploadRoundImage(sourceDate, file) {
+  const fd = new FormData();
+  fd.append("file", file);
+  await withSync(() =>
+    apiFetch(`/api/events/${encodeURIComponent(sourceDate)}/image`, {
+      method: "POST",
+      body: fd,
+    })
+  );
+  await refreshState();
+  mergeServerImageIntoDraft(sourceDate);
+}
+
+async function deleteRoundImage(sourceDate) {
+  await withSync(() =>
+    apiFetch(`/api/events/${encodeURIComponent(sourceDate)}/image`, { method: "DELETE" })
+  );
+  await refreshState();
+  mergeServerImageIntoDraft(sourceDate);
 }
 
 function syncDetailDraftFromForm(form) {
   if (!detailDraft) return;
   detailDraft.date = form.querySelector('[name="date"]')?.value ?? detailDraft.date;
   detailDraft.golfCourse = form.querySelector('[name="golfCourse"]')?.value ?? "";
+  const notesEl = form.querySelector('[name="notes"]');
+  if (notesEl) detailDraft.notes = notesEl.value;
   const scoreEl = form.querySelector('[name="score"]');
   if (scoreEl) {
     const raw = String(scoreEl.value ?? "");
@@ -316,6 +358,7 @@ async function saveEventDetail(sourceDate, form) {
   syncDetailDraftFromForm(form);
   const newDate = form.querySelector('[name="date"]').value;
   const golfCourse = form.querySelector('[name="golfCourse"]').value.trim();
+  const notes = form.querySelector('[name="notes"]')?.value ?? "";
   const scoreRaw = String(form.querySelector('[name="score"]')?.value ?? "").trim();
   if (!/^[0-9]*$/.test(scoreRaw)) {
     setMessage("error", "スコアは半角数字（0〜9）のみ入力できます。空欄は可です。");
@@ -348,6 +391,7 @@ async function saveEventDetail(sourceDate, form) {
         body: JSON.stringify({
           date: newDate,
           golfCourse,
+          notes,
           score,
           companionNames: vc.names,
           itemIds,
@@ -601,9 +645,13 @@ function renderEventDetail() {
   const scoreInp = document.createElement("input");
   scoreInp.type = "text";
   scoreInp.name = "score";
-  scoreInp.setAttribute("inputmode", "numeric");
+  scoreInp.className = "score-input-ime";
+  scoreInp.setAttribute("inputmode", "latin");
   scoreInp.setAttribute("lang", "en");
   scoreInp.setAttribute("pattern", "[0-9]*");
+  scoreInp.setAttribute("autocorrect", "off");
+  scoreInp.setAttribute("autocapitalize", "off");
+  scoreInp.setAttribute("spellcheck", "false");
   scoreInp.autocomplete = "off";
   scoreInp.placeholder = "例：88（空欄可）";
   scoreInp.value = d.scoreText;
@@ -675,6 +723,77 @@ function renderEventDetail() {
   addComp.addEventListener("click", () => addCompanionField(d.sourceDate));
   compWrap.appendChild(addComp);
   form.appendChild(compWrap);
+
+  const notesField = document.createElement("div");
+  notesField.className = "field";
+  const notesLabel = document.createElement("label");
+  notesLabel.textContent = "備考（自由記入）";
+  notesField.appendChild(notesLabel);
+  const notesTa = document.createElement("textarea");
+  notesTa.name = "notes";
+  notesTa.rows = 5;
+  notesTa.placeholder = "メモ・反省・天気など";
+  notesTa.value = d.notes;
+  notesField.appendChild(notesTa);
+  form.appendChild(notesField);
+
+  const imageWrap = document.createElement("div");
+  imageWrap.className = "field";
+  const imageLabel = document.createElement("label");
+  imageLabel.textContent = "写真（1枚・JPEG / PNG / GIF / WebP・2MB 以下）";
+  imageWrap.appendChild(imageLabel);
+  const imageHint = document.createElement("p");
+  imageHint.className = "hint";
+  imageHint.style.marginTop = 0;
+  imageHint.textContent = "選択後すぐアップロードされます。保存ボタンは不要です。";
+  imageWrap.appendChild(imageHint);
+  const hasImg = !!d.hasImage;
+  if (hasImg) {
+    const img = document.createElement("img");
+    img.className = "round-image-preview";
+    img.alt = "ラウンド添付画像";
+    img.src = `/api/events/${encodeURIComponent(d.sourceDate)}/image?cb=${Date.now()}`;
+    imageWrap.appendChild(img);
+  }
+  const imgRow = document.createElement("div");
+  imgRow.className = "row";
+  imgRow.style.alignItems = "center";
+  const fileInp = document.createElement("input");
+  fileInp.type = "file";
+  fileInp.accept = "image/jpeg,image/png,image/gif,image/webp";
+  fileInp.className = "round-image-file";
+  fileInp.addEventListener("change", async () => {
+    const file = fileInp.files && fileInp.files[0];
+    if (!file) return;
+    try {
+      await uploadRoundImage(d.sourceDate, file);
+      fileInp.value = "";
+      setMessage("success", "画像をアップロードしました。");
+    } catch (e) {
+      setMessage("error", e instanceof Error ? e.message : String(e));
+    }
+    render();
+  });
+  imgRow.appendChild(fileInp);
+  if (hasImg) {
+    const delImg = document.createElement("button");
+    delImg.type = "button";
+    delImg.className = "btn btn-danger btn-small";
+    delImg.textContent = "画像を削除";
+    delImg.addEventListener("click", async () => {
+      if (!confirm("添付画像を削除しますか？")) return;
+      try {
+        await deleteRoundImage(d.sourceDate);
+        setMessage("success", "画像を削除しました。");
+      } catch (e) {
+        setMessage("error", e instanceof Error ? e.message : String(e));
+      }
+      render();
+    });
+    imgRow.appendChild(delImg);
+  }
+  imageWrap.appendChild(imgRow);
+  form.appendChild(imageWrap);
 
   const bagH = document.createElement("h2");
   bagH.style.marginTop = "1rem";
